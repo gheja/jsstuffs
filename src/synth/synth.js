@@ -27,12 +27,7 @@ SynthSample = function()
 	
 	this.loadBase64RawData = function(encoded_data)
 	{
-		var i, data = atob(encoded_data);
-		this.samples = new Int16Array(data.length / 2);
-		for (i=0; i<data.length/2; i++)
-		{
-			this.samples[i] = data.charCodeAt(i*2+1) * 256 + data.charCodeAt(i*2);
-		}
+		this.samples = base64_to_int16array(encoded_data);
 	}
 }
 
