@@ -6,7 +6,7 @@
   */
 
 /** @constructor */
-// every SynthSample is in 2 channels, at 44.1 kHz
+// every SynthSample is in 44100 Hz, mono, signed 16 bit sounds
 SynthSample = function()
 {
 	// DEBUG BEGIN
@@ -20,10 +20,20 @@ SynthSample = function()
 	this.loop_length = 0;
 	this.sample_loop_type = 0; // 0: none, 1: forward, 2: ping-pong
 	this.relative_note_number = 0; // -96..+95, 0 means C-4 = C-4
-	this.length = 0; // sample count
+	// this.length = 0; // sample count, == this.samples.length
 	
 	/** @type Int16Array */
 	this.samples = null; // sample data
+	
+	this.loadBase64RawData = function(encoded_data)
+	{
+		var i, data = atob(encoded_data);
+		this.samples = new Int16Array(data.length / 2);
+		for (i=0; i<data.length/2; i++)
+		{
+			this.samples[i] = data.charCodeAt(i*2+1) * 256 + data.charCodeAt(i*2);
+		}
+	}
 }
 
 /** @constructor */
