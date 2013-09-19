@@ -52,6 +52,17 @@ function int16array_to_base64(data, endian_swap)
 	return output;
 }
 
+function int32array_to_base64(data, endian_swap)
+{
+	var i, data2 = new Int16Array(data.length * 2);
+	for (i=0; i<data.length; i++)
+	{
+		data2[i*2] = (data[i] & 0x000000FF) << 8 | (data[i] & 0x0000FF00) >> 8;
+		data2[i*2+1] = (data[i] & 0x00FF0000) >> 8 | (data[i] & 0xFF000000) >> 24;
+	}
+	return int16array_to_base64(data2, endian_swap);
+}
+
 // TODO: implement a cross-browser solution instead of atob()
 function base64_to_int16array(encoded_data)
 {
