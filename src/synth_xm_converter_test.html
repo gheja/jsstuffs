@@ -1,0 +1,33 @@
+<html>
+	<head>
+		<script src="../3rdparty/jDataView/src/jdataview.js"></script>
+		<script type="text/javascript">
+			function file_upload(obj)
+			{
+				var reader = new FileReader();
+				reader.onload = function(event)
+				{
+					var dv = new jDataView(event.target.result);
+					alert(dv.getUint8());
+				}
+				reader.readAsArrayBuffer(obj.files[0]);
+				
+				obj.style.display = "none";
+				
+				var div = document.createElement("div");
+				div.innerHTML = obj.value;
+				document.getElementById("files").appendChild(div);
+				
+				var upload = document.createElement("input");
+				upload.type = "file";
+				upload.onchange = obj.onchange;
+				document.getElementById("files").appendChild(upload);
+			}
+		</script>
+	</head>
+	<body>
+		<div id="files">
+			<input type="file" onchange="file_upload(this);" />
+		</div>
+	</body>
+</html>
