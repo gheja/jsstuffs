@@ -9,6 +9,14 @@ SynthXmConverter = function()
 	{
 		var xm_reader = new SynthXmReader();
 		
-		return xm_reader.readFile(data);
+		try
+		{
+			return xm_reader.readFile(data);
+		}
+		catch (e)
+		{
+			this.log("Exception: " + e);
+			return false;
+		}
 	}
 }
