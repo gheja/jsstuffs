@@ -2,6 +2,7 @@ SynthXmReader = function()
 {
 	this.header = {};
 	this.patterns = [];
+	this.instruments = [];
 	
 	this.log = function(s)
 	{
@@ -22,6 +23,15 @@ SynthXmReader = function()
 		dv.getUint32_2 = function()
 		{
 			return this.getUint8() + this.getUint8() * 256 + this.getUint8() * 256*256 + this.getUint8() * 256*256*256;
+		}
+		dv.getWords_2 = function(length)
+		{
+			var i, a = [];
+			for (i=0; i<length; i++)
+			{
+				a[i] = this.getUint16_2();
+			}
+			return a;
 		}
 		
 		if (dv.getString(17) != "Extended Module: ")
@@ -87,7 +97,77 @@ SynthXmReader = function()
 			
 			this.patterns[i] = pattern;
 		}
-		this.log("End of patterns.");
+		this.log("End of patterns, reading instruments...");
+		
+		for (i=0; i<this.header.number_of_instruments; i++)
+		{
+			this.log("Reading instrument #" + i + " header...");
+			var instrument = {
+				header_size: dv.getUint32_2(),
+				name: dv.getString(22),
+				instrument_type: dv.getUint8(), // dummy
+				number_of_samples: dv.getUint16_2()
+			};
+			
+			if (instrument.header_size != 263 && instrument.header_size != 29)
+			{
+				this.log("WARNING: Instrument header is " + instrument.header_size + " bytes long. This is probably bad, continuing anyway...");
+			}
+			
+			if (instrument.number_of_samples == 0)
+			{
+				this.log("Instrument #" + i + " has no samples.");
+				continue;
+			}
+			
+			instrument.sample_header_size = dv.getUint32_2();
+			instrument.sample_keymap_assignments = dv.getBytes(96);
+			instrument.points_for_volume_envelope = dv.getWords_2(24);
+			instrument.points_for_panning_envelope = dv.getWords_2(24);
+			
+			instrument.number_of_volume_points = dv.getUint8();
+			instrument.number_of_panning_points = dv.getUint8();
+			instrument.volume_sustain_point = dv.getUint8();
+			instrument.volume_loop_start_point = dv.getUint8();
+			instrument.volume_loop_end_point = dv.getUint8();
+			instrument.panning_sustain_point = dv.getUint8();
+			instrument.panning_loop_start_point = dv.getUint8();
+			instrument.panning_loop_end_point = dv.getUint8();
+			instrument.volume_type = dv.getUint8();
+			instrument.panning_type = dv.getUint8();
+			instrument.vibratio_type = dv.getUint8();
+			instrument.vibratio_sweep = dv.getUint8();
+			instrument.vibratio_depth = dv.getUint8();
+			instrument.vibratio_rate = dv.getUint8();
+			instrument.volume_fadeout = dv.getUint16_2();
+			dv.skip(22); // reserved
+			
+			instrument.samples = [];
+			
+			for (j=0; j<instrument.number_of_samples; j++)
+			{
+				this.log("Reading instrument #" + i + ", sample #" + j + " header...");
+				var sample = {
+					length: dv.getUint32_2(),
+					loop_start: dv.getUint32_2(),
+					loop_length: dv.getUint32_2(),
+					volume: dv.getUint8(),
+					finetune: dv.getInt8(), // signed!
+					type: dv.getUint8(),
+					panning: dv.getUint8(),
+					relative_note_number: dv.getInt8(), // signed!
+					compression_type: dv.getUint8(),
+					name: dv.getString(22)
+				};
+				
+				this.log("Reading instrument #" + i + ", sample #" + j + " data...");
+				sample.data = dv.getBytes(sample.length);
+				
+				instrument.samples[j] = sample;
+			}
+			
+			this.instruments[i] = instrument;
+		}
 		
 		this.log("File was successfully read.");
 		
