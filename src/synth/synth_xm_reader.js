@@ -1,6 +1,7 @@
 SynthXmReader = function()
 {
 	this.header = {};
+	this.patterns = [];
 	
 	this.log = function(s)
 	{
@@ -53,7 +54,42 @@ SynthXmReader = function()
 			return false;
 		}
 		
-		this.log("Header succesfully read.");
+		this.log("Header succesfully read, seeking to first pattern header...");
+		
+		dv.seek(60 + this.header.header_size);
+		
+		for (i=0; i<this.header.number_of_patterns; i++)
+		{
+			this.log("Reading pattern #" + i + " header...");
+			var pattern = {
+				header_size: dv.getUint32_2(),
+				packing_type: dv.getUint8(), // dummy
+				number_of_rows: dv.getUint16_2(),
+				packed_pattern_data_size: dv.getUint16_2()
+			};
+			
+			if (pattern.header_size != 9)
+			{
+				this.log("WARNING: Pattern header is " + pattern.header_size + " bytes long. This is probably bad, continuing anyway...");
+			}
+			
+			if (pattern.packed_pattern_data_size == 0)
+			{
+				this.log("Pattern is empty, not reading data...");
+				// channels = 4
+				pattern.data = new Uint8Array(4 * pattern.header.number_of_rows);
+			}
+			else
+			{
+				this.log("Reading pattern #" + i + " data...");
+				pattern.data = dv.getBytes(pattern.packed_pattern_data_size);
+			}
+			
+			this.patterns[i] = pattern;
+		}
+		this.log("End of patterns.");
+		
+		this.log("File was successfully read.");
 		
 		return true;
 	}
