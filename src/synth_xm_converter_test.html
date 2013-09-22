@@ -1,15 +1,31 @@
 <html>
 	<head>
 		<script src="../3rdparty/jDataView/src/jdataview.js"></script>
+		<script src="synth/synth_xm_reader.js"></script>
+		<script src="synth/synth_xm_converter.js"></script>
 		<script type="text/javascript">
+			var xm_converter = xm_converter = new SynthXmConverter();
+			
+			function _log(s)
+			{
+				console.log(s);
+				document.getElementById("log").innerHTML += s + "<br/>";
+			}
+			
 			function file_upload(obj)
 			{
 				var reader = new FileReader();
 				reader.onload = function(event)
 				{
-					var dv = new jDataView(event.target.result);
-					alert(dv.getUint8());
+					if (!xm_converter.readFile(event.target.result))
+					{
+						_log("Failed to open file, see console log for details");
+						return false;
+					}
+					
+					_log("File was successfully loaded.");
 				}
+				
 				reader.readAsArrayBuffer(obj.files[0]);
 				
 				obj.style.display = "none";
@@ -24,10 +40,26 @@
 				document.getElementById("files").appendChild(upload);
 			}
 		</script>
+		<style type="text/css">
+			#log
+			{
+				position: fixed;
+				bottom: 0;
+				left: 0;
+				right: 0;
+				height: 100px;
+				background: rgba(255,255,0,0.5);
+				font-family: Tahoma, sans;
+				font-size: 9pt;
+				padding: 4px;
+				overflow-y: scroll;
+			}
+		</style>
 	</head>
 	<body>
 		<div id="files">
 			<input type="file" onchange="file_upload(this);" />
 		</div>
+		<div id="log"></div>
 	</body>
 </html>
