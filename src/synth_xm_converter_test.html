@@ -50,6 +50,8 @@
 					return false;
 				}
 				_log("Processing successfully finished.");
+				
+				document.getElementById("output").innerHTML = xm_converter.getGeneratedData();
 			}
 		</script>
 		<style type="text/css">
@@ -66,6 +68,12 @@
 				padding: 4px;
 				overflow-y: scroll;
 			}
+			#output
+			{
+				width: 100%;
+				height: 200px;
+				word-wrap: break-word;
+			}
 		</style>
 	</head>
 	<body>
@@ -73,6 +81,7 @@
 			<input type="file" onchange="file_upload(this);" />
 		</div>
 		<input type="button" value="Process the loaded files" onclick="process_files(); return false;" />
+		<textarea id="output"></textarea>
 		<div id="log"></div>
 	</body>
 </html>
