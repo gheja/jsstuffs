@@ -14,6 +14,13 @@ Synth = function()
 	this.songs = [];
 	this.audio_objects = [];
 	
+	// DEBUG BEGIN
+	this.log = function(s)
+	{
+		console.log("Synth: " + s);
+	}
+	// DEBUG END
+	
 	/** @constructor */
 	this.SynthSample = function()
 	{
@@ -91,6 +98,12 @@ Synth = function()
 		this.sample_position = 0;
 		this.finished = 0;
 		
+		// DEBUG BEGIN
+		this.log = function(s)
+		{
+			console.log("SynthChannel: " + s);
+		}
+		// DEBUG END
 /*
 		this.loadBase64RawData = function(encoded_data)
 		{
@@ -107,7 +120,7 @@ Synth = function()
 			this.sample = instrument.sample;
 			this.volume = instrument.volume;
 			this.sample_position = 0;
-			console.log("  instrument: " + instrument + ", volume: " + this.volume);
+			this.log("  instrument: " + instrument + ", volume: " + this.volume);
 		}
 		
 		this.setNote = function(note)
@@ -120,13 +133,13 @@ Synth = function()
 			}
 			this.note = note;
 			this.sample_position = 0;
-			console.log("  note: " + note);
+			this.log("  note: " + note);
 		}
 		
 		this.setVolume = function(volume)
 		{
 			this.volume = volume;
-			console.log("  volume: " + volume);
+			this.log("  volume: " + volume);
 		}
 		
 		this.renderNote = function(buffer, pos, length)
@@ -266,7 +279,7 @@ Synth = function()
 				for (k=0; k<pattern.data.length; k++)
 				{
 					// NNA is "cut"
-					console.log("rendering pattern: row: " + k + ", pos: " + pos + ", time: " + Math.round(pos / 44100 * 1000) + "ms, row data: " + pattern.data[k]);
+					this.log("rendering pattern: row: " + k + ", pos: " + pos + ", time: " + Math.round(pos / 44100 * 1000) + "ms, row data: " + pattern.data[k]);
 					
 					pattern.data[k][0] && channels[0].setNote(pattern.data[k][0]);
 					pattern.data[k][1] && channels[0].setInstrument(this.instruments[pattern.data[k][1]]);
