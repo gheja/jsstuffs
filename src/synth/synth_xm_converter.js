@@ -45,7 +45,7 @@ SynthXmConverter = function()
 		
 		this.log("Processing " + this.xm_structures.length + " songs...");
 		
-		this.log("Creating the pattern-channel column dictionary and map...");
+		this.log("Creating the song-pattern-channel-column dictionary and map...");
 		for (i in this.xm_structures)
 		{
 			// read all the patterns into the merged_pattern_table
@@ -78,9 +78,40 @@ SynthXmConverter = function()
 				}
 			}
 		}
-		this.log("Pattern column dictionary and map created.");
+		this.log("Song-pattern-channel-column dictionary and map created.");
 		
-		this.log("total pattern-channel columns: " + a + ", unique: " + this.dictionary.getContentCount());
+		// -- some stats
+		this.log("  total columns: " + a + ", unique: " + this.dictionary.getContentCount());
+		
+		var old_size = 0, unpacked_size = 0, new_size = 0;
+		
+		for (i in this.xm_structures)
+		{
+			for (j in this.xm_structures[i].patterns)
+			{
+				old_size += this.xm_structures[i].patterns[j].packed_pattern_data_size;
+				unpacked_size += this.xm_structures[i].patterns[j].number_of_rows * this.xm_structures[i].header.number_of_channels * 5;
+			}
+		}
+		
+		new_size += this.dictionary.getSize();
+		
+		for (i in pattern_column_map)
+		{
+			for (j in pattern_column_map[i])
+			{
+				for (n in pattern_column_map[i][j])
+				{
+					for (k in pattern_column_map[i][j][n])
+					{
+						new_size += 2; // index in map
+					}
+				}
+			}
+		}
+		
+		this.log("  old packed size: " + old_size + ", unpacked size: " + unpacked_size +", approx. new size: " + new_size);
+		// -- end of stats
 		
 		return true;
 	}
