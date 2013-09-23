@@ -46,3 +46,15 @@ Patterns are stored compressed based on ...
   * Create a map to reassemble the original rows
 
 ...
+
+## XM/mod effects
+
+Sources:
+  * http://metamorph0sis.nm.ru/xmeffects.html
+
+### 0xy Arpegio
+x: first halftone, y: second halftone
+
+First tick the ```note``` is played, the next tick: ```note + x```, the next tick: ```note + y```, then repeat.
+
+Example: ```C-1 037```, first tick: ```C1```, next tick: ```C1 + 3 = Eb1```, next tick: ```C1 + 7 = G1```, then repeat.
