@@ -1,3 +1,4 @@
+/** @constructor */
 Dictionary = function()
 {
 	this.contents = [];
