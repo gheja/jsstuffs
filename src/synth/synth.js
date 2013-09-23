@@ -192,7 +192,19 @@ Synth = function()
 	
 	this.render = function(samples, file_base64, dictionary_base64)
 	{
-		var i;
+		var i, j, k, l,
+			file,
+			dictionary,
+			pos,
+			song,
+			pattern,
+			columns,
+			song_count,
+			number_of_patterns,
+			number_of_channels,
+			number_of_instruments,
+			number_of_rows,
+			song_length;
 		
 		/* load the samples, instruments and patterns */
 		for (i in samples)
@@ -249,14 +261,10 @@ Synth = function()
 		}
 		
 		/* render the songs */
-		var j, k, l,
-			channels,
-			pos,
+		var channels,
 			samples_per_tick,
 			data,
-			tmp,
-			song,
-			pattern;
+			tmp;
 		
 		for (i in this.songs)
 		{
