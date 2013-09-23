@@ -30,7 +30,7 @@ Dictionary = function()
 				}
 				if (found)
 				{
-					index = j;
+					index = i;
 					break;
 				}
 			}
@@ -96,6 +96,7 @@ Dictionary = function()
 				length = 256;
 			}
 			
+			this.contents[i] = [];
 			for (j=0; j<length; j++)
 			{
 				this.contents[i][j] = buffer[pos++];
