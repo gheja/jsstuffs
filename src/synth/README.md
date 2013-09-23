@@ -58,3 +58,46 @@ Sources:
 First tick the ```note``` is played, the next tick: ```note + x```, the next tick: ```note + y```, then repeat.
 
 Example: ```C-1 037```, first tick: ```C1```, next tick: ```C1 + 3 = Eb1```, next tick: ```C1 + 7 = G1```, then repeat.
+
+### 1xx Portamento up
+**xx**: speed
+
+This command is used to slide the sample pitch up. 
+
+Note: If Amiga frequence table is used, the sliding will be non-linear (the speed depends on the frequency).
+
+Actually sliding (really tone stepping) is being performed at every tick since command is active. So the final tone depends on the **xx** parameter.
+
+Example: TODO
+
+
+### 2xx Portamento down
+**xx**: speed
+
+This command is used to slide the sample pitch down. 
+
+Note: If Amiga frequence table is used, the sliding will be non-linear (the speed depends on the frequency).
+
+Actually sliding (really tone stepping) is being performed at every tick since command is active. So the final tone depends on the **xx** parameter.
+
+Example: TODO
+
+
+### 3xx Tone portanemto
+**xx**: speed
+
+This command is used together with a note, and will slide to its frequency.
+
+If glissando mode is set (by E3x command), the frequency will be rounded to the nearest halftone.
+
+Example: TODO
+
+
+### 4xy	Vibrato
+**x**: rate, **y**: depth
+
+Adds frequency vibrato to the channel with a specified rate and speed.
+
+Set vibrato mode command (E4x) can be used to change the vibrato waveform.
+
+Example: TODO
