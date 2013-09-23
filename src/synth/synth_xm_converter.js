@@ -11,12 +11,19 @@ SynthXmConverter = function()
 		
 		try
 		{
-			return xm_reader.readFile(data);
+			if (!xm_reader.readFile(data))
+			{
+				return false;
+			}
 		}
 		catch (e)
 		{
 			this.log("Exception: " + e);
 			return false;
 		}
+		
+		xm_reader.unpackPatternRows();
+		
+		return true;
 	}
 }

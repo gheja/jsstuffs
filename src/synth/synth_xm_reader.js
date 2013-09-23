@@ -160,6 +160,8 @@ SynthXmReader = function()
 					name: dv.getString(22)
 				};
 				
+				dv.skip(instrument.sample_header_size - 40);
+				
 				this.log("Reading instrument #" + i + ", sample #" + j + " data...");
 				sample.data = dv.getBytes(sample.length);
 				
@@ -172,5 +174,65 @@ SynthXmReader = function()
 		this.log("File was successfully read.");
 		
 		return true;
+	}
+	
+	this.unpackPatternRows = function()
+	{
+		var i, j, k, unpacked;
+		
+		for (i in this.patterns)
+		{
+			this.log("Unpacking pattern #" + i + "...");
+			k = 0;
+			unpacked = [];
+			for (j=0; j<this.patterns[i].packed_pattern_data_size; j++)
+			{
+				// compressed
+				a = this.patterns[i].data[j];
+				if (a & 128)
+				{
+					unpacked[k] = [ 0, 0, 0, 0, 0 ];
+					
+					// note follows
+					if (a & 1)
+					{
+						j++;
+						unpacked[k][0] = this.patterns[i].data[j];
+					}
+					// instrument follows
+					if (a & 2)
+					{
+						j++;
+						unpacked[k][1] = this.patterns[i].data[j];
+					}
+					// volume follows
+					if (a & 4)
+					{
+						j++;
+						unpacked[k][2] = this.patterns[i].data[j];
+					}
+					// effect type follows
+					if (a & 8)
+					{
+						j++;
+						unpacked[k][3] = this.patterns[i].data[j];
+					}
+					// effect parameter follows
+					if (a & 16)
+					{
+						j++;
+						unpacked[k][4] = this.patterns[i].data[j];
+					}
+				}
+				else
+				{
+					unpacked[k] = [ a, this.patterns[i].data[j + 1], this.patterns[i].data[j + 2], this.patterns[i].data[j + 3], this.patterns[i].data[j + 4] ];
+					j += 4;
+				}
+				k++;
+			}
+			this.patterns[i].data_unpacked = unpacked;
+		}
+		this.log("Unpacking finished.");
 	}
 }
