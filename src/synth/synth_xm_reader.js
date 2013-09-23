@@ -191,6 +191,17 @@ SynthXmReader = function()
 				a = this.patterns[i].data[j];
 				if (a & 128)
 				{
+					/*
+					// this is a more compact form, but the latter is easier to read and debug
+					unpacked[k] = [
+						a & 1  ? this.patterns[i].data[++j] : 0, // note
+						a & 2  ? this.patterns[i].data[++j] : 0, // instrument
+						a & 4  ? this.patterns[i].data[++j] : 0, // volume
+						a & 8  ? this.patterns[i].data[++j] : 0, // effect type
+						a & 16 ? this.patterns[i].data[++j] : 0  // effect parameter
+					];
+					*/
+					
 					unpacked[k] = [ 0, 0, 0, 0, 0 ];
 					
 					// note follows
