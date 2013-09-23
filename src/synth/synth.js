@@ -159,7 +159,6 @@ Synth = function()
 		this.name = "";
 		// DEBUG END
 		
-		this.length = 10; // seconds
 		this.bpm = 120;
 		this.speed = 3;
 		this.audio_object = null;
@@ -198,7 +197,6 @@ Synth = function()
 			song = new this.SynthSong();
 			song.bpm = file[pos++];
 			song.speed = file[pos++];
-			song.length = 10;
 			this.songs[0] = song;
 			
 			number_of_patterns = file[pos++];
@@ -244,7 +242,7 @@ Synth = function()
 		for (i in this.songs)
 		{
 			song = this.songs[i];
-			data = new Int16Array(44100 * 2 * song.length + 22);
+			data = [];
 			
 			// samples per seconds / beats per sec / speed
 			// samples_per_tick = Math.round(44100 / (song.bpm / 60 / song.speed * 12 / 3));
@@ -275,10 +273,12 @@ Synth = function()
 					}
 				}
 			}
+			
+			data2 = new Int16Array(data);
 		}
 		
 		/* prepare the WAV file, create the headers */
-		var used = data.length*2, dv = new Uint32Array(data.buffer, 0, 44);
+		var used = data2.length*2, dv = new Uint32Array(data2.buffer, 0, 44);
 		
 		dv[0] = 0x46464952; // "RIFF"
 		dv[1] = used + 36;  // total file size
@@ -293,7 +293,7 @@ Synth = function()
 		dv[10] = used;      // number of samples
 		
 		/* encode the WAV file to a data URL with base64 encoding and create the player HTML object */
-		this.audio_objects[0] = new Audio("data:audio/wav;base64," + base64_encode(new Uint8Array(data.buffer, 0, data.length / 2)));
+		this.audio_objects[0] = new Audio("data:audio/wav;base64," + base64_encode(new Uint8Array(data2.buffer, 0, data2.length * 2)));
 	}
 	
 	this.play = function(song_id)
