@@ -62,7 +62,7 @@ SynthXmConverter = function()
 					for (k=0; k<5; k++)
 					{
 						pattern_column = [];
-						for (l=n; l<pattern.number_of_rows; l += channels)
+						for (l=n; l<pattern.number_of_rows * channels; l += channels)
 						{
 							pattern_column.push(pattern.data_unpacked[l][k]);
 						}
