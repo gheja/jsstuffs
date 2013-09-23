@@ -1,6 +1,7 @@
 SynthXmConverter = function()
 {
 	this.xm_structures = [];
+	this.dictionary = new Dictionary();
 	
 	this.log = function(s)
 	{
@@ -66,39 +67,9 @@ SynthXmConverter = function()
 							pattern_column.push(pattern.data_unpacked[l][k]);
 						}
 						
-						index = pattern_column_dictionary.length;
+						index = this.dictionary.addArray(pattern_column);
 						
-						// check if we already stored an equivalent column array
-						for (l=0; l<pattern_column_dictionary.length; l++)
-						{
-							if (pattern_column_dictionary[l].length == pattern_column.length)
-							{
-								found = 1;
-								for (m=0; m<pattern_column.length; m++)
-								{
-									if (pattern_column_dictionary[l][m] != pattern_column[m])
-									{
-										found = 0;
-										break;
-									}
-								}
-								if (found)
-								{
-									index = l;
-									break;
-								}
-							}
-						}
-						
-						if (!found)
-						{
-							pattern_column_dictionary[index] = pattern_column;
-							this.log("    song #" + i + ", pattern #" + j + ", channel #" + n + ", column #" + k + " stored as #" + index);
-						}
-						else
-						{
-							this.log("    song #" + i + ", pattern #" + j + ", channel #" + n + ", column #" + k + " stored as #" + index + " (already stored)");
-						}
+						this.log("    song #" + i + ", pattern #" + j + ", channel #" + n + ", column #" + k + " stored as #" + index);
 						
 						pattern_column_map[i][j][n][k] = index;
 						
@@ -109,7 +80,7 @@ SynthXmConverter = function()
 		}
 		this.log("Pattern column dictionary and map created.");
 		
-		this.log("total pattern-channel columns: " + a + ", unique: " + pattern_column_dictionary.length);
+		this.log("total pattern-channel columns: " + a + ", unique: " + this.dictionary.getContentCount());
 		
 		return true;
 	}
