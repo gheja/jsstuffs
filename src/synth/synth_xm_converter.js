@@ -48,14 +48,16 @@ SynthXmConverter = function()
 		for (i in this.xm_structures)
 		{
 			// read all the patterns into the merged_pattern_table
+			pattern_column_map[i] = [];
 			for (j in this.xm_structures[i].patterns)
 			{
-				pattern_column_map[j] = [];
+				pattern_column_map[i][j] = [];
 				pattern = this.xm_structures[i].patterns[j];
 				channels = this.xm_structures[i].header.number_of_channels;
 				
 				for (n=0; n<channels; n++)
 				{
+					pattern_column_map[i][j][n] = [];
 					for (k=0; k<5; k++)
 					{
 						pattern_column = [];
@@ -98,7 +100,7 @@ SynthXmConverter = function()
 							this.log("    song #" + i + ", pattern #" + j + ", channel #" + n + ", column #" + k + " stored as #" + index + " (already stored)");
 						}
 						
-						pattern_column_map[j][k] = index;
+						pattern_column_map[i][j][n][k] = index;
 						
 						a++;
 					}
