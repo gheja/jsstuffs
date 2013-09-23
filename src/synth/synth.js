@@ -8,10 +8,6 @@
 /** @constructor */
 Synth = function()
 {
-	this.samples = [];
-	this.instruments = [];
-	this.patterns = [];
-	this.songs = [];
 	this.audio_objects = [];
 	
 	// DEBUG BEGIN
@@ -193,6 +189,10 @@ Synth = function()
 	this.render = function(samples, file_base64, dictionary_base64)
 	{
 		var i, j, k, l,
+			_samples = [],
+			_instruments = [],
+			_patterns = [],
+			_songs = [],
 			file,
 			dictionary,
 			pos,
@@ -209,13 +209,13 @@ Synth = function()
 		/* load the samples, instruments and patterns */
 		for (i in samples)
 		{
-			this.samples[i] = new this.SynthSample();
-			this.samples[i].loadBase64RawData(samples[i]);
+			_samples[i] = new this.SynthSample();
+			_samples[i].loadBase64RawData(samples[i]);
 		}
 		
-		this.instruments[1] = new this.SynthInstrument();
-		this.instruments[1].volume = 64;
-		this.instruments[1].sample = this.samples[0];
+		_instruments[1] = new this.SynthInstrument();
+		_instruments[1].volume = 64;
+		_instruments[1].sample = _samples[0];
 		
 		file = base64_decode(file_base64);
 		dictionary = new Dictionary();
@@ -228,7 +228,7 @@ Synth = function()
 			song = new this.SynthSong();
 			song.bpm = file[pos++];
 			song.speed = file[pos++];
-			this.songs[0] = song;
+			_songs[0] = song;
 			
 			number_of_patterns = file[pos++];
 			number_of_channels = file[pos++];
@@ -256,7 +256,7 @@ Synth = function()
 				{
 					pattern.data[l] = [ columns[0][l], columns[1][l], columns[2][l], columns[3][l], columns[4][l] ];
 				}
-				this.patterns[j] = pattern;
+				_patterns[j] = pattern;
 			}
 		}
 		
@@ -266,9 +266,9 @@ Synth = function()
 			data,
 			tmp;
 		
-		for (i in this.songs)
+		for (i in _songs)
 		{
-			song = this.songs[i];
+			song = _songs[i];
 			data = [];
 			
 			// samples per seconds / beats per sec / speed
@@ -282,7 +282,7 @@ Synth = function()
 			
 			for (j in song.patterns)
 			{
-				pattern = this.patterns[song.patterns[j]];
+				pattern = _patterns[song.patterns[j]];
 				
 				for (k=0; k<pattern.data.length; k++)
 				{
@@ -290,7 +290,7 @@ Synth = function()
 					this.log("rendering pattern: row: " + k + ", pos: " + pos + ", time: " + Math.round(pos / 44100 * 1000) + "ms, row data: " + pattern.data[k]);
 					
 					pattern.data[k][0] && channels[0].setNote(pattern.data[k][0]);
-					pattern.data[k][1] && channels[0].setInstrument(this.instruments[pattern.data[k][1]]);
+					pattern.data[k][1] && channels[0].setInstrument(_instruments[pattern.data[k][1]]);
 					pattern.data[k][2] && channels[0].setVolume(pattern.data[k][2]);
 					
 					for (l=0; l<song.speed; l++)
