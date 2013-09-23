@@ -33,28 +33,76 @@ SynthXmConverter = function()
 	
 	this.processFiles = function()
 	{
-		var i, j, a, merged_pattern_table;
+		var i, j, k, l, m,
+			found = 0,
+			index = -1,
+			pattern_column_dictionary = [],
+			pattern_column_map = [],
+			pattern,
+			a = 0;
 		
 		this.log("Processing " + this.xm_structures.length + " songs...");
 		
-		merged_pattern_table = [];
-		k = 0;
-		this.log("Assembling the merged pattern table...");
+		this.log("Creating the pattern column dictionary and map...");
 		for (i in this.xm_structures)
 		{
-			this.log("  start index of song #" + i + " in the merged pattern table is " + k);
-			
 			// read all the patterns into the merged_pattern_table
-			for (j=0; j<this.xm_structures[i].header.song_length; j++)
+			for (j in this.xm_structures[i].patterns)
 			{
-				a = this.xm_structures[i].header.pattern_order_table[j];
-				this.log("    song #" + i + ", pattern order #" + j + " is pattern #" + a + " of song, copying it to the merged pattern table as #" + k);
+				pattern_column_map[j] = [];
+				pattern = this.xm_structures[i].patterns[j];
 				
-				merged_pattern_table[k] = this.xm_structures[i].patterns[a].data_unpacked;
-				k++;
+				for (k=0; k<5; k++)
+				{
+					pattern_column = [];
+					for (l=0; l<pattern.number_of_rows; l++)
+					{
+						pattern_column.push(pattern.data_unpacked[l][k]);
+					}
+					
+					index = pattern_column_dictionary.length;
+					
+					// check if we already stored an equivalent column array
+					for (l=0; l<pattern_column_dictionary.length; l++)
+					{
+						if (pattern_column_dictionary[l].length == pattern_column.length)
+						{
+							found = 1;
+							for (m=0; m<pattern_column.length; m++)
+							{
+								if (pattern_column_dictionary[l][m] != pattern_column[m])
+								{
+									found = 0;
+									break;
+								}
+							}
+							if (found)
+							{
+								index = l;
+								break;
+							}
+						}
+					}
+					
+					if (!found)
+					{
+						pattern_column_dictionary[index] = pattern_column;
+						this.log("    song #" + i + ", pattern #" + j + ", column #" + k + " stored as #" + index);
+					}
+					else
+					{
+						this.log("    song #" + i + ", pattern #" + j + ", column #" + k + " stored as #" + index + " (already stored)");
+					}
+					
+					pattern_column_map[j][k] = index;
+					
+					a++;
+				}
 			}
 		}
-		this.log("Merged pattern table assembled.");
+		this.log("Pattern column dictionary and map created.");
+		
+		this.log("total pattern columns: " + a + ", unique pattern columns: " + pattern_column_dictionary.length);
 		
 		return true;
 	}
