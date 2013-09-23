@@ -81,6 +81,18 @@ function int32array_to_base64(data, endian_swap)
 */
 
 // TODO: implement a cross-browser solution instead of atob()
+function base64_decode(encoded_data)
+{
+	var data = atob(encoded_data), output = [];
+	
+	for (i=0; i<data.length; i++)
+	{
+		output[i] = data.charCodeAt(i);
+	}
+	
+	return output;
+}
+
 function base64_to_int16array(encoded_data)
 {
 	var i, data = atob(encoded_data);
