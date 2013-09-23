@@ -281,25 +281,25 @@ Synth = function()
 			}
 			
 			data2 = new Int16Array(data);
+			
+			/* prepare the WAV file, create the headers */
+			var used = data2.length*2, dv = new Uint32Array(data2.buffer, 0, 44);
+			
+			dv[0] = 0x46464952; // "RIFF"
+			dv[1] = used + 36;  // total file size
+			dv[2] = 0x45564157; // "WAVE"
+			dv[3] = 0x20746D66; // "fmt " chunk
+			dv[4] = 0x00000010; // size of the following
+			dv[5] = 0x00020001; // format: PCM, channels: 2
+			dv[6] = 0x0000AC44; // samples per second: 44100
+			dv[7] = 0x00015888; // byte rate: two bytes per sample
+			dv[8] = 0x00100002; // data align: 2 bytes, bits per sample: 16 bits
+			dv[9] = 0x61746164; // "data" chunk
+			dv[10] = used;      // number of samples
+			
+			/* encode the WAV file to a data URL with base64 encoding and create the player HTML object */
+			this.audio_objects[i] = new Audio("data:audio/wav;base64," + base64_encode(new Uint8Array(data2.buffer, 0, data2.length * 2)));
 		}
-		
-		/* prepare the WAV file, create the headers */
-		var used = data2.length*2, dv = new Uint32Array(data2.buffer, 0, 44);
-		
-		dv[0] = 0x46464952; // "RIFF"
-		dv[1] = used + 36;  // total file size
-		dv[2] = 0x45564157; // "WAVE"
-		dv[3] = 0x20746D66; // "fmt " chunk
-		dv[4] = 0x00000010; // size of the following
-		dv[5] = 0x00020001; // format: PCM, channels: 2
-		dv[6] = 0x0000AC44; // samples per second: 44100
-		dv[7] = 0x00015888; // byte rate: two bytes per sample
-		dv[8] = 0x00100002; // data align: 2 bytes, bits per sample: 16 bits
-		dv[9] = 0x61746164; // "data" chunk
-		dv[10] = used;      // number of samples
-		
-		/* encode the WAV file to a data URL with base64 encoding and create the player HTML object */
-		this.audio_objects[0] = new Audio("data:audio/wav;base64," + base64_encode(new Uint8Array(data2.buffer, 0, data2.length * 2)));
 	}
 	
 	this.play = function(song_id)
