@@ -53,7 +53,7 @@ Sources:
   * http://metamorph0sis.nm.ru/xmeffects.html
 
 ### 0xy Arpegio
-x: first halftone, y: second halftone
+**x**: first halftone, **y**: second halftone
 
 First tick the ```note``` is played, the next tick: ```note + x```, the next tick: ```note + y```, then repeat.
 
