@@ -1,3 +1,22 @@
+/** @const */
+var BASE64_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+
+function base64_encode(data)
+{
+	// the base64 encoding was originally written by @maettig for https://github.com/grumdrig/jsfxr
+	
+	var output = "", used = data.length;
+	
+	for (i = 0; i < used; i += 3)
+	{
+		a = data[i] << 16 | data[i + 1] << 8 | data[i + 2];
+		output += BASE64_CHARS[a >> 18] + BASE64_CHARS[a >> 12 & 63] + BASE64_CHARS[a >> 6 & 63] + BASE64_CHARS[a & 63];
+	}
+	i -= used;
+	
+	return output.slice(0, output.length - i) + '=='.slice(0, i);
+}
+
 /*
   one base64 character can store 6 bits. 16 bits need 2.66 base64 characters.
   store 3 x 16 bits (= 6 bytes) to have 8 characters of base64 data
@@ -5,10 +24,7 @@
   data           11111111 11111111 22222222 22222222 33333333 33333333
   base64 encoded aaaaaabb bbbbcccc ccdddddd eeeeeeff ffffgggg gghhhhhh
 */
-
-/** @const */
-var BASE64_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
-
+/*
 function int16array_to_base64(data, endian_swap)
 {
 	var i, j, a, b = [], len, output = "";
@@ -62,6 +78,7 @@ function int32array_to_base64(data, endian_swap)
 	}
 	return int16array_to_base64(data2, endian_swap);
 }
+*/
 
 // TODO: implement a cross-browser solution instead of atob()
 function base64_to_int16array(encoded_data)

@@ -265,12 +265,7 @@ Synth = function()
 		}
 		
 		/* prepare the WAV file, create the headers */
-		var used = data.length*2,
-			dv = new Uint32Array(data.buffer, 0, 44),
-			base64Characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/',
-			output = 'data:audio/wav;base64,',
-			a,
-			data2;
+		var used = data.length*2, dv = new Uint32Array(data.buffer, 0, 44);
 		
 		dv[0] = 0x46464952; // "RIFF"
 		dv[1] = used + 36;  // total file size
@@ -283,22 +278,9 @@ Synth = function()
 		dv[8] = 0x00100002; // data align: 2 bytes, bits per sample: 16 bits
 		dv[9] = 0x61746164; // "data" chunk
 		dv[10] = used;      // number of samples
-		used += 44;
 		
-		/* encode the WAV file to a data URL with base64 encoding */
-		// the base64 encoding was originally written by @maettig for https://github.com/grumdrig/jsfxr
-		data2 = new Uint8Array(data.buffer, 0, data.length / 2);
-		
-		for (i = 0; i < used; i += 3)
-		{
-			a = data2[i] << 16 | data2[i + 1] << 8 | data2[i + 2];
-			output += base64Characters[a >> 18] + base64Characters[a >> 12 & 63] + base64Characters[a >> 6 & 63] + base64Characters[a & 63];
-		}
-		i -= used;
-		output.slice(0, output.length - i) + '=='.slice(0, i);
-		
-		/* create the player HTML object */
-		this.audio_objects[0] = new Audio(output);
+		/* encode the WAV file to a data URL with base64 encoding and create the player HTML object */
+		this.audio_objects[0] = new Audio("data:audio/wav;base64," + base64_encode(new Uint8Array(data.buffer, 0, data.length / 2)));
 	}
 	
 	this.play = function(song_id)
