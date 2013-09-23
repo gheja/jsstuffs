@@ -172,7 +172,7 @@ Synth = function()
 		*/
 	}
 	
-	this.render = function(samples, instruments, patterns, songs)
+	this.render = function(samples, file_base64, dictionary_base64)
 	{
 		var i;
 		
@@ -183,40 +183,53 @@ Synth = function()
 			this.samples[i].loadBase64RawData(samples[i]);
 		}
 		
-		/*
-		for (i in instruments)
-		{
-			this.instruments[i] = new this.SynthInstrument();
-			this.instruments[i].loadBase64RawData(instruments[i]);
-		}
-		*/
-		
 		this.instruments[1] = new this.SynthInstrument();
 		this.instruments[1].volume = 64;
 		this.instruments[1].sample = this.samples[0];
 		
-		/*
-		for (i in patterns)
+		file = base64_decode(file_base64);
+		dictionary = new Dictionary();
+		dictionary.setContents(base64_decode(dictionary_base64));
+		
+		pos = 0;
+		song_count = file[pos++];
+		for (i=0; i<song_count; i++)
 		{
-			this.patterns[i] = new this.SynthPattern();
-			this.patterns[i].loadBase64RawData(patterns[i]);
+			song = new this.SynthSong();
+			song.bpm = file[pos++];
+			song.speed = file[pos++];
+			song.length = 10;
+			this.songs[0] = song;
+			
+			number_of_patterns = file[pos++];
+			number_of_channels = file[pos++];
+			number_of_instruments = file[pos++];
+			song_length = file[pos++];
+			
+			for (j=0; j<song_length; j++)
+			{
+				song.patterns[j] = file[pos++];
+			}
+			
+			for (j=0; j<number_of_patterns; j++)
+			{
+				number_of_rows = file[pos++];
+				
+				pattern = new this.SynthPattern();
+				columns = [
+					dictionary.getArray(file[pos++] + file[pos++] * 256), // notes
+					dictionary.getArray(file[pos++] + file[pos++] * 256), // instruments
+					dictionary.getArray(file[pos++] + file[pos++] * 256), // volumes
+					dictionary.getArray(file[pos++] + file[pos++] * 256), // effect types
+					dictionary.getArray(file[pos++] + file[pos++] * 256)  // effect parameters
+				];
+				for (l=0; l<number_of_rows; l++)
+				{
+					pattern.data[l] = [ columns[0][l], columns[1][l], columns[2][l], columns[3][l], columns[4][l] ];
+				}
+				this.patterns[j] = pattern;
+			}
 		}
-		*/
-		
-		this.patterns[0] = new this.SynthPattern();
-		this.patterns[0].data = [ [ 48, 1, 64, 0, 0 ], [0, 0, 0, 0, 0], [ 32, 1, 32, 0, 0 ], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0] ];
-		
-		/*
-		for (i in songs)
-		{
-			this.songs[i] = new this.SynthSong();
-			this.songs[i].loadBase64RawData(songs[i]);
-		}
-		*/
-		
-		this.songs[0] = new this.SynthSong();
-		this.songs[0].patterns = [ 0 ];
-		// this.songs[0].data = 
 		
 		/* render the songs */
 		var j, k, l,
