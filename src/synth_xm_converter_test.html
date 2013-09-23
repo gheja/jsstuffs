@@ -39,6 +39,16 @@
 				upload.onchange = obj.onchange;
 				document.getElementById("files").appendChild(upload);
 			}
+			
+			function process_files()
+			{
+				if (!xm_converter.processFiles())
+				{
+					_log("Processing failed, see console log for details");
+					return false;
+				}
+				_log("Processing successfully finished.");
+			}
 		</script>
 		<style type="text/css">
 			#log
@@ -60,6 +70,7 @@
 		<div id="files">
 			<input type="file" onchange="file_upload(this);" />
 		</div>
+		<input type="button" value="Process the loaded files" onclick="process_files(); return false;" />
 		<div id="log"></div>
 	</body>
 </html>
