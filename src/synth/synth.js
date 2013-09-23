@@ -96,6 +96,12 @@ Synth = function()
 		{
 		}
 */
+		this.getFrequency = function(note, finetune)
+		{
+			var period = 10*12*16*4 - note * 16*4 - finetune / 2;
+			return 8363 * Math.pow(2, (6*12*16*4 - period) / (12*16*4));
+		}
+		
 		this.setInstrument = function(instrument)
 		{
 			this.sample = instrument.sample;
@@ -125,7 +131,7 @@ Synth = function()
 		
 		this.renderNote = function(buffer, pos, length)
 		{
-			var i, speed = this.note / this.sample.relative_note_number;
+			var i, speed = this.getFrequency(this.note + this.sample.relative_note_number, 0) / 44100;
 			
 			for (i=0; i<length; i++)
 			{
