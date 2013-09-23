@@ -246,4 +246,13 @@ SynthXmReader = function()
 		}
 		this.log("Unpacking finished.");
 	}
+	
+	this.getXmStructure = function()
+	{
+		return {
+			header: this.header,
+			patterns: this.patterns,
+			instruments: this.instruments
+		};
+	}
 }
