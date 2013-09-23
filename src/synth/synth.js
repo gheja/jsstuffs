@@ -177,7 +177,7 @@ Synth = function()
 		this.bpm = 120;
 		this.speed = 3;
 		this.audio_object = null;
-		this.patterns = [];
+		this.pattern_order_table = [];
 		
 		/*
 		this.loadBase64RawData = function(encoded_data)
@@ -237,7 +237,7 @@ Synth = function()
 			
 			for (j=0; j<song_length; j++)
 			{
-				song.patterns[j] = file[pos++];
+				song.pattern_order_table[j] = file[pos++];
 			}
 			
 			for (j=0; j<number_of_patterns; j++)
@@ -280,9 +280,9 @@ Synth = function()
 			// leave the first 44 bytes empty (= 11 samples, 2 channels, 2 bytes)
 			pos = 11;
 			
-			for (j in song.patterns)
+			for (j in song.pattern_order_table)
 			{
-				pattern = _patterns[song.patterns[j]];
+				pattern = _patterns[song.pattern_order_table[j]];
 				
 				for (k=0; k<pattern.data.length; k++)
 				{
