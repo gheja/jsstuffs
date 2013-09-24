@@ -163,7 +163,7 @@ SynthXmReader = function()
 				dv.skip(instrument.sample_header_size - 40);
 				
 				this.log("Reading instrument #" + i + ", sample #" + j + " data...");
-				sample.data = dv.getBytes(sample.length);
+				sample.data = new Int8Array(dv.getBytes(sample.length));
 				
 				instrument.samples[j] = sample;
 			}
