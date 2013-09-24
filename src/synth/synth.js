@@ -217,40 +217,40 @@ Synth = function()
 		_instruments[1].volume = 64;
 		_instruments[1].sample = _samples[0];
 		
-		file = base64_decode(file_base64);
+		file = new ArbitaryArray(base64_decode(file_base64));
 		dictionary = new Dictionary();
 		dictionary.setContents(base64_decode(dictionary_base64));
 		
 		pos = 0;
-		song_count = file[pos++];
+		song_count = file.readOne();
 		for (i=0; i<song_count; i++)
 		{
 			song = new this.SynthSong();
-			song.bpm = file[pos++];
-			song.speed = file[pos++];
+			song.bpm = file.readOne();
+			song.speed = file.readOne();
 			_songs[0] = song;
 			
-			number_of_patterns = file[pos++];
-			number_of_channels = file[pos++];
-			number_of_instruments = file[pos++];
-			song_length = file[pos++];
+			number_of_patterns = file.readOne();
+			number_of_channels = file.readOne();
+			number_of_instruments = file.readOne();
+			song_length = file.readOne();
 			
 			for (j=0; j<song_length; j++)
 			{
-				song.pattern_order_table[j] = file[pos++];
+				song.pattern_order_table[j] = file.readOne();
 			}
 			
 			for (j=0; j<number_of_patterns; j++)
 			{
-				number_of_rows = file[pos++];
+				number_of_rows = file.readOne();
 				
 				pattern = new this.SynthPattern();
 				columns = [
-					dictionary.getArray(file[pos++] + file[pos++] * 256), // notes
-					dictionary.getArray(file[pos++] + file[pos++] * 256), // instruments
-					dictionary.getArray(file[pos++] + file[pos++] * 256), // volumes
-					dictionary.getArray(file[pos++] + file[pos++] * 256), // effect types
-					dictionary.getArray(file[pos++] + file[pos++] * 256)  // effect parameters
+					dictionary.getArray(file.readTwo()), // notes
+					dictionary.getArray(file.readTwo()), // instruments
+					dictionary.getArray(file.readTwo()), // volumes
+					dictionary.getArray(file.readTwo()), // effect types
+					dictionary.getArray(file.readTwo())  // effect parameters
 				];
 				for (l=0; l<number_of_rows; l++)
 				{

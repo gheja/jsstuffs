@@ -158,9 +158,6 @@ SynthXmConverter = function()
 		this.log("  old packed size: " + old_size + ", unpacked size: " + unpacked_size +", approx. new size: " + new_size);
 		// -- end of stats
 		
-		buffer = [];
-		pos = 0;
-		
 		/*
 		  file format:
 		  bytes   type  content
@@ -194,36 +191,37 @@ SynthXmConverter = function()
 		                end
 		*/
 		
-		buffer[pos++] = this.xm_structures.length;
+		buffer = new ArbitaryArray(null, 256);
+		buffer.add(this.xm_structures.length);
 		for (i in this.xm_structures)
 		{
-			buffer[pos++] = this.xm_structures[i].header.default_bpm;
-			buffer[pos++] = this.xm_structures[i].header.default_tempo;
-			buffer[pos++] = this.xm_structures[i].header.number_of_patterns;
-			buffer[pos++] = this.xm_structures[i].header.number_of_channels;
-			buffer[pos++] = this.xm_structures[i].header.number_of_instruments;
-			buffer[pos++] = this.xm_structures[i].header.song_length;
+			buffer.add(this.xm_structures[i].header.default_bpm);
+			buffer.add(this.xm_structures[i].header.default_tempo);
+			buffer.add(this.xm_structures[i].header.number_of_patterns);
+			buffer.add(this.xm_structures[i].header.number_of_channels);
+			buffer.add(this.xm_structures[i].header.number_of_instruments);
+			buffer.add(this.xm_structures[i].header.song_length);
 			
 			for (j=0; j<this.xm_structures[i].header.song_length; j++)
 			{
-				buffer[pos++] = this.xm_structures[i].header.pattern_order_table[j];
+				buffer.add(this.xm_structures[i].header.pattern_order_table[j]);
 			}
 			
 			for (j in pattern_column_map[i])
 			{
 				for (n in pattern_column_map[i][j])
 				{
-					buffer[pos++] = this.xm_structures[i].patterns[j].number_of_rows;
+					buffer.add(this.xm_structures[i].patterns[j].number_of_rows);
 					for (k in pattern_column_map[i][j][n])
 					{
-						buffer[pos++] = pattern_column_map[i][j][n][k] & 0xFF;
-						buffer[pos++] = pattern_column_map[i][j][n][k] >> 16;
+						buffer.add(pattern_column_map[i][j][n][k] & 0xFF);
+						buffer.add(pattern_column_map[i][j][n][k] >> 16);
 					}
 				}
 			}
 		}
 		
-		this.generated_data = buffer;
+		this.generated_data = buffer.getAsUint8Array();
 		
 		return true;
 	}
