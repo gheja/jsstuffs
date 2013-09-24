@@ -41,12 +41,54 @@ SynthXmConverter = function()
 			channels = 0,
 			pattern_column_dictionary = [],
 			pattern_column_map = [],
+			instruments = [],
+			samples = [],
 			pattern,
+			instrument,
+			sample,
 			a = 0;
 		
 		this.log("Processing " + this.xm_structures.length + " songs...");
 		
-		// TODO: create new instruments for multi-sample instruments here
+		this.log("Processing instruments...");
+		
+		k = 0;
+		for (i in this.xm_structures)
+		{
+			for (j in this.xm_structures[i].instruments)
+			{
+				this.log("  song #" + i + ", instrument #" + j);
+				instrument = this.xm_structures[i].instruments[j];
+				
+				if (instrument.number_of_samples > 1)
+				{
+					this.log("WARNING: instruments with more than one sample are unsupported - reading the first sample only.");
+					// TODO: create new instruments for multi-sample instruments here
+				}
+				
+				if (instrument.samples[0].type & 8)
+				{
+					this.log("WARNING: 16-bit samples are unsupported yet - skipping this sample.");
+					continue;
+				}
+				
+				if (instrument.samples[0].compression_type != 0)
+				{
+					this.log("WARNING: samples not using delta packing (compression type = 0x00) are unsupported yet - skipping this sample.");
+					continue;
+				}
+				
+				old = 0;
+				sample = [];
+				for (l=0; l<instrument.samples[0].length; l++)
+				{
+					old += instrument.samples[0].data[l];
+					sample[l] = old;
+				}
+				samples[k++] = sample;
+			}
+		}
+		
 		
 		this.log("Creating the song-pattern-channel-column dictionary and map...");
 		for (i in this.xm_structures)
