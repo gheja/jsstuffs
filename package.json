@@ -1,0 +1,27 @@
+{
+  
+  
+  "NOTE": "this repository is not (yet?) intended to be an npm package, some values are filled with dummy values",
+  
+  
+  "name": "jsstuffs",
+  "author": "Gabor Heja (gheja)",
+  "description": "jsstuffs",
+  "version": "0.0.0",
+  "homepage": "https://github.com/gheja/jsstuffs",
+  "main": "we-have-no-main",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/gheja/jsstuffs.git"
+  },
+  "scripts": {
+    "test": "mocha --reporter spec"
+  },
+  "engines": {
+    "node": ">= 0.9"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "mocha": "1.x.x"
+  }
+}
