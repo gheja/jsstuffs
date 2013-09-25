@@ -1,7 +1,7 @@
 /** @const */
 var BASE64_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 
-function base64_encode(data)
+base64_encode = function(data)
 {
 	// the base64 encoding was originally written by @maettig for https://github.com/grumdrig/jsfxr
 	
@@ -81,7 +81,7 @@ function int32array_to_base64(data, endian_swap)
 */
 
 // TODO: implement a cross-browser solution instead of atob()
-function base64_decode(encoded_data)
+base64_decode = function(encoded_data)
 {
 	var data = atob(encoded_data), output = [];
 	
@@ -93,7 +93,7 @@ function base64_decode(encoded_data)
 	return output;
 }
 
-function base64_to_int16array(encoded_data)
+base64_to_int16array = function(encoded_data)
 {
 	var i, data = atob(encoded_data);
 	
