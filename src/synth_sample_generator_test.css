@@ -1,0 +1,115 @@
+body,
+html
+{
+	padding: 0;
+	margin: 0;
+}
+body,
+input
+{
+	font-family: Verdana, sans;
+	font-size: 8pt;
+}
+body
+{
+	background: #181818;
+	padding: 30px 8px 200px 8px;
+}
+#toolbar
+{
+	position: fixed;
+	padding: 4px;
+	top: 0;
+	left: 0;
+	right: 0;
+	background: rgba(0, 0, 0, 0.5);
+	color: #666;
+}
+.block
+{
+	background: #222;
+	margin: 0;
+	display: none;
+	border: none;
+}
+.title
+{
+	margin: 0;
+	background: #333;
+	color: #fff;
+	padding: 1px 2px 3px 2px;
+}
+.block .parameters
+{
+	margin: 0;
+	float: right;
+}
+.block .parameters input,
+#toolbar input
+{
+	margin: 0;
+	padding: 0 2px 0 2px;
+	width: 40px;
+	border: 1px solid #222;
+	background: #222;
+	color: #fff;
+	text-align: right;
+}
+.block .canvas
+{
+	height: 100px;
+	padding: 4px 0 4px 0;
+}
+a,
+a:visited
+{
+	color: #fff;
+	text-decoration: none;
+}
+a:hover
+{
+	color: #0bf;
+}
+.block:hover
+{
+	background: #012;
+}
+.block:hover .title
+{
+	background: #06a;
+}
+.block:hover .parameters input
+{
+	background: #048;
+	border: 1px solid #000;
+}
+.block:hover .parameters input:hover
+{
+	background: #222;
+	border: 1px solid #000;
+}
+.block .parameters a:hover
+{
+	color: #000;
+}
+#output
+{
+	display: block;
+}
+#output:hover
+{
+	background: #001800;
+}
+#output:hover .title
+{
+	background: #091;
+}
+#output:hover .parameters input:hover,
+{
+	border: 1px solid #091;
+}
+#toolbar input:hover
+{
+	background: #444;
+	border: 1px solid #ccc;
+}

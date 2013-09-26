@@ -1,0 +1,282 @@
+<html>
+	<head>
+		<script src="lib/arrays.js"></script>
+		<script src="lib/almost_random.js"></script>
+		<script src="lib/base64.js"></script>
+		<script src="lib/misc.js"></script>
+		<script src="synth/synth_sample_generator.js"></script>
+		<script src="synth_sample_generator_test.js"></script>
+		<link href="synth_sample_generator_test.css" rel="stylesheet" type="text/css" />
+	</head>
+	<body>
+<!-- generators -->
+		<div class="block" id="prototype_1">
+			<div class="title">
+				stored sample, signed 8-bit
+				<div class="parameters">
+					<a href="" onclick="kill_block(this); return false;">X</a>
+				</div>
+			</div>
+		</div>
+		
+		<div class="block" id="prototype_2">
+			<div class="title">
+				stored sample, signed 16-bit
+				<div class="parameters">
+					<a href="" onclick="kill_block(this); return false;">X</a>
+				</div>
+			</div>
+		</div>
+		
+		<div class="block" id="prototype_3">
+			<div class="title">
+				four points
+				<div class="parameters">
+					<input type="hidden" class="one" value="3" />
+					<input type="text" class="two" value="120" />
+					<input type="text" class="one" value="128" />
+					<input type="text" class="one" value="20" />
+					<input type="text" class="one" value="255" />
+					<input type="text" class="one" value="20" />
+					<input type="text" class="one" value="128" />
+					<input type="text" class="one" value="20" />
+					<input type="text" class="one" value="0" />
+					<input type="text" class="one" value="20" />
+					
+					<a href="#" onclick="play_block(this); return false;">&#9654;</a>
+					<a href="" onclick="kill_block(this); return false;">X</a>
+				</div>
+			</div>
+		</div>
+		
+		<div class="block" id="prototype_4">
+			<div class="title">
+				sine
+				<div class="parameters">
+					<input type="hidden" class="one" value="4" />
+					<input type="text" class="two" value="120" />
+					
+					<a href="#" onclick="play_block(this); return false;">&#9654;</a>
+					<a href="" onclick="kill_block(this); return false;">X</a>
+				</div>
+			</div>
+		</div>
+		
+		<div class="block" id="prototype_5">
+			<div class="title">
+				noise
+				<div class="parameters">
+					<input type="hidden" class="one" value="5" />
+					<input type="text" class="two" value="1024" />
+					<input type="text" class="two" value="42" />
+					
+					<a href="#" onclick="play_block(this); return false;">&#9654;</a>
+					<a href="" onclick="kill_block(this); return false;">X</a>
+				</div>
+			</div>
+		</div>
+		
+<!-- local operators -->
+		
+		<div class="block" id="prototype_51">
+			<div class="title">
+				volume
+				<div class="parameters">
+					<input type="hidden" class="one" value="51" />
+					<input type="text" class="one" value="64" />
+					
+					<a href="#" onclick="play_block(this); return false;">&#9654;</a>
+					<a href="" onclick="kill_block(this); return false;">X</a>
+				</div>
+			</div>
+		</div>
+		
+		<div class="block" id="prototype_52">
+			<div class="title">
+				volume2
+				<div class="parameters">
+					<input type="hidden" class="one" value="52" />
+					<input type="text" class="one" value="64" />
+					<input type="text" class="one" value="64" />
+					<input type="text" class="one" value="64" />
+					<input type="text" class="one" value="64" />
+					<input type="text" class="one" value="64" />
+					<input type="text" class="one" value="64" />
+					<input type="text" class="one" value="64" />
+					<input type="text" class="one" value="64" />
+					
+					<a href="#" onclick="play_block(this); return false;">&#9654;</a>
+					<a href="" onclick="kill_block(this); return false;">X</a>
+				</div>
+			</div>
+		</div>
+		
+		<div class="block" id="prototype_53">
+			<div class="title">
+				repeat
+				<div class="parameters">
+					<input type="hidden" class="one" value="53" />
+					<input type="text" class="one" value="10" />
+					
+					<a href="#" onclick="play_block(this); return false;">&#9654;</a>
+					<a href="" onclick="kill_block(this); return false;">X</a>
+				</div>
+			</div>
+		</div>
+		
+		<div class="block" id="prototype_51a">
+			<div class="title">
+				volume+repeat
+				<div class="parameters">
+					<input type="hidden" class="one" value="51" />
+					<input type="text" class="one" value="64" />
+					<input type="hidden" class="one" value="53" />
+					<input type="text" class="one" value="10" />
+					
+					<a href="#" onclick="play_block(this); return false;">&#9654;</a>
+					<a href="" onclick="kill_block(this); return false;">X</a>
+				</div>
+			</div>
+		</div>
+		
+		<div class="block" id="prototype_54">
+			<div class="title">
+				skew
+				<div class="parameters">
+					<input type="hidden" class="one" value="54" />
+					<input type="text" class="one" value="10" />
+					<input type="text" class="one" value="64" />
+					
+					<a href="#" onclick="play_block(this); return false;">&#9654;</a>
+					<a href="" onclick="kill_block(this); return false;">X</a>
+				</div>
+			</div>
+		</div>
+		
+		<div class="block" id="prototype_55">
+			<div class="title">
+				cut
+				<div class="parameters">
+					<input type="hidden" class="one" value="55" />
+					<input type="text" class="two" value="64" />
+					
+					<a href="#" onclick="play_block(this); return false;">&#9654;</a>
+					<a href="" onclick="kill_block(this); return false;">X</a>
+				</div>
+			</div>
+		</div>
+		
+<!-- global operators -->
+		<div class="block" id="prototype_101a">
+			<div class="title">
+				ovewrite final
+				<div class="parameters">
+					<input type="hidden" class="one" value="101" />
+					<input type="hidden" class="one" value="0" />
+					
+					<a href="#" onclick="play_block(this); return false;">&#9654;</a>
+					<a href="" onclick="kill_block(this); return false;">X</a>
+				</div>
+			</div>
+		</div>
+		
+		<div class="block" id="prototype_101b">
+			<div class="title">
+				add to final
+				<div class="parameters">
+					<input type="hidden" class="one" value="101" />
+					<input type="hidden" class="one" value="1" />
+					
+					<a href="#" onclick="play_block(this); return false;">&#9654;</a>
+					<a href="" onclick="kill_block(this); return false;">X</a>
+				</div>
+			</div>
+		</div>
+		
+		<div class="block" id="prototype_101c">
+			<div class="title">
+				subtract from final
+				<div class="parameters">
+					<input type="hidden" class="one" value="101" />
+					<input type="hidden" class="one" value="2" />
+					
+					<a href="#" onclick="play_block(this); return false;">&#9654;</a>
+					<a href="" onclick="kill_block(this); return false;">X</a>
+				</div>
+			</div>
+		</div>
+		
+		<div class="block" id="prototype_101d">
+			<div class="title">
+				multiply final by
+				<div class="parameters">
+					<input type="hidden" class="one" value="101" />
+					<input type="hidden" class="one" value="3" />
+					
+					<a href="#" onclick="play_block(this); return false;">&#9654;</a>
+					<a href="" onclick="kill_block(this); return false;">X</a>
+				</div>
+			</div>
+		</div>
+		
+		<div class="block" id="prototype_101e">
+			<div class="title">
+				divide final with
+				<div class="parameters">
+					<input type="hidden" class="one" value="101" />
+					<input type="hidden" class="one" value="4" />
+					
+					<a href="#" onclick="play_block(this); return false;">&#9654;</a>
+					<a href="" onclick="kill_block(this); return false;">X</a>
+				</div>
+			</div>
+		</div>
+		
+<!-- end -->
+		
+		<div id="toolbar">
+			[
+			<a href="#" onclick="clone_block('1'); return false;">stored 8-bit</a> |
+			<a href="#" onclick="clone_block('2'); return false;">stored 16-bit</a> |
+			<a href="#" onclick="clone_block('3'); return false;">four point</a> |
+			<a href="#" onclick="clone_block('4'); return false;">sine</a> |
+			<a href="#" onclick="clone_block('5'); return false;">noise</a>
+			]
+			&nbsp;&middot;&nbsp;
+			[
+			<a href="#" onclick="clone_block('51'); return false;">volume</a> |
+			<a href="#" onclick="clone_block('52'); return false;">volume2</a> |
+			<a href="#" onclick="clone_block('53'); return false;">repeat</a> |
+			<a href="#" onclick="clone_block('51a'); return false;">volume+repeat</a> |
+			<!-- <a href="#" onclick="clone_block('54'); return false;"> --> skew <!-- </a> --> |
+			<!-- <a href="#" onclick="clone_block('55'); return false;"> --> cut <!-- </a> -->
+			]
+			&nbsp;&middot;&nbsp;
+			[
+			<a href="#" onclick="clone_block('101a'); return false;">overwrite</a> |
+			<a href="#" onclick="clone_block('101b'); return false;">add</a> |
+			<a href="#" onclick="clone_block('101c'); return false;">subtract</a> |
+			<a href="#" onclick="clone_block('101d'); return false;">multiply</a> |
+			<!-- <a href="#" onclick="clone_block('101e'); return false;"> -->divide<!-- </a> -->
+			]
+			&nbsp;&middot;&nbsp;
+			zoom: <input type="text" id="zoom" class="zoom" value="1" >
+		</div>
+		
+		<div id="container">
+			<div id="container_dynamic">
+			</div>
+			
+			<div class="block" id="output">
+				<div class="title">
+					output  &middot; 44100 Hz, 16 bit, mono &middot; 876543 samples &middot; 1.23 seconds
+					<div class="parameters">
+						<a href="#" onclick="save_block(this); return false;">&#9660;</a>
+						<a href="#" onclick="play_block(this); return false;">&#9654;</a>
+					</div>
+				</div>
+				<canvas></canvas>
+			</div>
+		</div>
+	</body>
+</html>
