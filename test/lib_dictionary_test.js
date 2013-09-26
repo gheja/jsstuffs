@@ -2,20 +2,26 @@ var assert = require('assert');
 
 require('../src/lib/dictionary.js');
 
-var dictionary = new Dictionary();
-
 describe('Dictionary', function() {
+	var obj = null;
+	
+	describe('<constructor>', function() {
+		it('should not throw an error', function () {
+			obj = new Dictionary();
+		});
+	});
+	
 	describe('addArray()', function() {
 		it('should store the array [ 1, 2, 3 ] with index 0', function () {
-			var result = dictionary.addArray([ 1, 2, 3 ]);
+			var result = obj.addArray([ 1, 2, 3 ]);
 			assert.equal(result, 0);
 		});
 		it('should store the array [ 4, 5, 6 ] with index 1', function () {
-			var result = dictionary.addArray([ 4, 5, 6 ]);
+			var result = obj.addArray([ 4, 5, 6 ]);
 			assert.equal(result, 1);
 		});
 		it('should find the [ 1, 2, 3 ] array with index 0 when storing', function () {
-			var result = dictionary.addArray([ 1, 2, 3 ]);
+			var result = obj.addArray([ 1, 2, 3 ]);
 			assert.equal(result, 0);
 		});
 		it('should throw an exception when storing an empty array', function () {
@@ -23,7 +29,7 @@ describe('Dictionary', function() {
 			
 			try
 			{
-				dictionary.addArray([]);
+				obj.addArray([]);
 			}
 			catch (e)
 			{
@@ -41,7 +47,7 @@ describe('Dictionary', function() {
 			
 			try
 			{
-				dictionary.addArray(a);
+				obj.addArray(a);
 			}
 			catch (e)
 			{
@@ -53,25 +59,25 @@ describe('Dictionary', function() {
 	
 	describe('getArray()', function() {
 		it('should return the array [ 1, 2, 3 ] for index 0', function () {
-			var result = dictionary.getArray(0);
+			var result = obj.getArray(0);
 			assert.deepEqual(result, [ 1, 2, 3 ]);
 		});
 		it('should return the array [ 4, 5, 6 ] for index 1', function () {
-			var result = dictionary.getArray(1);
+			var result = obj.getArray(1);
 			assert.deepEqual(result, [ 4, 5, 6 ]);
 		});
 	});
 	
 	describe('getContentCount()', function() {
 		it('should return 2', function () {
-			var result = dictionary.getContentCount();
+			var result = obj.getContentCount();
 			assert.equal(result, 2);
 		});
 	});
 	
 	describe('getContents()', function() {
 		it('should return correct Uint8Array', function () {
-			var result = dictionary.getContents();
+			var result = obj.getContents();
 			assert.deepEqual(result, new Uint8Array([ 3, 1, 2, 3, 3, 4, 5, 6 ]));
 		});
 	});
@@ -80,11 +86,11 @@ describe('Dictionary', function() {
 		var input = new Uint8Array([ 3, 10, 11, 12, 3, 13, 14, 15 ]);
 		
 		it('should store the array... ', function () {
-			dictionary.setContents(input);
+			obj.setContents(input);
 			// assert.deepEqual(result, "");
 		});
 		it('... and then getContents() should return the input', function () {
-			var result = dictionary.getContents();
+			var result = obj.getContents();
 			assert.deepEqual(result, input);
 		});
 	});

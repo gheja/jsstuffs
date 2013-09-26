@@ -2,56 +2,59 @@ var assert = require('assert');
 
 require('../src/lib/arrays.js');
 
-var array = new ArbitaryArray([1, 2, 3, 4], 256);
-
-console.log(array);
-
 describe('ArbitaryArray', function() {
+	var obj = null;
+	
+	describe('<constructor>([ 1, 2, 3, 4 ], 256)', function() {
+		it('should not throw an error', function () {
+			obj = new ArbitaryArray([ 1, 2, 3, 4 ], 256);
+		});
+	});
 	describe('readOne()', function() {
 		it('should return 1', function () {
-			var result = array.readOne();
+			var result = obj.readOne();
 			assert.equal(result, 1);
 		});
 	});
 	describe('readTwo()', function() {
 		it('should return 2 + 3*256', function () {
-			var result = array.readTwo();
+			var result = obj.readTwo();
 			assert.equal(result, 2 + 3*256);
 		});
 	});
 	describe('eof()', function() {
 		it('should return false, when not at end of array', function () {
-			var result = array.eof();
+			var result = obj.eof();
 			assert.equal(result, false);
 		});
 		
 		
 		it('should return true, when at end of array', function () {
 			// read the last item
-			array.readOne();
+			obj.readOne();
 			
-			var result = array.eof();
+			var result = obj.eof();
 			assert.equal(result, true);
 		});
 	});
 	describe('seek()', function() {
 		it('seek(1)', function () {
-			array.seek(1);
+			obj.seek(1);
 		});
 		it('readOne() should return 2', function () {
-			var result = array.readOne();
+			var result = obj.readOne();
 			assert.equal(result, 2);
 		});
 	});
 	describe('add(5), add(6)', function() {
 		it('should run without errors', function () {
-			array.add(5);
-			array.add(6);
+			obj.add(5);
+			obj.add(6);
 		});
 	});
 	describe('getAsUint8Array()', function() {
 		it('should return correct Uint8Array', function () {
-			var result = array.getAsUint8Array();
+			var result = obj.getAsUint8Array();
 			assert.equal(result[0], 1);
 			assert.equal(result[1], 2);
 			assert.equal(result[2], 3);
@@ -62,7 +65,7 @@ describe('ArbitaryArray', function() {
 	});
 	describe('getAsUint16Array()', function() {
 		it('should return correct Uint16Array', function () {
-			var result = array.getAsUint16Array();
+			var result = obj.getAsUint16Array();
 			assert.equal(result[0] + result[1] * 256, 1 + 2*256);
 			assert.equal(result[2] + result[3] * 256, 3 + 4*256);
 			assert.equal(result[4] + result[5] * 256, 5 + 6*256);
