@@ -34,6 +34,15 @@ describe('ArbitaryArray', function() {
 			assert.equal(result, true);
 		});
 	});
+	describe('seek()', function() {
+		it('seek(1)', function () {
+			array.seek(1);
+		});
+		it('readOne() should return 2', function () {
+			var result = array.readOne();
+			assert.equal(result, 2);
+		});
+	});
 	describe('add(5), add(6)', function() {
 		it('should run without errors', function () {
 			array.add(5);

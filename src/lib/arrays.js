@@ -25,6 +25,11 @@ ArbitaryArray = function(a, b)
 		return this.pointer >= this.array.length;
 	}
 	
+	this.seek = function(i)
+	{
+		this.pointer = i;
+	}
+	
 	this.getAsUint8Array = function()
 	{
 		return new Uint8Array(this.array);
