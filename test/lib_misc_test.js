@@ -45,4 +45,9 @@ describe('Miscellaneous helpers', function() {
 			assert.equal(result, 32767);
 		});
 	});
+	describe('git branch test', function() {
+		it('this should fail', function () {
+			assert.equal(0, 1);
+		});
+	});
 });
