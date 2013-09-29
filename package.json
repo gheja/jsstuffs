@@ -25,6 +25,7 @@
     "btoa": "x"
   },
   "devDependencies": {
-    "mocha": "1.x.x"
+    "mocha": "1.x.x",
+    "jshint": "2.x"
   }
 }
