@@ -3,9 +3,9 @@ var ArbitaryArray = function(a, b)
 {
 	"use strict";
 	
-	this.array = a ? a : [];
-	this.multiplier = b ? b : 256;
-	this.pointer = 0;
+	var array = a ? a : [];
+	var multiplier = b ? b : 256;
+	var pointer = 0;
 	
 	this.add = function(value)
 	{
