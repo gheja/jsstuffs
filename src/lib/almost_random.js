@@ -5,7 +5,7 @@ var AlmostRandom = function()
 {
 	"use strict";
 	
-	this.seed = 42;
+	var seed = 42;
 	
 	this.setSeed = function(seed)
 	{
