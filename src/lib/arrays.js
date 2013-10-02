@@ -3,42 +3,44 @@ var ArbitaryArray = function(a, b)
 {
 	"use strict";
 	
-	var array = a ? a : [];
-	var multiplier = b ? b : 256;
-	var pointer = 0;
+	var _array = a ? a : [];
+	var _multiplier = b ? b : 256;
+	var _pointer = 0;
 	
 	this.add = function(value)
 	{
-		this.array.push(value);
+		_array.push(value);
 	};
 	
 	this.readOne = function()
 	{
-		return this.array[this.pointer++];
+		return _array[_pointer++];
 	};
 	
 	this.readTwo = function()
 	{
-		return this.array[this.pointer++] + this.array[this.pointer++] * this.multiplier;
+		return _array[_pointer++] + _array[_pointer++] * _multiplier;
 	};
 	
 	this.eof = function()
 	{
-		return this.pointer >= this.array.length;
+		return _pointer >= _array.length;
 	};
 	
 	this.seek = function(i)
 	{
-		this.pointer = i;
+		_pointer = i;
 	};
 	
 	this.getAsUint8Array = function()
 	{
-		return new Uint8Array(this.array);
+		return new Uint8Array(_array);
 	};
 	
 	this.getAsUint16Array = function()
 	{
-		return new Uint16Array(this.array);
+		return new Uint16Array(_array);
 	};
 };
+
+module.exports = ArbitaryArray;

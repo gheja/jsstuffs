@@ -5,19 +5,21 @@ var AlmostRandom = function()
 {
 	"use strict";
 	
-	var seed = 42;
+	var _seed = 42;
 	
 	this.setSeed = function(seed)
 	{
-		this.seed = seed;
+		_seed = seed;
 	};
 	
 	this.random = function()
 	{
 		// these numbers are from random.org
-		this.seed = (this.seed * 26031 + 35803270) % 5886503;
+		_seed = (_seed * 26031 + 35803270) % 5886503;
 		
 		// really.
-		return (this.seed % 73727) / 73727;
+		return (_seed % 73727) / 73727;
 	};
 };
+
+module.exports = AlmostRandom;

@@ -49,3 +49,5 @@ var Base64 = function()
 		return output;
 	};
 };
+
+module.exports = Base64;

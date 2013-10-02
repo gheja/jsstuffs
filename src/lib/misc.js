@@ -18,3 +18,5 @@ var Lib = function()
 		return this.clamp(a | 0, -32768, 32767);
 	};
 };
+
+module.exports = Lib;

@@ -3,7 +3,7 @@ var Dictionary = function()
 {
 	"use strict";
 	
-	var contents = [];
+	var _contents = [];
 	
 	this.addArray = function(a)
 	{
@@ -18,14 +18,14 @@ var Dictionary = function()
 			throw "Array must have <= 256 elements.";
 		}
 		
-		for (i=0; i<this.contents.length; i++)
+		for (i=0; i<_contents.length; i++)
 		{
-			if (this.contents[i].length === a.length)
+			if (_contents[i].length === a.length)
 			{
 				found = 1;
 				for (j=0; j<a.length; j++)
 				{
-					if (this.contents[i][j] !== a[j])
+					if (_contents[i][j] !== a[j])
 					{
 						found = 0;
 						break;
@@ -41,8 +41,8 @@ var Dictionary = function()
 		
 		if (!found)
 		{
-			index = this.contents.length;
-			this.contents[index] = a;
+			index = _contents.length;
+			_contents[index] = a;
 		}
 		
 		return index;
@@ -50,12 +50,12 @@ var Dictionary = function()
 	
 	this.getArray = function(i)
 	{
-		return this.contents[i];
+		return _contents[i];
 	};
 	
 	this.getContentCount = function()
 	{
-		return this.contents.length;
+		return _contents.length;
 	};
 	
 	this.getContents = function()
@@ -64,20 +64,20 @@ var Dictionary = function()
 		
 		pos = 0;
 		
-		for (i=0; i<this.contents.length; i++)
+		for (i=0; i<_contents.length; i++)
 		{
-			pos += this.contents[i].length + 1;
+			pos += _contents[i].length + 1;
 		}
 		
 		buffer = new Uint8Array(pos);
 		
 		pos = 0;
-		for (i=0; i<this.contents.length; i++)
+		for (i=0; i<_contents.length; i++)
 		{
-			buffer[pos++] = this.contents[i].length & 0xFF;
-			for (j=0; j<this.contents[i].length; j++)
+			buffer[pos++] = _contents[i].length & 0xFF;
+			for (j=0; j<_contents[i].length; j++)
 			{
-				buffer[pos++] = this.contents[i][j];
+				buffer[pos++] = _contents[i][j];
 			}
 		}
 		
@@ -99,10 +99,10 @@ var Dictionary = function()
 				length = 256;
 			}
 			
-			this.contents[i] = [];
+			_contents[i] = [];
 			for (j=0; j<length; j++)
 			{
-				this.contents[i][j] = buffer[pos++];
+				_contents[i][j] = buffer[pos++];
 			}
 			i++;
 		}
@@ -113,3 +113,5 @@ var Dictionary = function()
 		return this.getContents().length;
 	};
 };
+
+module.exports = Dictionary;
