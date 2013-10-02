@@ -1,6 +1,7 @@
 var assert = require('assert');
+var jshint = require('jshint');
 
-require('../src/lib/almost_random.js');
+var AlmostRandom = require('../src/lib/almost_random.js');
 
 describe('AlmostRandom', function() {
 	var obj = null;

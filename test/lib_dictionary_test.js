@@ -1,6 +1,6 @@
 var assert = require('assert');
 
-require('../src/lib/dictionary.js');
+var Dictionary = require('../src/lib/dictionary.js');
 
 describe('Dictionary', function() {
 	var obj = null;

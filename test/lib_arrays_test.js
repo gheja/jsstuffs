@@ -1,6 +1,6 @@
 var assert = require('assert');
 
-require('../src/lib/arrays.js');
+var ArbitaryArray = require('../src/lib/arrays.js');
 
 describe('ArbitaryArray', function() {
 	var obj = null;
