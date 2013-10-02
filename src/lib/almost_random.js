@@ -1,6 +1,6 @@
 // ugly, but simple and useful
 
-/** @construct */
+/** @constructor */
 var AlmostRandom = function()
 {
 	"use strict";
