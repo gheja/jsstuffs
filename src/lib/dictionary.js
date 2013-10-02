@@ -1,29 +1,31 @@
 /** @constructor */
-Dictionary = function()
+var Dictionary = function()
 {
+	"use strict";
+	
 	this.contents = [];
 	
 	this.addArray = function(a)
 	{
 		var i, j, index, found = 0;
 		
-		if (a.length == 0)
+		if (a.length === 0)
 		{
-			throw new Exception("Cannot store an empty array.");
+			throw "Cannot store an empty array.";
 		}
 		if (a.length > 256)
 		{
-			throw new Exception("Array must have <= 256 elements.");
+			throw "Array must have <= 256 elements.";
 		}
 		
 		for (i=0; i<this.contents.length; i++)
 		{
-			if (this.contents[i].length == a.length)
+			if (this.contents[i].length === a.length)
 			{
 				found = 1;
 				for (j=0; j<a.length; j++)
 				{
-					if (this.contents[i][j] != a[j])
+					if (this.contents[i][j] !== a[j])
 					{
 						found = 0;
 						break;
@@ -44,21 +46,21 @@ Dictionary = function()
 		}
 		
 		return index;
-	}
+	};
 	
 	this.getArray = function(i)
 	{
 		return this.contents[i];
-	}
+	};
 	
 	this.getContentCount = function()
 	{
 		return this.contents.length;
-	}
+	};
 	
 	this.getContents = function()
 	{
-		var i, pos, buffer;
+		var i, j, pos, buffer;
 		
 		pos = 0;
 		
@@ -80,7 +82,7 @@ Dictionary = function()
 		}
 		
 		return buffer;
-	}
+	};
 	
 	this.setContents = function(buffer)
 	{
@@ -92,7 +94,7 @@ Dictionary = function()
 		while (pos<buffer.length)
 		{
 			length = buffer[pos++];
-			if (length == 0)
+			if (length === 0)
 			{
 				length = 256;
 			}
@@ -104,10 +106,10 @@ Dictionary = function()
 			}
 			i++;
 		}
-	}
+	};
 	
 	this.getSize = function()
 	{
 		return this.getContents().length;
-	}
-}
+	};
+};

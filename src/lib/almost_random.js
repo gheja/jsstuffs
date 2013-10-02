@@ -1,14 +1,16 @@
 // ugly, but simple and useful
 
 /** @construct */
-AlmostRandom = function()
+var AlmostRandom = function()
 {
+	"use strict";
+	
 	this.seed = 42;
 	
 	this.setSeed = function(seed)
 	{
 		this.seed = seed;
-	}
+	};
 	
 	this.random = function()
 	{
@@ -17,5 +19,5 @@ AlmostRandom = function()
 		
 		// really.
 		return (this.seed % 73727) / 73727;
-	}
-}
+	};
+};
