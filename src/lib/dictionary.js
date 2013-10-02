@@ -3,7 +3,7 @@ var Dictionary = function()
 {
 	"use strict";
 	
-	this.contents = [];
+	var contents = [];
 	
 	this.addArray = function(a)
 	{
