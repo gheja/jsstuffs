@@ -1,5 +1,4 @@
 var assert = require('assert');
-var jshint = require('jshint');
 
 var AlmostRandom = require('../src/lib/almost_random.js');
 
