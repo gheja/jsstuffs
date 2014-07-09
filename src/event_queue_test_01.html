@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Synchronized Event Queue demo</title>
+		<script src="event_queue/synchronized_event_queue.js"></script>
+		<style type="text/css">
+			fieldset
+			{
+				width: 1000px;
+			}
+			.status
+			{
+				background: #eeeeee;
+				font-size: 9pt;
+			}
+		</style>
+	</head>
+	<body>
+		<script type="text/javascript">
+			var DummyNetwork = function() {
+				this.peers = [];
+				
+				this.registerPeer = function(obj)
+				{
+					this.peers[this.peers.length] = obj;
+				}
+				
+				this.send = function(block, originator_id)
+				{
+					for (i = 0; i<this.peers.length; i++)
+					{
+						if (this.peers[i].source_id != originator_id)
+						{
+							this.peers[i].receiveBlockFromServer(block);
+						}
+					}
+				}
+			};
+			
+			var _dummy_network = new DummyNetwork();
+			
+			var a = new SynchronizedEventQueue();
+			a.setSourceId(0);
+			a.initialize();
+			
+			var b = new SynchronizedEventQueue();
+			b.setSourceId(1);
+			b.initialize();
+			
+			var c = new SynchronizedEventQueue();
+			c.setSourceId(2);
+			c.initialize();
+			
+			_dummy_network.registerPeer(a, a.source_id);
+			_dummy_network.registerPeer(b, b.source_id);
+			_dummy_network.registerPeer(c, c.source_id);
+			
+			a.registerNewSource(1);
+			a.registerNewSource(2);
+			
+			b.registerNewSource(0);
+			b.registerNewSource(2);
+			
+			c.registerNewSource(0);
+			c.registerNewSource(1);
+			
+			function update_div(obj, div_name)
+			{
+				var p1_status = document.getElementById(div_name);
+				var i;
+				var str = "";
+				
+				str += "current_write_block_id: " + obj.current_write_block_id + ", ";
+				str += "current_write_tick: " + obj.current_write_tick + ",  ";
+				str += "current_read_block_id: " + obj.current_read_block_id + ", ";
+				str += "current_read_tick: " + obj.current_read_tick + ", ";
+				str += "last_complete_block_id: " + obj.last_complete_block_id + ", ";
+				str += "ticks_per_block: " + obj.ticks_per_block;
+				if (obj.read_waiting)
+				{
+					str += " *READ WAITING*";
+				}
+				if (obj.write_waiting)
+				{
+					str += " *WRITE WAITING*";
+				}
+				str += "<br/>";
+				
+				str += "buffer: ";
+				
+				for (i=0; i<obj.buffer.length; i++)
+				{
+					str += "[" + obj.buffer[i][0] + ", " + obj.buffer[i][1] + "] ";
+				}
+				
+				p1_status.innerHTML = str;
+			}
+			
+			function update_timeline(obj, canvas_name)
+			{
+				var canvas = document.getElementById(canvas_name);
+				var ctx = canvas.getContext("2d");
+				var i, j, k, a, b, c;
+				
+				c = obj.source_id;
+				
+				ctx.fillStyle = "#ffffff";
+				ctx.fillRect(0, 0, 1000, 40);
+				
+				// block marker
+				ctx.fillStyle = "rgba(0, 0, 0, 0.2)";
+				for (i=0; i<100; i++)
+				{
+					ctx.fillRect((i * obj.ticks_per_block) * 4, 0, 4, 40);
+				}
+				
+				// write block pointer
+				ctx.fillStyle = "rgba(255, 0, 0, 0.2)";
+				ctx.fillRect((obj.current_write_block_id * obj.ticks_per_block) * 4, c * 10 + 5, obj.ticks_per_block * 4, 11);
+				
+				// write tick pointer
+				ctx.fillStyle = "rgba(192, 0, 0, 0.7)";
+				ctx.fillRect((obj.current_write_block_id * obj.ticks_per_block + obj.current_write_tick) * 4, c * 10 + 5, 4, 11);
+				
+				// read block pointer
+				ctx.fillStyle = "rgba(0, 255, 0, 0.2)";
+				ctx.fillRect((obj.current_read_block_id * obj.ticks_per_block) * 4, 0, obj.ticks_per_block * 4, 100);
+				
+				// read pointer
+				ctx.fillStyle = "rgba(0, 192, 0, 0.7)";
+				ctx.fillRect((obj.current_read_block_id * obj.ticks_per_block + obj.current_read_tick) * 4, 0, 4, 100);
+				
+				// completed block highlight
+				ctx.fillStyle = "rgba(0, 192, 0, 0.5)";
+				ctx.fillRect(0, 0, ((obj.last_complete_block_id + 1)* obj.ticks_per_block) * 4, 4);
+				
+				for (i=0; i<3; i++)
+				{
+					if (i == c)
+					{
+						ctx.fillStyle = "rgba(128, 128, 128, 0.4)";
+					}
+					else
+					{
+						ctx.fillStyle = "rgba(128, 128, 128, 0.2)";
+					}
+					ctx.fillRect(0, i * 10 + 6, 1000, 9);
+				}
+				
+				for (i=0; i<3; i++)
+				{
+					for (j=0; j<obj.sources[i].blocks.length; j++)
+					{
+						a = obj.sources[i].blocks[j];
+						for (k=0; k<a.block_data.length; k++)
+						{
+							b = a.block_data[k];
+							if (b[1] == 1)
+							{
+								ctx.fillStyle = "#880000";
+							}
+							else if (b[1] == 2)
+							{
+								ctx.fillStyle = "#008800";
+							}
+							else if (b[1] == 3)
+							{
+								ctx.fillStyle = "#000088";
+							}
+							else
+							{
+								ctx.fillStyle = "#880088";
+							}
+							ctx.fillRect((a.block_id * obj.ticks_per_block + b[0]) * 4, i * 10 + 6, 4, 9);
+						}
+					}
+				}
+				
+				// buffer
+				for (j=0; j<obj.buffer.length; j++)
+				{
+					a = obj.buffer;
+					for (k=0; k<a.length; k++)
+					{
+						b = a[k];
+						if (b[1] == 1)
+						{
+							ctx.fillStyle = "#880000";
+						}
+						else if (b[1] == 2)
+						{
+							ctx.fillStyle = "#008800";
+						}
+						else if (b[1] == 3)
+						{
+							ctx.fillStyle = "#000088";
+						}
+						else
+						{
+							ctx.fillStyle = "#880088";
+						}
+						ctx.fillRect((obj.current_write_block_id * obj.ticks_per_block + b[0]) * 4, c * 10 + 6, 4, 9);
+					}
+				}
+			}
+			
+			function update()
+			{
+				update_div(a, "p1_status");
+				update_div(b, "p2_status");
+				update_div(c, "p3_status");
+				update_timeline(a, "p1_timeline");
+				update_timeline(b, "p2_timeline");
+				update_timeline(c, "p3_timeline");
+			}
+			
+			function player_event(obj, event)
+			{
+				obj.addEvent(event);
+				update();
+			}
+			
+			function player_write_tick(obj)
+			{
+				obj.writeTick();
+				update();
+			}
+			
+			function player_read_tick(obj)
+			{
+				obj.readTick();
+				update();
+			}
+			
+			function auto_tick_advance()
+			{
+				if (document.getElementById("p1_auto_tick").checked)
+				{
+					a.writeTick();
+					a.readTick();
+				}
+				if (document.getElementById("p2_auto_tick").checked)
+				{
+					b.writeTick();
+					b.readTick();
+				}
+				if (document.getElementById("p3_auto_tick").checked)
+				{
+					c.writeTick();
+					c.readTick();
+				}
+				update();
+				window.setTimeout(auto_tick_advance, 1000 / document.getElementById("game_speed").value);
+			}
+			
+			window.setTimeout(auto_tick_advance, 1000);
+			
+			function auto_event_advance()
+			{
+				if (document.getElementById("p1_auto_event").checked)
+				{
+					if (Math.random() > 0.9)
+					{
+						a.addEvent(Math.floor(Math.random() * 4));
+					}
+				}
+				if (document.getElementById("p2_auto_event").checked)
+				{
+					if (Math.random() > 0.9)
+					{
+						b.addEvent(Math.floor(Math.random() * 4));
+					}
+				}
+				if (document.getElementById("p3_auto_event").checked)
+				{
+					if (Math.random() > 0.9)
+					{
+						c.addEvent(Math.floor(Math.random() * 4));
+					}
+				}
+				update();
+				
+				window.setTimeout(auto_event_advance, 1000 / document.getElementById("game_speed").value);
+			}
+			
+			window.setTimeout(auto_event_advance, 1000);
+		</script>
+		<fieldset>
+			<legend>Game options</legend>
+			Engine speed (ticks per second):
+			<select id="game_speed">
+				<option value="1" selected="selected">1 tps</option>
+				<option value="2">2 tps</option>
+				<option value="5">5 tps</option>
+				<option value="10">10 tps</option>
+				<option value="15">15 tps</option>
+				<option value="30">30 tps</option>
+				<option value="60">60 tps</option>
+			</select>
+		</fieldset>
+		<fieldset>
+			<legend>Player 1</legend>
+			Player generated events:
+			<a href="#" onclick="player_event(a, 1); return false;">1</a>
+			<a href="#" onclick="player_event(a, 2); return false;">2</a>
+			<a href="#" onclick="player_event(a, 3); return false;">3</a>
+			<a href="#" onclick="player_event(a, 4); return false;">4</a><br/>
+			Random events:
+			<input type="checkbox" id="p1_auto_event" value="1" /><br/>
+			Tick advance:
+			<a href="#" onclick="player_write_tick(a); return false;">write tick</a>
+			<a href="#" onclick="player_read_tick(a); return false;">read tick</a><br/>
+			Automatic tick advance:
+			<input type="checkbox" id="p1_auto_tick" value="1" /><br/>
+			Internal status of SyncEQ:
+			<div id="p1_status" class="status">&nbsp;</div>
+			Timeline:<br/>
+			<canvas id="p1_timeline" width="1000" height="40"></canvas>
+		</fieldset>
+		<fieldset>
+			<legend>Player 2</legend>
+			Player generated events:
+			<a href="#" onclick="player_event(b, 1); return false;">1</a>
+			<a href="#" onclick="player_event(b, 2); return false;">2</a>
+			<a href="#" onclick="player_event(b, 3); return false;">3</a>
+			<a href="#" onclick="player_event(b, 4); return false;">4</a><br/>
+			Random events:
+			<input type="checkbox" id="p2_auto_event" value="1" /><br/>
+			Tick advance:
+			<a href="#" onclick="player_write_tick(b); return false;">write tick</a>
+			<a href="#" onclick="player_read_tick(b); return false;">read tick</a><br/>
+			Automatic tick advance:
+			<input type="checkbox" id="p2_auto_tick" value="1" /><br/>
+			Internal status of SyncEQ:
+			<div id="p2_status" class="status">&nbsp;</div>
+			Timeline:<br/>
+			<canvas id="p2_timeline" width="1000" height="40"></canvas>
+		</fieldset>
+		<fieldset>
+			<legend>Player 3</legend>
+			Player generated events:
+			<a href="#" onclick="player_event(c, 1); return false;">1</a>
+			<a href="#" onclick="player_event(c, 2); return false;">2</a>
+			<a href="#" onclick="player_event(c, 3); return false;">3</a>
+			<a href="#" onclick="player_event(c, 4); return false;">4</a><br/>
+			Random events:
+			<input type="checkbox" id="p3_auto_event" value="1" /><br/>
+			Tick advance:
+			<a href="#" onclick="player_write_tick(c); return false;">write tick</a>
+			<a href="#" onclick="player_read_tick(c); return false;">read tick</a><br/>
+			Automatic tick advance:
+			<input type="checkbox" id="p3_auto_tick" value="1" /><br/>
+			Internal status of SyncEQ:
+			<div id="p3_status" class="status">&nbsp;</div>
+			Timeline:<br/>
+			<canvas id="p3_timeline" width="1000" height="40"></canvas>
+		</fieldset>
+		<script type="text/javascript">
+			update();
+		</script>
+	</body>
+</html>
