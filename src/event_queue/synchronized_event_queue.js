@@ -20,10 +20,6 @@ SynchronizedEventQueue = (function(total_source_count, this_source_id)
 	this.sources = [];
 	
 	
-	this.initialize = function()
-	{
-	}
-	
 	this.addEvent = function(event)
 	{
 		if (this.write_waiting)
