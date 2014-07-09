@@ -67,7 +67,7 @@ SynchronizedEventQueue = (function(total_source_count, this_source_id)
 	  * Stores a block in the queue for the given source (indicated in the block).
 	  *
 	  * @private
-	  * @param {block} block the block to be stored
+	  * @param {Object} block the block to be stored
 	  */
 	this.storeBlock = function(block)
 	{
@@ -98,7 +98,7 @@ SynchronizedEventQueue = (function(total_source_count, this_source_id)
 	  * construction of the instance.
 	  *
 	  * @private
-	  * @param {block} block the block to be sent
+	  * @param {Object} block the block to be sent
 	  */
 	this.sendBlockToServer = function(block)
 	{
@@ -111,7 +111,7 @@ SynchronizedEventQueue = (function(total_source_count, this_source_id)
 	  * source.
 	  *
 	  * @public
-	  * @param {block} block the received block
+	  * @param {Object} block the received block
 	  */
 	this.receiveBlockFromServer = function(block)
 	{
@@ -210,7 +210,7 @@ SynchronizedEventQueue = (function(total_source_count, this_source_id)
 	  * we are waiting for some other sources) {false} is returned.
 	  *
 	  * @public
-	  * @returns {Array|false}
+	  * @returns {Array|boolean}
 	  */
 	this.readTick = function()
 	{
@@ -242,7 +242,7 @@ SynchronizedEventQueue = (function(total_source_count, this_source_id)
 	  * we cannot store another write) {false} is returned, otherwise {true}.
 	  *
 	  * @public
-	  * @return {Boolean}
+	  * @return {boolean}
 	  */
 	this.writeTick = function()
 	{
@@ -264,8 +264,8 @@ SynchronizedEventQueue = (function(total_source_count, this_source_id)
 	
 	
 	// initialization
-	/** @private */
-	var i, j;
+	/** @private */ var i;
+	/** @private */ var j;
 	
 	for (i=0; i<total_source_count; i++)
 	{
