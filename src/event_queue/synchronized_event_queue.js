@@ -23,8 +23,6 @@ SynchronizedEventQueue = (function(total_source_count, this_source_id)
 	{
 		var i;
 		
-		this.sources[source_id].active = 1;
-		
 		// initial dummy blocks (pretend we received them)
 		for (i=0; i<this.write_read_block_distance; i++)
 		{
@@ -92,10 +90,6 @@ SynchronizedEventQueue = (function(total_source_count, this_source_id)
 		
 		for (i=0; i<this.sources.length; i++)
 		{
-			if (!this.sources[i].active)
-			{
-				continue;
-			}
 			if (this.sources[i].last_block_id < k || k == -1)
 			{
 				k = this.sources[i].last_block_id;
@@ -113,10 +107,6 @@ SynchronizedEventQueue = (function(total_source_count, this_source_id)
 		
 		for (i=0; i<this.sources.length; i++)
 		{
-			if (!this.sources[i].active)
-			{
-				continue;
-			}
 			for (j=0; j<this.sources[i].blocks[this.current_read_block_id].block_data.length; j++)
 			{
 				a = this.sources[i].blocks[this.current_read_block_id].block_data[j];
@@ -187,7 +177,7 @@ SynchronizedEventQueue = (function(total_source_count, this_source_id)
 	
 	for (i=0; i<total_source_count; i++)
 	{
-		this.sources[i] = { blocks: [], last_block_id: 0, active: 0 };
+		this.sources[i] = { blocks: [], last_block_id: 0 };
 	}
 	this.source_id = this_source_id;
 	this.current_read_block_id = 0;
