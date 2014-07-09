@@ -38,7 +38,6 @@ SynchronizedEventQueue = (function(total_source_count, this_source_id)
 	/** @private */ this.last_complete_block_id = 0;
 	/** @private */ this.write_read_block_distance = 2;
 	/** @private */ this.ticks_per_block = 10;
-	/** @private */ this.ticks_per_read_block = 10;
 	/** @private */ this.buffer = []; // the block currently being written by this source
 	/** @private */ this.read_waiting = 0;
 	/** @private */ this.write_waiting = 0;
@@ -224,7 +223,7 @@ SynchronizedEventQueue = (function(total_source_count, this_source_id)
 		
 		this.current_read_tick++;
 		
-		if (this.current_read_tick == this.ticks_per_read_block)
+		if (this.current_read_tick == this.ticks_per_block)
 		{
 			this.current_read_block_id++;
 			this.current_read_tick = 0;
