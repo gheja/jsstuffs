@@ -3,10 +3,8 @@
   */
 
 /** @constructor */
-SynchronizedEventQueue = (function()
+SynchronizedEventQueue = (function(total_source_count, this_source_id)
 {
-	var i;
-	
 	this.source_id = 0;
 	this.current_write_block_id = 0;
 	this.current_write_tick = 0;
@@ -20,17 +18,6 @@ SynchronizedEventQueue = (function()
 	this.read_waiting = 0;
 	this.write_waiting = 0;
 	this.sources = [];
-	
-	// TODO: hardcoded to 8 players max.
-	for (i=0; i<7; i++)
-	{
-		this.sources[i] = { blocks: [], last_block_id: 0, active: 0 };
-	}
-	
-	this.setSourceId = function(new_source_id)
-	{
-		this.source_id = new_source_id;
-	}
 	
 	this.registerNewSource = function(source_id)
 	{
@@ -48,11 +35,6 @@ SynchronizedEventQueue = (function()
 	
 	this.initialize = function()
 	{
-		var i;
-		
-		this.current_read_block_id = 0;
-		this.current_write_block_id = this.write_read_block_distance;
-		this.registerNewSource(this.source_id);
 	}
 	
 	this.addEvent = function(event)
@@ -197,5 +179,20 @@ SynchronizedEventQueue = (function()
 	{
 		this.storeBlock(block);
 	}
+	
+	
+	
+	// initialization
+	var i;
+	
+	for (i=0; i<total_source_count; i++)
+	{
+		this.sources[i] = { blocks: [], last_block_id: 0, active: 0 };
+	}
+	this.source_id = this_source_id;
+	this.current_read_block_id = 0;
+	this.current_write_block_id = this.write_read_block_distance;
+	this.registerNewSource(this.source_id);
+	
 });
 

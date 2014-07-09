@@ -39,17 +39,9 @@
 			
 			var _dummy_network = new DummyNetwork();
 			
-			var a = new SynchronizedEventQueue();
-			a.setSourceId(0);
-			a.initialize();
-			
-			var b = new SynchronizedEventQueue();
-			b.setSourceId(1);
-			b.initialize();
-			
-			var c = new SynchronizedEventQueue();
-			c.setSourceId(2);
-			c.initialize();
+			var a = new SynchronizedEventQueue(3, 0);
+			var b = new SynchronizedEventQueue(3, 1);
+			var c = new SynchronizedEventQueue(3, 2);
 			
 			_dummy_network.registerPeer(a, a.source_id);
 			_dummy_network.registerPeer(b, b.source_id);
