@@ -1,5 +1,30 @@
 /**
   * Synchronized Event Queue
+  *
+  * This event queue is intended to be used in a multiplayer environment where
+  * the synchronous execution of events from all player is crucial (i.e. in a
+  * realtime strategy game).
+  *
+  * The queue has "sources" - these are the players. The sources put events into
+  * the queue and simultaneously read them. The events are groupped in "blocks".
+  * When a source finishes a block it sends it through the network to the
+  * other sources with an incremental block id. All the blocks represent
+  * a specified time slice. All the sources wait until they receive the blocks
+  * for a specified time and then process them, the trick is that there are two
+  * so-called pointers, one for the write ("current_write_block_id") and one for
+  & the read operation ("current_read_block_id"). The read pointer is always
+  * behind the write pointer so there is a slight delay (hey, this is a queue!)
+  * between putting the item in the queue and getting it out. This delay is used
+  * to transmit the block over the network.
+  *
+  * So basically a write is happening when an action is made (i.e. sent a unit
+  * to a position) and the read happens when the action has its effects (i.e.
+  * the unit starts to move).
+  *
+  * This kind of queue is being used in numerous of famous (if not legendary)
+  * RTS games and game series, i.e. Age of Empires, Warcraft, Starcraft. There
+  * are also methods to hide the delay in the game introduced by the queue, most
+  * common is probably the acknowledgement by playing a sound or some animation.
   */
 
 /** @constructor */
