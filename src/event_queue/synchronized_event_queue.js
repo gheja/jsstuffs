@@ -47,7 +47,13 @@ SynchronizedEventQueue = (function(total_source_count, this_source_id)
 	
 	this.sendBlockToServer = function(block)
 	{
+		// TODO: this needs to be a callback
 		_dummy_network.send(block, this.source_id);
+	}
+	
+	this.receiveBlockFromServer = function(block)
+	{
+		this.storeBlock(block);
 	}
 	
 	this.sendCurrentBlock = function()
@@ -147,12 +153,6 @@ SynchronizedEventQueue = (function(total_source_count, this_source_id)
 		}
 		
 		return true;
-	}
-	
-	// this receives the packet
-	this.receiveBlockFromServer = function(block)
-	{
-		this.storeBlock(block);
 	}
 	
 	
