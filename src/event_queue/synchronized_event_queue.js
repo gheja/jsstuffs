@@ -19,17 +19,6 @@ SynchronizedEventQueue = (function(total_source_count, this_source_id)
 	this.write_waiting = 0;
 	this.sources = [];
 	
-	this.registerNewSource = function(source_id)
-	{
-		var i;
-		
-		// initial dummy blocks (pretend we received them)
-		for (i=0; i<this.write_read_block_distance; i++)
-		{
-			this.storeDummyBlock(source_id, i);
-		}
-		return true;
-	}
 	
 	this.initialize = function()
 	{
@@ -173,16 +162,20 @@ SynchronizedEventQueue = (function(total_source_count, this_source_id)
 	
 	
 	// initialization
-	var i;
+	var i, j;
 	
 	for (i=0; i<total_source_count; i++)
 	{
 		this.sources[i] = { blocks: [], last_block_id: 0 };
+		
+		// initial dummy blocks (pretend we received them)
+		for (j=0; j<this.write_read_block_distance; j++)
+		{
+			this.storeDummyBlock(i, j);
+		}
 	}
 	this.source_id = this_source_id;
 	this.current_read_block_id = 0;
 	this.current_write_block_id = this.write_read_block_distance;
-	this.registerNewSource(this.source_id);
-	
 });
 
