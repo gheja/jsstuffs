@@ -99,11 +99,11 @@
 				
 				// write block pointer
 				ctx.fillStyle = "rgba(255, 0, 0, 0.2)";
-				ctx.fillRect((obj.current_write_block_id * obj.ticks_per_block) * 4, c * 10 + 5, obj.ticks_per_block * 4, 11);
+				ctx.fillRect((obj.current_write_block_id * obj.ticks_per_block) * 4, c * 10 + 6, obj.ticks_per_block * 4, 9);
 				
 				// write tick pointer
 				ctx.fillStyle = "rgba(192, 0, 0, 0.7)";
-				ctx.fillRect((obj.current_write_block_id * obj.ticks_per_block + obj.current_write_tick) * 4, c * 10 + 5, 4, 11);
+				ctx.fillRect((obj.current_write_block_id * obj.ticks_per_block + obj.current_write_tick) * 4, c * 10 + 6, 4, 9);
 				
 				// read block pointer
 				ctx.fillStyle = "rgba(0, 255, 0, 0.2)";
@@ -127,11 +127,8 @@
 					{
 						ctx.fillStyle = "rgba(128, 128, 128, 0.2)";
 					}
-					ctx.fillRect(0, i * 10 + 6, 1000, 9);
-				}
-				
-				for (i=0; i<3; i++)
-				{
+					ctx.fillRect(0, i * 10 + 6, (obj.sources[i].blocks.length * obj.ticks_per_block) * 4, 9);
+						
 					for (j=0; j<obj.sources[i].blocks.length; j++)
 					{
 						a = obj.sources[i].blocks[j];
