@@ -25,23 +25,30 @@
   * RTS games and game series, i.e. Age of Empires, Warcraft, Starcraft. There
   * are also methods to hide the delay in the game introduced by the queue, most
   * common is probably the acknowledgement by playing a sound or some animation.
+  *
+  * @module SynchronizedEventQueue
   */
 
-/** @constructor */
+/**
+  * @constructor
+  * @class SynchronizedEventQueue
+  * @param {number} total_source_count the number of sources to be initialized
+  * @param {number} this_source_id the unique id of this source
+  */
 SynchronizedEventQueue = (function(total_source_count, this_source_id)
 {
-	/** @private */ this.source_id = 0;
-	/** @private */ this.current_write_block_id = 0;
-	/** @private */ this.current_write_tick = 0;
-	/** @private */ this.current_read_block_id = 0;
-	/** @private */ this.current_read_tick = 0;
-	/** @private */ this.last_complete_block_id = 0;
-	/** @private */ this.write_read_block_distance = 2;
-	/** @private */ this.ticks_per_block = 10;
-	/** @private */ this.buffer = []; // the block currently being written by this source
-	/** @private */ this.read_waiting = 0;
-	/** @private */ this.write_waiting = 0;
-	/** @private */ this.sources = [];
+	/** @private {number} */ this.source_id = 0;
+	/** @private {number} */ this.current_write_block_id = 0;
+	/** @private {number} */ this.current_write_tick = 0;
+	/** @private {number} */ this.current_read_block_id = 0;
+	/** @private {number} */ this.current_read_tick = 0;
+	/** @private {number} */ this.last_complete_block_id = 0;
+	/** @private {number} */ this.write_read_block_distance = 2;
+	/** @private {number} */ this.ticks_per_block = 10;
+	/** @private {Array} */ this.buffer = []; // the block currently being written by this source
+	/** @private {boolean} */ this.read_waiting = false;
+	/** @private {boolean} */ this.write_waiting = false;
+	/** @private {Array} */ this.sources = [];
 	
 	/**
 	  * Add an event in the current block at the current tick. The event is an
@@ -50,7 +57,7 @@ SynchronizedEventQueue = (function(total_source_count, this_source_id)
 	  *
 	  * Note: any number of events can be stored on a tick.
 	  *
-	  * @public
+	  * @method addEvent
 	  * @param {*} event the event to be stored, sent and then processed
 	  */
 	this.addEvent = function(event)
@@ -66,6 +73,7 @@ SynchronizedEventQueue = (function(total_source_count, this_source_id)
 	/**
 	  * Stores a block in the queue for the given source (indicated in the block).
 	  *
+	  * @method storeBlock
 	  * @private
 	  * @param {Object} block the block to be stored
 	  */
@@ -83,6 +91,7 @@ SynchronizedEventQueue = (function(total_source_count, this_source_id)
 	  * distance between the write and read pointers. This method creates just
 	  * enough empty blocks to make the queue valid.
 	  *
+	  * @method storeDummyBlock
 	  * @private
 	  * @param {number} source_id the id of the source
 	  * @param {number} id the block id
@@ -97,6 +106,7 @@ SynchronizedEventQueue = (function(total_source_count, this_source_id)
 	  * Send a block to the server via the callback function registered on
 	  * construction of the instance.
 	  *
+	  * @method sendBlockToServer
 	  * @private
 	  * @param {Object} block the block to be sent
 	  */
@@ -110,7 +120,7 @@ SynchronizedEventQueue = (function(total_source_count, this_source_id)
 	  * Callback function to receive a block from the server sent by another
 	  * source.
 	  *
-	  * @public
+	  * @method receiveBlockFromServer
 	  * @param {Object} block the received block
 	  */
 	this.receiveBlockFromServer = function(block)
@@ -121,6 +131,7 @@ SynchronizedEventQueue = (function(total_source_count, this_source_id)
 	/**
 	  * Finalize the current block on this source and send it over the network.
 	  *
+	  * @method sendCurrentBlock
 	  * @private
 	  */
 	this.sendCurrentBlock = function()
@@ -147,6 +158,7 @@ SynchronizedEventQueue = (function(total_source_count, this_source_id)
 	  * A block is only complete when all the sources have sent and we have
 	  * received them.
 	  *
+	  * @method updateLastCompleteBlockId
 	  * @private
 	  */
 	this.updateLastCompleteBlockId = function()
@@ -169,8 +181,9 @@ SynchronizedEventQueue = (function(total_source_count, this_source_id)
 	/**
 	  * Get the events for the current tick from all the sources.
 	  *
+	  * @method getEventsForThisTick
 	  * @private
-	  * @returns {Array}
+	  * @return {Array}
 	  */
 	this.getEventsForThisTick = function()
 	{
@@ -197,6 +210,7 @@ SynchronizedEventQueue = (function(total_source_count, this_source_id)
 	  * See if we need to wait for the other sources and update the flags
 	  * accordingly.
 	  *
+	  * @method updateWaitStatus
 	  * @private
 	  */
 	this.updateWaitStatus = function()
@@ -209,8 +223,8 @@ SynchronizedEventQueue = (function(total_source_count, this_source_id)
 	  * Try to read the events for the next tick. If the read is blocked (i.e.
 	  * we are waiting for some other sources) {false} is returned.
 	  *
-	  * @public
-	  * @returns {Array|boolean}
+	  * @method readTick
+	  * @return {Array|boolean}
 	  */
 	this.readTick = function()
 	{
@@ -241,7 +255,7 @@ SynchronizedEventQueue = (function(total_source_count, this_source_id)
 	  * If the write is blocked (i.e. we are waiting for some other sources or
 	  * we cannot store another write) {false} is returned, otherwise {true}.
 	  *
-	  * @public
+	  * @method writeTick
 	  * @return {boolean}
 	  */
 	this.writeTick = function()
@@ -264,8 +278,8 @@ SynchronizedEventQueue = (function(total_source_count, this_source_id)
 	
 	
 	// initialization
-	/** @private */ var i;
-	/** @private */ var j;
+	/** @private {number} */ var i;
+	/** @private {number} */ var j;
 	
 	for (i=0; i<total_source_count; i++)
 	{
