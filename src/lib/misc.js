@@ -129,7 +129,13 @@ clamp_and_round_uint24 = function(value)
   */
 clamp_and_round_int32 = function(value)
 {
-	return clamp(value | 0, -2147483648, 2147483647);
+	/*
+	  Note: the bitwise OR operator ("|") is working on 32 bit integers
+	  therefore rounding values outside the 32 bits is not working, falling back
+	  to Math.round().
+	*/
+	
+	return clamp(Math.round(value), -2147483648, 2147483647);
 }
 
 /**
@@ -140,5 +146,10 @@ clamp_and_round_int32 = function(value)
   */
 clamp_and_round_uint32 = function(value)
 {
-	return clamp(value | 0, 0, 4294967295);
+	/*
+	  Note: the bitwise OR operator ("|") is working on 32 bit integers
+	  therefore rounding values outside the 32 bits is not working, falling back
+	  to Math.round().
+	*/
+	return clamp(Math.round(value), 0, 4294967295);
 }
