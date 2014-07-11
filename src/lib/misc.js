@@ -12,6 +12,39 @@ clamp = function(value, lower_limit, upper_limit)
 }
 
 /**
+  * Rounds then clamps a given value to fit in a signed 6 bit integer.
+  *
+  * @nosideeffects
+  * @param {number} value the value to be clamped
+  */
+clamp_and_round_int6 = function(value)
+{
+	return clamp(value | 0, -32, 31);
+}
+
+/**
+  * Rounds then clamps a given value to fit in an unsigned 6 bit integer.
+  *
+  * @nosideeffects
+  * @param {number} value the value to be clamped
+  */
+clamp_and_round_uint6 = function(value)
+{
+	return clamp(value | 0, 0, 63);
+}
+
+/**
+  * Rounds then clamps a given value to fit in a signed 8 bit integer.
+  *
+  * @nosideeffects
+  * @param {number} value the value to be clamped
+  */
+clamp_and_round_int8 = function(value)
+{
+	return clamp(value | 0, -128, 127);
+}
+
+/**
   * Rounds then clamps a given value to fit in an unsigned 8 bit integer.
   *
   * @nosideeffects
@@ -23,6 +56,28 @@ clamp_and_round_uint8 = function(value)
 }
 
 /**
+  * Rounds then clamps a given value to fit in a signed 12 bit integer.
+  *
+  * @nosideeffects
+  * @param {number} value the value to be clamped
+  */
+clamp_and_round_int12 = function(value)
+{
+	return clamp(value | 0, -2048, 2047);
+}
+
+/**
+  * Rounds then clamps a given value to fit in an unsigned 12 bit integer.
+  *
+  * @nosideeffects
+  * @param {number} value the value to be clamped
+  */
+clamp_and_round_uint12 = function(value)
+{
+	return clamp(value | 0, 0, 4095);
+}
+
+/**
   * Rounds then clamps a given value to fit in a signed 16 bit integer.
   *
   * @nosideeffects
@@ -31,4 +86,59 @@ clamp_and_round_uint8 = function(value)
 clamp_and_round_int16 = function(value)
 {
 	return clamp(value | 0, -32768, 32767);
+}
+
+/**
+  * Rounds then clamps a given value to fit in an unsigned 16 bit integer.
+  *
+  * @nosideeffects
+  * @param {number} value the value to be clamped
+  */
+clamp_and_round_uint16 = function(value)
+{
+	return clamp(value | 0, 0, 65535);
+}
+
+/**
+  * Rounds then clamps a given value to fit in a signed 24 bit integer.
+  *
+  * @nosideeffects
+  * @param {number} value the value to be clamped
+  */
+clamp_and_round_int24 = function(value)
+{
+	return clamp(value | 0, -8388608, 8388607);
+}
+
+/**
+  * Rounds then clamps a given value to fit in an unsigned 24 bit integer.
+  *
+  * @nosideeffects
+  * @param {number} value the value to be clamped
+  */
+clamp_and_round_uint24 = function(value)
+{
+	return clamp(value | 0, 0, 16777215);
+}
+
+/**
+  * Rounds then clamps a given value to fit in a signed 32 bit integer.
+  *
+  * @nosideeffects
+  * @param {number} value the value to be clamped
+  */
+clamp_and_round_int32 = function(value)
+{
+	return clamp(value | 0, -2147483648, 2147483647);
+}
+
+/**
+  * Rounds then clamps a given value to fit in an unsigned 32 bit integer.
+  *
+  * @nosideeffects
+  * @param {number} value the value to be clamped
+  */
+clamp_and_round_uint32 = function(value)
+{
+	return clamp(value | 0, 0, 4294967295);
 }
