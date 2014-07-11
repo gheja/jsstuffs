@@ -1,6 +1,13 @@
 /** @const */
 var BASE64_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 
+/**
+  * Returns a base64 encoded string of input data
+  *
+  * @nosideeffects
+  * @param {array} data the array to be encoded
+  * @returns {string}
+  */
 base64_encode = function(data)
 {
 	// the base64 encoding was originally written by @maettig for https://github.com/grumdrig/jsfxr
@@ -18,6 +25,13 @@ base64_encode = function(data)
 }
 
 // TODO: implement a cross-browser solution instead of atob()
+/**
+  * Returns an array of unsigned 8 bit integers from a base64 encoded string.
+  *
+  * @nosideeffects
+  * @param {string} data to be decoded
+  * @returns {array}
+  */
 base64_decode = function(encoded_data)
 {
 	var data = atob(encoded_data), output = [];
@@ -30,6 +44,13 @@ base64_decode = function(encoded_data)
 	return output;
 }
 
+/**
+  * Returns an array of signed 16 bit integers from a base64 encoded string.
+  *
+  * @nosideeffects
+  * @param {string} data to be decoded
+  * @returns {array}
+  */
 base64_to_int16array = function(encoded_data)
 {
 	var i, data = atob(encoded_data);
