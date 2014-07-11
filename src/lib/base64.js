@@ -29,7 +29,7 @@ base64_encode = function(data)
   * Returns an array of unsigned 8 bit integers from a base64 encoded string.
   *
   * @nosideeffects
-  * @param {string} data to be decoded
+  * @param {string} encoded_data to be decoded
   * @returns {array}
   */
 base64_decode = function(encoded_data)
@@ -48,7 +48,7 @@ base64_decode = function(encoded_data)
   * Returns an array of signed 16 bit integers from a base64 encoded string.
   *
   * @nosideeffects
-  * @param {string} data to be decoded
+  * @param {string} encoded_data to be decoded
   * @returns {array}
   */
 base64_to_int16array = function(encoded_data)
