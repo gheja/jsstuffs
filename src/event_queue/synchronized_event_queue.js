@@ -58,7 +58,6 @@ SynchronizedEventQueue = (function(total_source_count, this_source_id)
 	  * Note: any number of events can be stored on a tick.
 	  *
 	  * @method addEvent
-	  * @public
 	  * @param {*} event the event to be stored, sent and then processed
 	  */
 	this.addEvent = function(event)
@@ -122,7 +121,6 @@ SynchronizedEventQueue = (function(total_source_count, this_source_id)
 	  * source.
 	  *
 	  * @method receiveBlockFromServer
-	  * @public
 	  * @param {Object} block the received block
 	  */
 	this.receiveBlockFromServer = function(block)
@@ -185,7 +183,7 @@ SynchronizedEventQueue = (function(total_source_count, this_source_id)
 	  *
 	  * @method getEventsForThisTick
 	  * @private
-	  * @returns {Array}
+	  * @return {Array}
 	  */
 	this.getEventsForThisTick = function()
 	{
@@ -226,8 +224,7 @@ SynchronizedEventQueue = (function(total_source_count, this_source_id)
 	  * we are waiting for some other sources) {false} is returned.
 	  *
 	  * @method readTick
-	  * @public
-	  * @returns {Array|boolean}
+	  * @return {Array|boolean}
 	  */
 	this.readTick = function()
 	{
@@ -259,7 +256,6 @@ SynchronizedEventQueue = (function(total_source_count, this_source_id)
 	  * we cannot store another write) {false} is returned, otherwise {true}.
 	  *
 	  * @method writeTick
-	  * @public
 	  * @return {boolean}
 	  */
 	this.writeTick = function()
