@@ -72,6 +72,7 @@ ArbitaryArray = function(a, b)
 	  * Seeks into a specified position in array.
 	  *
 	  * @method seek
+	  * @param {number} i the position to seek to
 	  * @return {Boolean}
 	  */
 	this.seek = function(i)
