@@ -20,7 +20,7 @@ Synth = function()
 	/** @constructor */
 	this.SynthSample = function()
 	{
-		// every SynthSample is in 44100 Hz, mono, signed 16 bit sounds
+		// every SynthSample is in 44100 Hz, mono, signed 16 bit format
 		
 		// DEBUG BEGIN
 		this.name = "";
@@ -31,7 +31,7 @@ Synth = function()
 		this.pan = 0;
 		this.loop_start = 0;
 		this.loop_length = 0;
-		this.sample_loop_type = 0; // 0: none, 1: forward, 2: ping-pong
+		this.sample_loop_type = 1; // 0: none, 1: forward, 2: ping-pong
 		this.relative_note_number = 32; // -96..+95, 0 means C-4 = C-4
 		
 		/** @type Int16Array */
@@ -140,7 +140,7 @@ Synth = function()
 		
 		this.renderNote = function(buffer, pos, length)
 		{
-			var i, speed = this.getFrequency(this.note + this.sample.relative_note_number, 0) / 44100;
+			var i, speed = this.getFrequency(this.note + this.sample.relative_note_number - 32, 0) / 44100;
 			
 			for (i=0; i<length; i++)
 			{
@@ -271,9 +271,9 @@ Synth = function()
 			song = _songs[i];
 			data = [];
 			
-			// samples per seconds / beats per sec / speed
-			// samples_per_tick = Math.round(44100 / (song.bpm / 60 / song.speed * 12 / 3));
-			samples_per_tick = Math.round(44100 / (song.bpm / song.speed));
+			// this is just an approximation, I could not get my head over the correct calculation...
+			// TODO: make a correct calculation for this
+			samples_per_tick = Math.round((1 / song.bpm * 3 * 0.8) * 44100);
 			
 			channels = [ new this.SynthChannel() ];
 			
@@ -287,7 +287,7 @@ Synth = function()
 				for (k=0; k<pattern.data.length; k++)
 				{
 					// NNA is "cut"
-					this.log("rendering pattern: row: " + k + ", pos: " + pos + ", time: " + Math.round(pos / 44100 * 1000) + "ms, row data: " + pattern.data[k]);
+					this.log("rendering pattern: row: " + k + ", pos: " + pos + ", time: " + Math.round(pos / 44100 * 1000) + "ms, ticks: " + song.speed + ", row data: " + pattern.data[k]);
 					
 					pattern.data[k][0] && channels[0].setNote(pattern.data[k][0]);
 					pattern.data[k][1] && channels[0].setInstrument(_instruments[pattern.data[k][1]]);
