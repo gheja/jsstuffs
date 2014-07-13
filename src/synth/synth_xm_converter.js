@@ -160,35 +160,36 @@ SynthXmConverter = function()
 		
 		/*
 		  file format:
-		  bytes   type  content
-		      1  uint8  number of songs
-		                -- first song --
-		      1  uint8  default bpm
-		      1  uint8  default speed
-		      1  uint8  number of patterns
-		      1  uint8  number of channels
-		      1  uint8  number of instruments
-		      1  uint8  song length (in patterns)
-		                -- pattern order table --
-		      1  uint8  first pattern id
-		                second pattern id
-		                "song length"th pattern id
-		                -- first pattern --
-		      1  uint8  first channel notes index in dictionary
-		      1  uint8  first channel instruments index in dictionary
-		      1  uint8  first channel effect types index in dictionary
-		      1  uint8  first channel effect parameters index in dictionary
-		      1  uint8  second channel notes...
-		                ... "number of channels"th notes...
-		                -- second pattern --
-		                ...
-		                -- "number of patterns"th pattern --
-		                ...
-		                -- second song --
-		                ...
-		                -- "number of songs"th song --
-		                ...
-		                end
+		  bytes    type  content
+		      1   uint8  number of songs
+		                 -- first song --
+		      1   uint8  default bpm
+		      1   uint8  default speed
+		      1   uint8  number of patterns
+		      1   uint8  number of channels
+		      1   uint8  number of instruments
+		      1   uint8  song length (in patterns)
+		                 -- pattern order table --
+		      1   uint8  first pattern id
+		                 second pattern id
+		                 "song length"th pattern id
+		                 -- first pattern --
+		      1   uint8  number of rows
+		      2  uint16  first channel notes index in dictionary
+		      2  uint16  first channel instruments index in dictionary
+		      2  uint16  first channel effect types index in dictionary
+		      2  uint16  first channel effect parameters index in dictionary
+		      2  uint16  second channel notes...
+		                 ... "number of channels"th notes...
+		                 -- second pattern --
+		                 ...
+		                 -- "number of patterns"th pattern --
+		                 ...
+		                 -- second song --
+		                 ...
+		                 -- "number of songs"th song --
+		                 ...
+		                 end
 		*/
 		
 		buffer = new ArbitaryArray(null, 256);
