@@ -171,8 +171,8 @@ SynthXmConverter = function()
 		      1   uint8  song length (in patterns)
 		                 -- pattern order table --
 		      1   uint8  first pattern id
-		                 second pattern id
-		                 "song length"th pattern id
+		      1   uint8  second pattern id
+		      1   uint8  "song length"th pattern id
 		                 -- first pattern --
 		      1   uint8  number of rows
 		      2  uint16  first channel notes index in dictionary
