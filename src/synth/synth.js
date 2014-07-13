@@ -145,9 +145,13 @@ Synth = function()
 			
 			for (i=0; i<length; i++)
 			{
+				// volume has a 0.5 multiplier to prevent clipping (note:
+				// samples played simultaneously on more channels can still
+				// create clipping)
+				//
 				// left and right channels
-				buffer[(pos + i)*2] = this.sample.getDataOnPosition(this.sample_position) * this.volume / 64;
-				buffer[(pos + i)*2+1] = this.sample.getDataOnPosition(this.sample_position) * this.volume / 64;
+				buffer[(pos + i)*2] = this.sample.getDataOnPosition(this.sample_position) * this.volume / 64 * 0.5;
+				buffer[(pos + i)*2+1] = this.sample.getDataOnPosition(this.sample_position) * this.volume / 64 * 0.5;
 				this.sample_position += speed;
 			}
 		}
