@@ -53,7 +53,7 @@
 				_log("Processing successfully finished.");
 				
 				var result = xm_converter.getGeneratedData();
-				document.getElementById("output_samples").innerHTML = result.samples;
+				document.getElementById("output_instrument_titles").innerHTML = result.instrument_titles;
 				document.getElementById("output_data").innerHTML = result.data_base64;
 				document.getElementById("output_dictionary").innerHTML = result.dictionary_base64;
 			}
@@ -85,8 +85,8 @@
 			<input type="file" onchange="file_upload(this);" />
 		</div>
 		<input type="button" value="Process the loaded files" onclick="process_files(); return false;" /><br/>
-		samples:<br/>
-		<textarea id="output_samples"></textarea>
+		instrument titles:<br/>
+		<textarea id="output_instrument_titles"></textarea>
 		data:<br/>
 		<textarea id="output_data"></textarea>
 		dictionary:<br/>
