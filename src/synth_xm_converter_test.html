@@ -52,7 +52,10 @@
 				}
 				_log("Processing successfully finished.");
 				
-				document.getElementById("output").innerHTML = xm_converter.getGeneratedData();
+				var result = xm_converter.getGeneratedData();
+				document.getElementById("output_samples").innerHTML = result.samples;
+				document.getElementById("output_data").innerHTML = result.data_base64;
+				document.getElementById("output_dictionary").innerHTML = result.dictionary_base64;
 			}
 		</script>
 		<style type="text/css">
@@ -69,10 +72,10 @@
 				padding: 4px;
 				overflow-y: scroll;
 			}
-			#output
+			textarea
 			{
 				width: 100%;
-				height: 200px;
+				height: 100px;
 				word-wrap: break-word;
 			}
 		</style>
@@ -81,8 +84,13 @@
 		<div id="files">
 			<input type="file" onchange="file_upload(this);" />
 		</div>
-		<input type="button" value="Process the loaded files" onclick="process_files(); return false;" />
-		<textarea id="output"></textarea>
+		<input type="button" value="Process the loaded files" onclick="process_files(); return false;" /><br/>
+		samples:<br/>
+		<textarea id="output_samples"></textarea>
+		data:<br/>
+		<textarea id="output_data"></textarea>
+		dictionary:<br/>
+		<textarea id="output_dictionary"></textarea>
 		<div id="log"></div>
 	</body>
 </html>

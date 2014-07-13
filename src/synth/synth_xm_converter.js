@@ -228,6 +228,10 @@ SynthXmConverter = function()
 	
 	this.getGeneratedData = function()
 	{
-		return base64_encode(new Uint8Array(this.generated_data)) + "\n\n" + base64_encode(this.dictionary.getContents());
+		return {
+			samples: "",
+			data_base64: base64_encode(new Uint8Array(this.generated_data)),
+			dictionary_base64: base64_encode(this.dictionary.getContents())
+		};
 	}
 }
