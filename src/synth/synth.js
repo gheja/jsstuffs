@@ -32,7 +32,7 @@ Synth = function()
 		this.loop_start = 0;
 		this.loop_length = 0;
 		this.sample_loop_type = 1; // 0: none, 1: forward, 2: ping-pong
-		this.relative_note_number = 32; // -96..+95, 0 means C-4 = C-4
+		this.relative_note_number = 0; // -96..+95, 0 means C-4 = C-4
 		
 		/** @type Int16Array */
 		this.samples = null; // sample data
@@ -140,7 +140,8 @@ Synth = function()
 		
 		this.renderNote = function(buffer, pos, length)
 		{
-			var i, speed = this.getFrequency(this.note + this.sample.relative_note_number - 32, 0) / 44100;
+			// the notes in XM files seem to be one note off - correcting it here
+			var i, speed = this.getFrequency(this.note + this.sample.relative_note_number - 1, 0) / 44100;
 			
 			for (i=0; i<length; i++)
 			{
@@ -273,7 +274,7 @@ Synth = function()
 			
 			// this is just an approximation, I could not get my head over the correct calculation...
 			// TODO: make a correct calculation for this
-			samples_per_tick = Math.round((1 / song.bpm * 3 * 0.8) * 44100);
+			samples_per_tick = Math.round((1 / song.bpm * 2.501129) * 44100);
 			
 			channels = [ new this.SynthChannel() ];
 			
