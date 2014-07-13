@@ -220,7 +220,7 @@ SynthXmReader = function()
 					if (a & 4)
 					{
 						j++;
-						unpacked[k][2] = this.patterns[i].data[j];
+						unpacked[k][2] = this.patterns[i].data[j] - 16;
 					}
 					// effect type follows
 					if (a & 8)
@@ -237,7 +237,7 @@ SynthXmReader = function()
 				}
 				else
 				{
-					unpacked[k] = [ a, this.patterns[i].data[j + 1], this.patterns[i].data[j + 2], this.patterns[i].data[j + 3], this.patterns[i].data[j + 4] ];
+					unpacked[k] = [ a, this.patterns[i].data[j + 1], this.patterns[i].data[j + 2] - 16, this.patterns[i].data[j + 3], this.patterns[i].data[j + 4] ];
 					j += 4;
 				}
 				k++;
