@@ -37,34 +37,9 @@ Synth = function()
 			this.samples = base64_to_int16array(encoded_data);
 		}
 		
-		this.getDataOnPosition = function(pos, loop_type)
+		this.getDataOnPosition = function(pos)
 		{
-			var pos2 = Math.round(pos);
-			
-			if (loop_type == 1) // forward
-			{
-				return this.samples[pos2 % this.samples.length];
-			}
-			else if (loop_type == 2) // ping-pong
-			{
-				if (pos2 % (this.samples.length * 2) < this.samples.length)
-				{
-					return this.samples[pos2 % this.samples.length];
-				}
-				else
-				{
-					return this.samples[this.samples.length - (pos2 % this.samples.length + 1)];
-				}
-			}
-			else // no loop
-			{
-				if (pos2 < this.samples.length)
-				{
-					return this.samples[pos2];
-				}
-			}
-			
-			return 0;
+			return this.samples[pos];
 		}
 	}
 	
@@ -116,6 +91,8 @@ Synth = function()
 		this.sample_speed = 0;
 		this.sample_position = 0;
 		this.sample_loop_type = 1; // 0: none, 1: forward, 2: ping-pong
+		this.sample_loop_start = 0;
+		this.sample_loop_length = 0;
 		this.relative_note_number = 0; // -96..+95, 0 means C-4 = C-4
 		this.finished = 0;
 		
@@ -141,6 +118,8 @@ Synth = function()
 			this.instrument = instrument;
 			this.sample = instrument.sample;
 			this.sample_loop_type = instrument.sample_loop_type;
+			this.sample_loop_start = instrument.sample_loop_start;
+			this.sample_loop_length = instrument.sample_loop_length;
 			this.relative_note_number = instrument.relative_note_number;
 			this.sample_position = 0;
 			this.log("  instrument: " + instrument);
@@ -168,9 +147,46 @@ Synth = function()
 			this.log("  volume: " + this.volume);
 		}
 		
+		this.getSamplePosition = function()
+		{
+			var pos = Math.floor(this.sample_position), a;
+			
+			if (this.sample_loop_type == 1) // forward
+			{
+				if (pos >= this.sample_loop_start + this.sample_loop_length)
+				{
+					pos = this.sample_loop_start + (pos - this.sample_loop_start) % this.sample_loop_length;
+				}
+			}
+			else if (this.sample_loop_type == 2) // ping-pong
+			{
+				if (pos >= this.sample_loop_start + this.sample_loop_length)
+				{
+					// unlike XM we calculate with real loop length not its duplicate
+					a = pos - this.sample_loop_start;
+					a = a % (this.sample_loop_length * 2);
+					if (a >= this.sample_loop_length)
+					{
+						a = this.sample_loop_length - (a % this.sample_loop_length) - 1;
+					}
+					pos = this.sample_loop_start + a;
+				}
+			}
+			else // no loop
+			{
+				if (pos >= this.sample.samples.length)
+				{
+					pos = -1;
+				}
+			}
+			
+			
+			return pos;
+		}
+		
 		this.renderNote = function(buffer, pos, length)
 		{
-			var i, speed;
+			var i, a, speed, pos2;
 			
 			if (this.sample == null)
 			{
@@ -182,13 +198,23 @@ Synth = function()
 			
 			for (i=0; i<length; i++)
 			{
+				pos2 = this.getSamplePosition();
+				
+				if (pos2 == -1)
+				{
+					break;
+				}
+				
+				a = this.sample.getDataOnPosition(pos2);
+				
 				// volume has a 0.5 multiplier to prevent clipping (note:
 				// samples played simultaneously on more channels can still
 				// create clipping)
 				//
 				// left and right channels
-				buffer[(pos + i)*2] += this.sample.getDataOnPosition(this.sample_position, this.sample_loop_type) * this.volume / 64 * (1 - Math.min(((this.panning - 128) / 128), 1)) * 0.5;
-				buffer[(pos + i)*2+1] += this.sample.getDataOnPosition(this.sample_position, this.sample_loop_type) * this.volume / 64 * Math.min(this.panning / 128, 1) * 0.5;
+				buffer[(pos + i)*2] +=  a * this.volume / 64 * (1 - Math.min(((this.panning - 128) / 128), 1)) * 0.5;
+				buffer[(pos + i)*2+1] += a * this.volume / 64 * Math.min(this.panning / 128, 1) * 0.5;
+				
 				this.sample_position += speed;
 			}
 		}
@@ -270,6 +296,8 @@ Synth = function()
 			_instruments[i] = new this.SynthInstrument();
 			_instruments[i].sample_id = file.readOne();
 			_instruments[i].sample_loop_type = file.readOne();
+			_instruments[i].sample_loop_start = file.readTwo();
+			_instruments[i].sample_loop_length = file.readTwo();
 			_instruments[i].volume = file.readOne();
 			_instruments[i].panning = file.readOne();
 			_instruments[i].finetune = file.readOne();

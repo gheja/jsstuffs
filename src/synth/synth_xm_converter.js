@@ -234,6 +234,8 @@ SynthXmConverter = function()
 		                 -- instrument table --
 		      1   uint8  first instrument sample id
 		      1   uint8  first instrument sample repeat mode
+		      2  uint16  first instrument sample repeat start
+		      2  uint16  first instrument sample repeat length
 		      1   uint8  first instrument volume
 		      1   uint8  first instrument panning
 		      1   uint8  first instrument finetune
@@ -276,9 +278,23 @@ SynthXmConverter = function()
 		for (i in new_instruments)
 		{
 			buffer.add(new_instruments[i].sample_id);
+			
 			// strip the 0x10 flag (0: 8-bit, 1: 16-bit sample), keep the
 			// loop type
 			buffer.add(new_instruments[i].samples[0].type & 0x0f);
+			
+			// we store sample indexes not byte indexes - divide by two in case
+			// of 16-bit samples
+			if ((new_instruments[i].samples[0].type & 0x10) == 0x10)
+			{
+				buffer.addTwo(new_instruments[i].samples[0].loop_start / 2);
+				buffer.addTwo(new_instruments[i].samples[0].loop_length / 2);
+			}
+			else
+			{
+				buffer.addTwo(new_instruments[i].samples[0].loop_start);
+				buffer.addTwo(new_instruments[i].samples[0].loop_length);
+			}
 			buffer.add(new_instruments[i].samples[0].volume);
 			buffer.add(new_instruments[i].samples[0].panning);
 			buffer.add(new_instruments[i].samples[0].finetune);
@@ -306,8 +322,7 @@ SynthXmConverter = function()
 					buffer.add(this.xm_structures[i].patterns[j].number_of_rows);
 					for (k in pattern_column_map[i][j][n])
 					{
-						buffer.add(pattern_column_map[i][j][n][k] & 0xFF);
-						buffer.add(pattern_column_map[i][j][n][k] >> 16);
+						buffer.addTwo(pattern_column_map[i][j][n][k]);
 					}
 				}
 			}
