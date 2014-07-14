@@ -280,7 +280,8 @@ SynthXmConverter = function()
 			buffer.add(new_instruments[i].samples[0].volume);
 			buffer.add(new_instruments[i].samples[0].panning);
 			buffer.add(new_instruments[i].samples[0].finetune);
-			buffer.add(new_instruments[i].samples[0].relative_note_number);
+			// convert the relative note number to _unsigned_
+			buffer.add(new_instruments[i].samples[0].relative_note_number + 128);
 		}
 		
 		for (i in this.xm_structures)
