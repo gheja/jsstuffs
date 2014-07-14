@@ -64,8 +64,6 @@ SynthXmConverter = function()
 		instrument_remap_table = []; // [song_id][instrument_id] = new_instrument_id
 		new_instrument_id = 0;
 		
-		// new_instruments[0] = { name: 'dummy', volume: 0, panning: 0, finetune: 0, relative_note_number: 0 };
-		
 		for (i in this.xm_structures)
 		{
 			instrument_remap_table[i] = [];

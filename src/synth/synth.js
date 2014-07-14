@@ -26,9 +26,6 @@ Synth = function()
 		this.name = "";
 		// DEBUG END
 		
-		this.loop_start = 0;
-		this.loop_length = 0;
-		
 		/** @type Int16Array */
 		this.samples = null; // sample data
 		
@@ -73,12 +70,6 @@ Synth = function()
 		this.vibratio_depth = 0;
 		this.vibratio_rate = 0;
 		*/
-		
-		/*
-		this.loadBase64RawData = function(encoded_data)
-		{
-		}
-		*/
 	}
 	
 	/** @constructor */
@@ -102,11 +93,7 @@ Synth = function()
 			console.log("SynthChannel: " + s);
 		}
 		// DEBUG END
-/*
-		this.loadBase64RawData = function(encoded_data)
-		{
-		}
-*/
+		
 		this.getFrequency = function(note, finetune)
 		{
 			var period = 10*12*16*4 - note * 16*4 - finetune / 2;
@@ -163,7 +150,6 @@ Synth = function()
 			{
 				if (pos >= this.sample_loop_start + this.sample_loop_length)
 				{
-					// unlike XM we calculate with real loop length not its duplicate
 					a = pos - this.sample_loop_start;
 					a = a % (this.sample_loop_length * 2);
 					if (a >= this.sample_loop_length)
@@ -230,12 +216,6 @@ Synth = function()
 		this.number_of_rows;
 		this.number_of_channels;
 		this.channel_data = [ [], [], [], [] ]; // row data for 4 channels
-		
-		/*
-		this.loadBase64RawData = function(encoded_data)
-		{
-		}
-		*/
 	}
 	
 	/** @constructor */
@@ -249,12 +229,6 @@ Synth = function()
 		this.speed = 3;
 		this.audio_object = null;
 		this.pattern_order_table = [];
-		
-		/*
-		this.loadBase64RawData = function(encoded_data)
-		{
-		}
-		*/
 	}
 	
 	this.render = function(samples, file_base64, dictionary_base64)
@@ -324,7 +298,6 @@ Synth = function()
 			
 			number_of_patterns = file.readOne();
 			number_of_channels = file.readOne();
-			// number_of_channels = 1;
 			song_length = file.readOne();
 			
 			for (j=0; j<song_length; j++)
@@ -385,12 +358,6 @@ Synth = function()
 			// leave the first 44 bytes empty for the WAVE header
 			// = 11 samples, 2 channels, 2 bytes
 			pos = 11;
-			
-			for (j=0; j<32; j++)
-			{
-				// turn the channel off
-				// channels[j].setNote(97);
-			}
 			
 			for (j in song.pattern_order_table)
 			{
