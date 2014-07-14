@@ -28,7 +28,6 @@ Synth = function()
 		
 		this.loop_start = 0;
 		this.loop_length = 0;
-		this.sample_loop_type = 1; // 0: none, 1: forward, 2: ping-pong
 		
 		/** @type Int16Array */
 		this.samples = null; // sample data
@@ -38,10 +37,34 @@ Synth = function()
 			this.samples = base64_to_int16array(encoded_data);
 		}
 		
-		this.getDataOnPosition = function(pos)
+		this.getDataOnPosition = function(pos, loop_type)
 		{
-			// forward loop
-			return this.samples[Math.round(pos) % this.samples.length];
+			var pos2 = Math.round(pos);
+			
+			if (loop_type == 1) // forward
+			{
+				return this.samples[pos2 % this.samples.length];
+			}
+			else if (loop_type == 2) // ping-pong
+			{
+				if (pos2 % (this.samples.length * 2) < this.samples.length)
+				{
+					return this.samples[pos2 % this.samples.length];
+				}
+				else
+				{
+					return this.samples[this.samples.length - (pos2 % this.samples.length + 1)];
+				}
+			}
+			else // no loop
+			{
+				if (pos2 < this.samples.length)
+				{
+					return this.samples[pos2];
+				}
+			}
+			
+			return 0;
 		}
 	}
 	
@@ -92,6 +115,7 @@ Synth = function()
 		this.note = 0;
 		this.sample_speed = 0;
 		this.sample_position = 0;
+		this.sample_loop_type = 1; // 0: none, 1: forward, 2: ping-pong
 		this.relative_note_number = 0; // -96..+95, 0 means C-4 = C-4
 		this.finished = 0;
 		
@@ -116,6 +140,7 @@ Synth = function()
 		{
 			this.instrument = instrument;
 			this.sample = instrument.sample;
+			this.sample_loop_type = instrument.sample_loop_type;
 			this.relative_note_number = instrument.relative_note_number;
 			this.sample_position = 0;
 			this.log("  instrument: " + instrument);
@@ -162,8 +187,8 @@ Synth = function()
 				// create clipping)
 				//
 				// left and right channels
-				buffer[(pos + i)*2] += this.sample.getDataOnPosition(this.sample_position) * this.volume / 64 * (1 - Math.min(((this.panning - 128) / 128), 1)) * 0.5;
-				buffer[(pos + i)*2+1] += this.sample.getDataOnPosition(this.sample_position) * this.volume / 64 * Math.min(this.panning / 128, 1) * 0.5;
+				buffer[(pos + i)*2] += this.sample.getDataOnPosition(this.sample_position, this.sample_loop_type) * this.volume / 64 * (1 - Math.min(((this.panning - 128) / 128), 1)) * 0.5;
+				buffer[(pos + i)*2+1] += this.sample.getDataOnPosition(this.sample_position, this.sample_loop_type) * this.volume / 64 * Math.min(this.panning / 128, 1) * 0.5;
 				this.sample_position += speed;
 			}
 		}

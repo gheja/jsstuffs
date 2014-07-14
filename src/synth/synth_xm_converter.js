@@ -276,7 +276,9 @@ SynthXmConverter = function()
 		for (i in new_instruments)
 		{
 			buffer.add(new_instruments[i].sample_id);
-			buffer.add(1); // repeat_mode: 1 = forward
+			// strip the 0x10 flag (0: 8-bit, 1: 16-bit sample), keep the
+			// loop type
+			buffer.add(new_instruments[i].samples[0].type & 0x0f);
 			buffer.add(new_instruments[i].samples[0].volume);
 			buffer.add(new_instruments[i].samples[0].panning);
 			buffer.add(new_instruments[i].samples[0].finetune);
