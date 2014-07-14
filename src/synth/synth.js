@@ -26,13 +26,9 @@ Synth = function()
 		this.name = "";
 		// DEBUG END
 		
-		this.volume = 0;
-		this.fine_tune = 0;
-		this.pan = 0;
 		this.loop_start = 0;
 		this.loop_length = 0;
 		this.sample_loop_type = 1; // 0: none, 1: forward, 2: ping-pong
-		this.relative_note_number = 0; // -96..+95, 0 means C-4 = C-4
 		
 		/** @type Int16Array */
 		this.samples = null; // sample data
@@ -57,9 +53,10 @@ Synth = function()
 		// DEBUG END
 		
 		this.sample_id = 0;
-		this.volume = 0;
+		this.volume = 0; // 0..64
 		this.panning = 128; // 0: left, 128: center, 255: right
 		this.finetune = 0;
+		this.relative_note_number = 0; // -96..+95, 0 means C-4 = C-4
 		
 		// only one sample at the moment
 		/** @type SynthSample */
@@ -90,9 +87,12 @@ Synth = function()
 	this.SynthChannel = function()
 	{
 		this.sample = null;
+		this.volume = 0; // 0..64
+		this.panning = 128;
 		this.note = 0;
 		this.sample_speed = 0;
 		this.sample_position = 0;
+		this.relative_note_number = 0; // -96..+95, 0 means C-4 = C-4
 		this.finished = 0;
 		
 		// DEBUG BEGIN
@@ -114,10 +114,11 @@ Synth = function()
 		
 		this.setInstrument = function(instrument)
 		{
+			this.instrument = instrument;
 			this.sample = instrument.sample;
-			this.volume = instrument.volume;
+			this.relative_note_number = instrument.relative_note_number;
 			this.sample_position = 0;
-			this.log("  instrument: " + instrument + ", volume: " + this.volume);
+			this.log("  instrument: " + instrument);
 		}
 		
 		this.setNote = function(note)
@@ -128,15 +129,18 @@ Synth = function()
 				this.volume = 0;
 				return;
 			}
+			// reset the volume and panning
+			this.volume = this.instrument.volume;
+			this.panning = this.instrument.panning;
 			this.note = note;
 			this.sample_position = 0;
-			this.log("  note: " + note);
+			this.log("  note: " + note + ", volume: " + this.volume + ", panning: " + this.panning);
 		}
 		
 		this.setVolume = function(volume)
 		{
 			this.volume = volume;
-			this.log("  volume: " + volume);
+			this.log("  volume: " + this.volume);
 		}
 		
 		this.renderNote = function(buffer, pos, length)
@@ -149,7 +153,7 @@ Synth = function()
 			}
 			
 			// the notes in XM files seem to be one note off - correcting it here
-			speed = this.getFrequency(this.note + this.sample.relative_note_number - 1, 0) / 44100;
+			speed = this.getFrequency(this.note + this.relative_note_number - 1, 0) / 44100;
 			
 			for (i=0; i<length; i++)
 			{
@@ -244,7 +248,8 @@ Synth = function()
 			_instruments[i].volume = file.readOne();
 			_instruments[i].panning = file.readOne();
 			_instruments[i].finetune = file.readOne();
-			_instruments[i].relative_note_number = file.readOne();
+			// we store the relative note number _unsigned_ and moved up by 128
+			_instruments[i].relative_note_number = file.readOne() - 128;
 			// DEBUG BEGIN
 			if (_samples[_instruments[i].sample_id] == undefined)
 			{
@@ -329,7 +334,7 @@ Synth = function()
 			for (j=0; j<32; j++)
 			{
 				// turn the channel off
-				channels[j].setNote(97);
+				// channels[j].setNote(97);
 			}
 			
 			for (j in song.pattern_order_table)
@@ -346,8 +351,8 @@ Synth = function()
 						this.log("rendering pattern: row: " + k + ", pos: " + pos + ", time: " + Math.round(pos / 44100 * 1000) + "ms, ticks: " + song.speed + ", channel: " + m + ", row data: " + pattern.channel_data[m][k]);
 						
 						// NNA is "cut"
-						pattern.channel_data[m][k][0] && channels[m].setNote(pattern.channel_data[m][k][0]);
 						pattern.channel_data[m][k][1] && channels[m].setInstrument(_instruments[pattern.channel_data[m][k][1] - 1]);
+						pattern.channel_data[m][k][0] && channels[m].setNote(pattern.channel_data[m][k][0]);
 						pattern.channel_data[m][k][2] && channels[m].setVolume(pattern.channel_data[m][k][2] - 16);
 					}
 					
