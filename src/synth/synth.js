@@ -56,16 +56,19 @@ Synth = function()
 		this.name = "";
 		// DEBUG END
 		
+		this.sample_id = 0;
+		this.volume = 0;
+		this.panning = 128; // 0: left, 128: center, 255: right
+		this.finetune = 0;
+		
 		// only one sample at the moment
 		/** @type SynthSample */
 		this.sample = null;
 		
-		this.volume = 0;
 		this.volume_sustain = 0;
 		this.volume_loop = 0;
 		this.volume_fadeout = 0;
 		
-		this.pan = 0;
 		this.pan_sustain = 0;
 		this.pan_loop = 0;
 		
@@ -89,8 +92,6 @@ Synth = function()
 		this.sample = null;
 		this.note = 0;
 		this.sample_speed = 0;
-		this.volume = 0;
-		this.pan = 128; // 0: left, 128: center, 255: right
 		this.sample_position = 0;
 		this.finished = 0;
 		
@@ -227,16 +228,33 @@ Synth = function()
 			_samples[i].loadBase64RawData(samples[i]);
 		}
 		
-		_instruments[1] = new this.SynthInstrument();
-		_instruments[1].volume = 64;
-		_instruments[1].sample = _samples[0];
-		
 		file = new ArbitaryArray(base64_decode(file_base64));
 		dictionary = new Dictionary();
 		dictionary.setContents(base64_decode(dictionary_base64));
 		
 		pos = 0;
 		song_count = file.readOne();
+		number_of_instruments = file.readOne();
+		
+		for (i=0; i<number_of_instruments; i++)
+		{
+			_instruments[i] = new this.SynthInstrument();
+			_instruments[i].sample_id = file.readOne();
+			_instruments[i].sample_loop_type = file.readOne();
+			_instruments[i].volume = file.readOne();
+			_instruments[i].panning = file.readOne();
+			_instruments[i].finetune = file.readOne();
+			_instruments[i].relative_note_number = file.readOne();
+			// DEBUG BEGIN
+			if (_samples[_instruments[i].sample_id] == undefined)
+			{
+				console.log("ERROR: sample #" + _instruments[i].sample_id + " is undefined!");
+				return false;
+			}
+			// DEBUG END
+			_instruments[i].sample = _samples[_instruments[i].sample_id];
+		}
+		
 		for (i=0; i<song_count; i++)
 		{
 			song = new this.SynthSong();
@@ -247,7 +265,6 @@ Synth = function()
 			number_of_patterns = file.readOne();
 			number_of_channels = file.readOne();
 			// number_of_channels = 1;
-			number_of_instruments = file.readOne();
 			song_length = file.readOne();
 			
 			for (j=0; j<song_length; j++)
@@ -301,7 +318,8 @@ Synth = function()
 			// TODO: make it dynamic?
 			channels = [ new this.SynthChannel(), new this.SynthChannel(), new this.SynthChannel(), new this.SynthChannel()  ];
 			
-			// leave the first 44 bytes empty (= 11 samples, 2 channels, 2 bytes)
+			// leave the first 44 bytes empty for the WAVE header
+			// = 11 samples, 2 channels, 2 bytes
 			pos = 11;
 			
 			for (j in song.pattern_order_table)
@@ -319,7 +337,7 @@ Synth = function()
 						
 						// NNA is "cut"
 						pattern.channel_data[m][k][0] && channels[m].setNote(pattern.channel_data[m][k][0]);
-						pattern.channel_data[m][k][1] && channels[m].setInstrument(_instruments[pattern.channel_data[m][k][1]]);
+						pattern.channel_data[m][k][1] && channels[m].setInstrument(_instruments[pattern.channel_data[m][k][1] - 1]);
 						pattern.channel_data[m][k][2] && channels[m].setVolume(pattern.channel_data[m][k][2]);
 					}
 					
