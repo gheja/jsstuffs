@@ -305,6 +305,14 @@ Synth = function()
 			data,
 			tmp;
 		
+		// hardcoded to 32 channels, the maximum of an XM file
+		// TODO: make it dynamic?
+		channels = [];
+		for (i=0; i<32; i++)
+		{
+			channels[i] = new this.SynthChannel();
+		}
+		
 		for (i in _songs)
 		{
 			song = _songs[i];
@@ -314,13 +322,15 @@ Synth = function()
 			// TODO: make a correct calculation for this
 			samples_per_tick = Math.round((1 / song.bpm * 2.501129) * 44100);
 			
-			// hardcoded to 4 channels
-			// TODO: make it dynamic?
-			channels = [ new this.SynthChannel(), new this.SynthChannel(), new this.SynthChannel(), new this.SynthChannel()  ];
-			
 			// leave the first 44 bytes empty for the WAVE header
 			// = 11 samples, 2 channels, 2 bytes
 			pos = 11;
+			
+			for (j=0; j<32; j++)
+			{
+				// turn the channel off
+				channels[j].setNote(97);
+			}
 			
 			for (j in song.pattern_order_table)
 			{
