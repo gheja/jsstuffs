@@ -34,6 +34,18 @@ ArbitaryArray = function(a, b)
 	}
 	
 	/**
+	  * Add two items to the array.
+	  *
+	  * @method addTwo
+	  * @param {number} the item to be added
+	  */
+	this.addTwo = function(value)
+	{
+		this.array.push(value % this.multiplier);
+		this.array.push((value / this.multiplier) | 0);
+	}
+	
+	/**
 	  * Reads the next item in array.
 	  *
 	  * @method readOne
