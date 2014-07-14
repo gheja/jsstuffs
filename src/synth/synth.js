@@ -26,10 +26,6 @@ Synth = function()
 		this.name = "";
 		// DEBUG END
 		
-		this.loop_start = 0;
-		this.loop_length = 0;
-		this.sample_loop_type = 1; // 0: none, 1: forward, 2: ping-pong
-		
 		/** @type Int16Array */
 		this.samples = null; // sample data
 		
@@ -40,8 +36,7 @@ Synth = function()
 		
 		this.getDataOnPosition = function(pos)
 		{
-			// forward loop
-			return this.samples[Math.round(pos) % this.samples.length];
+			return this.samples[pos];
 		}
 	}
 	
@@ -75,12 +70,6 @@ Synth = function()
 		this.vibratio_depth = 0;
 		this.vibratio_rate = 0;
 		*/
-		
-		/*
-		this.loadBase64RawData = function(encoded_data)
-		{
-		}
-		*/
 	}
 	
 	/** @constructor */
@@ -92,6 +81,9 @@ Synth = function()
 		this.note = 0;
 		this.sample_speed = 0;
 		this.sample_position = 0;
+		this.sample_loop_type = 1; // 0: none, 1: forward, 2: ping-pong
+		this.sample_loop_start = 0;
+		this.sample_loop_length = 0;
 		this.relative_note_number = 0; // -96..+95, 0 means C-4 = C-4
 		this.finished = 0;
 		
@@ -101,11 +93,7 @@ Synth = function()
 			console.log("SynthChannel: " + s);
 		}
 		// DEBUG END
-/*
-		this.loadBase64RawData = function(encoded_data)
-		{
-		}
-*/
+		
 		this.getFrequency = function(note, finetune)
 		{
 			var period = 10*12*16*4 - note * 16*4 - finetune / 2;
@@ -116,7 +104,11 @@ Synth = function()
 		{
 			this.instrument = instrument;
 			this.sample = instrument.sample;
+			this.sample_loop_type = instrument.sample_loop_type;
+			this.sample_loop_start = instrument.sample_loop_start;
+			this.sample_loop_length = instrument.sample_loop_length;
 			this.relative_note_number = instrument.relative_note_number;
+			this.finetune = instrument.finetune;
 			this.sample_position = 0;
 			this.log("  instrument: " + instrument);
 		}
@@ -143,9 +135,45 @@ Synth = function()
 			this.log("  volume: " + this.volume);
 		}
 		
+		this.getSamplePosition = function()
+		{
+			var pos = Math.floor(this.sample_position), a;
+			
+			if (this.sample_loop_type == 1) // forward
+			{
+				if (pos >= this.sample_loop_start + this.sample_loop_length)
+				{
+					pos = this.sample_loop_start + (pos - this.sample_loop_start) % this.sample_loop_length;
+				}
+			}
+			else if (this.sample_loop_type == 2) // ping-pong
+			{
+				if (pos >= this.sample_loop_start + this.sample_loop_length)
+				{
+					a = pos - this.sample_loop_start;
+					a = a % (this.sample_loop_length * 2);
+					if (a >= this.sample_loop_length)
+					{
+						a = this.sample_loop_length - (a % this.sample_loop_length) - 1;
+					}
+					pos = this.sample_loop_start + a;
+				}
+			}
+			else // no loop
+			{
+				if (pos >= this.sample.samples.length)
+				{
+					pos = -1;
+				}
+			}
+			
+			
+			return pos;
+		}
+		
 		this.renderNote = function(buffer, pos, length)
 		{
-			var i, speed;
+			var i, a, speed, pos2;
 			
 			if (this.sample == null)
 			{
@@ -153,17 +181,27 @@ Synth = function()
 			}
 			
 			// the notes in XM files seem to be one note off - correcting it here
-			speed = this.getFrequency(this.note + this.relative_note_number - 1, 0) / 44100;
+			speed = this.getFrequency(this.note + this.relative_note_number + this.finetune / 128 - 1, 0) / 44100;
 			
 			for (i=0; i<length; i++)
 			{
+				pos2 = this.getSamplePosition();
+				
+				if (pos2 == -1)
+				{
+					break;
+				}
+				
+				a = this.sample.getDataOnPosition(pos2);
+				
 				// volume has a 0.5 multiplier to prevent clipping (note:
 				// samples played simultaneously on more channels can still
 				// create clipping)
 				//
 				// left and right channels
-				buffer[(pos + i)*2] += this.sample.getDataOnPosition(this.sample_position) * this.volume / 64 * (1 - Math.min(((this.panning - 128) / 128), 1)) * 0.5;
-				buffer[(pos + i)*2+1] += this.sample.getDataOnPosition(this.sample_position) * this.volume / 64 * Math.min(this.panning / 128, 1) * 0.5;
+				buffer[(pos + i)*2] +=  a * this.volume / 64 * (1 - Math.min(((this.panning - 128) / 128), 1)) * 0.5;
+				buffer[(pos + i)*2+1] += a * this.volume / 64 * Math.min(this.panning / 128, 1) * 0.5;
+				
 				this.sample_position += speed;
 			}
 		}
@@ -178,12 +216,6 @@ Synth = function()
 		this.number_of_rows;
 		this.number_of_channels;
 		this.channel_data = [ [], [], [], [] ]; // row data for 4 channels
-		
-		/*
-		this.loadBase64RawData = function(encoded_data)
-		{
-		}
-		*/
 	}
 	
 	/** @constructor */
@@ -197,12 +229,6 @@ Synth = function()
 		this.speed = 3;
 		this.audio_object = null;
 		this.pattern_order_table = [];
-		
-		/*
-		this.loadBase64RawData = function(encoded_data)
-		{
-		}
-		*/
 	}
 	
 	this.render = function(samples, file_base64, dictionary_base64)
@@ -245,9 +271,12 @@ Synth = function()
 			_instruments[i] = new this.SynthInstrument();
 			_instruments[i].sample_id = file.readOne();
 			_instruments[i].sample_loop_type = file.readOne();
+			_instruments[i].sample_loop_start = file.readTwo();
+			_instruments[i].sample_loop_length = file.readTwo();
 			_instruments[i].volume = file.readOne();
 			_instruments[i].panning = file.readOne();
-			_instruments[i].finetune = file.readOne();
+			// we store the finetun _unsigned_ and moved up by 128
+			_instruments[i].finetune = file.readOne() - 128;
 			// we store the relative note number _unsigned_ and moved up by 128
 			_instruments[i].relative_note_number = file.readOne() - 128;
 			// DEBUG BEGIN
@@ -269,7 +298,6 @@ Synth = function()
 			
 			number_of_patterns = file.readOne();
 			number_of_channels = file.readOne();
-			// number_of_channels = 1;
 			song_length = file.readOne();
 			
 			for (j=0; j<song_length; j++)
@@ -330,12 +358,6 @@ Synth = function()
 			// leave the first 44 bytes empty for the WAVE header
 			// = 11 samples, 2 channels, 2 bytes
 			pos = 11;
-			
-			for (j=0; j<32; j++)
-			{
-				// turn the channel off
-				// channels[j].setNote(97);
-			}
 			
 			for (j in song.pattern_order_table)
 			{
