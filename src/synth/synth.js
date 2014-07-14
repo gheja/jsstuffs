@@ -348,7 +348,7 @@ Synth = function()
 						// NNA is "cut"
 						pattern.channel_data[m][k][0] && channels[m].setNote(pattern.channel_data[m][k][0]);
 						pattern.channel_data[m][k][1] && channels[m].setInstrument(_instruments[pattern.channel_data[m][k][1] - 1]);
-						pattern.channel_data[m][k][2] && channels[m].setVolume(pattern.channel_data[m][k][2]);
+						pattern.channel_data[m][k][2] && channels[m].setVolume(pattern.channel_data[m][k][2] - 16);
 					}
 					
 					// initialize the buffer for this row
