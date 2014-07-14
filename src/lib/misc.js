@@ -1,4 +1,10 @@
 /**
+  * Miscellaneous helpers
+  *
+  * @module misc
+  */
+
+/**
   * Clamps a given value between lower and upper limits.
   *
   * @nosideeffects

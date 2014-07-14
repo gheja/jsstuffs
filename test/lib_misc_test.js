@@ -164,6 +164,9 @@ describe('Miscellaneous helpers', function() {
 		// 	var result = clamp_and_round_int32(-3000000000);
 		// 	assert.equal(result, -2147483648);
 		// });
+		it('NOTICE: ignoring lower limit check of clamp_and_round_int32() as it always fails with mocha, see issue #3', function () {
+			assert.equal(1, 1);
+		});
 		it('clamp_and_round_int32(1234567890) should return 1234567890', function () {
 			var result = clamp_and_round_int32(1234567890);
 			assert.equal(result, 1234567890);
