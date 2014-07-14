@@ -162,8 +162,8 @@ Synth = function()
 				// create clipping)
 				//
 				// left and right channels
-				buffer[(pos + i)*2] += this.sample.getDataOnPosition(this.sample_position) * this.volume / 64 * 0.5;
-				buffer[(pos + i)*2+1] += this.sample.getDataOnPosition(this.sample_position) * this.volume / 64 * 0.5;
+				buffer[(pos + i)*2] += this.sample.getDataOnPosition(this.sample_position) * this.volume / 64 * (1 - Math.min(((this.panning - 128) / 128), 1)) * 0.5;
+				buffer[(pos + i)*2+1] += this.sample.getDataOnPosition(this.sample_position) * this.volume / 64 * Math.min(this.panning / 128, 1) * 0.5;
 				this.sample_position += speed;
 			}
 		}
