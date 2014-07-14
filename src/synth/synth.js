@@ -121,6 +121,7 @@ Synth = function()
 			this.sample_loop_start = instrument.sample_loop_start;
 			this.sample_loop_length = instrument.sample_loop_length;
 			this.relative_note_number = instrument.relative_note_number;
+			this.finetune = instrument.finetune;
 			this.sample_position = 0;
 			this.log("  instrument: " + instrument);
 		}
@@ -194,7 +195,7 @@ Synth = function()
 			}
 			
 			// the notes in XM files seem to be one note off - correcting it here
-			speed = this.getFrequency(this.note + this.relative_note_number - 1, 0) / 44100;
+			speed = this.getFrequency(this.note + this.relative_note_number + this.finetune / 128 - 1, 0) / 44100;
 			
 			for (i=0; i<length; i++)
 			{
@@ -300,7 +301,8 @@ Synth = function()
 			_instruments[i].sample_loop_length = file.readTwo();
 			_instruments[i].volume = file.readOne();
 			_instruments[i].panning = file.readOne();
-			_instruments[i].finetune = file.readOne();
+			// we store the finetun _unsigned_ and moved up by 128
+			_instruments[i].finetune = file.readOne() - 128;
 			// we store the relative note number _unsigned_ and moved up by 128
 			_instruments[i].relative_note_number = file.readOne() - 128;
 			// DEBUG BEGIN
