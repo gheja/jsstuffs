@@ -16,11 +16,23 @@ AlmostRandom = function()
 {
 	/** @private {number} */ this.seed = 42;
 	
+	/**
+	  * Set the seed for a specified value
+	  *
+	  * @method setSeed
+	  * @param {number} seed the seed wanted
+	  */
 	this.setSeed = function(seed)
 	{
 		this.seed = seed;
 	}
 	
+	/**
+	  * Returns a "random" float between 0.0 and 1.0.
+	  *
+	  * @method setSeed
+	  * @returns {number} the generated random number
+	  */
 	this.random = function()
 	{
 		// these numbers are from random.org
