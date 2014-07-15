@@ -1,9 +1,20 @@
-// ugly, but simple and useful
+/**
+  * @module almost_random
+  */
 
-/** @construct */
+/**
+  * This is simple, ugly but really useful PRNG. The random numbers are always
+  * predictable from the seed so two sequence of random numbers are guaranteed
+  * to be the same if the same seed is used - useful for simulations and
+  * debugging purposes.
+  *
+  * @constructor
+  * @class AlmostRandom
+  * @param {number} seed (optional) initial seed
+  */
 AlmostRandom = function()
 {
-	this.seed = 42;
+	/** @private {number} */ this.seed = 42;
 	
 	this.setSeed = function(seed)
 	{
