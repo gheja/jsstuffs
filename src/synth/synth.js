@@ -18,7 +18,7 @@ Synth = function()
 	// DEBUG END
 	
 	/** @constructor */
-	this.SynthSample = function()
+	this.SynthSample = function(sample_data)
 	{
 		// every SynthSample is in 44100 Hz, mono, signed 16 bit format
 		
@@ -27,12 +27,7 @@ Synth = function()
 		// DEBUG END
 		
 		/** @type Int16Array */
-		this.samples = null; // sample data
-		
-		this.loadBase64RawData = function(encoded_data)
-		{
-			this.samples = base64_to_int16array(encoded_data);
-		}
+		this.samples = sample_data;
 		
 		this.getDataOnPosition = function(pos)
 		{
@@ -254,8 +249,7 @@ Synth = function()
 		/* load the samples, instruments and patterns */
 		for (i in samples)
 		{
-			_samples[i] = new this.SynthSample();
-			_samples[i].loadBase64RawData(samples[i]);
+			_samples[i] = new this.SynthSample(base64_to_int16array(samples[i]));
 		}
 		
 		file = new ArbitaryArray(base64_decode(file_base64));
