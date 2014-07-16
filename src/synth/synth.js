@@ -226,7 +226,7 @@ Synth = function()
 		this.pattern_order_table = [];
 	}
 	
-	this.render = function(samples, file_base64, dictionary_base64)
+	this.render = function(samples, file, dictionary)
 	{
 		var i, j, k, l, m,
 			_samples = [],
@@ -249,14 +249,9 @@ Synth = function()
 		/* load the samples, instruments and patterns */
 		for (i in samples)
 		{
-			_samples[i] = new this.SynthSample(base64_to_int16array(samples[i]));
+			_samples[i] = new this.SynthSample(samples[i]);
 		}
 		
-		file = new ArbitaryArray(base64_decode(file_base64));
-		dictionary = new Dictionary();
-		dictionary.setContents(base64_decode(dictionary_base64));
-		
-		pos = 0;
 		song_count = file.readOne();
 		number_of_instruments = file.readOne();
 		
