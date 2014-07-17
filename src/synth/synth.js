@@ -27,11 +27,16 @@ Synth = function()
 		// DEBUG END
 		
 		/** @type Int16Array */
-		this.samples = sample_data;
+		this.data = sample_data;
+		
+		this.getDataLength = function()
+		{
+			return this.data.length;
+		}
 		
 		this.getDataOnPosition = function(pos)
 		{
-			return this.samples[pos];
+			return this.data[pos];
 		}
 	}
 	
@@ -156,7 +161,7 @@ Synth = function()
 			}
 			else // no loop
 			{
-				if (pos >= this.sample.samples.length)
+				if (pos >= this.sample.getDataLength())
 				{
 					pos = -1;
 				}
