@@ -1,4 +1,16 @@
-/** @constructor */
+/**
+  * @module dictionary
+  */
+
+/**
+  * This dictionary object stores one dimensional arrays and returns an index
+  * for them. If a request appears for storing the same array it returns the
+  * index of the first occurence and does not store the given array again. This
+  * way it can be used as a basic compression method.
+  *
+  * @constructor
+  * @class Dictionary
+  */
 Dictionary = function()
 {
 	this.contents = [];

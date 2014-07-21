@@ -18,7 +18,7 @@ Synth = function()
 	// DEBUG END
 	
 	/** @constructor */
-	this.SynthSample = function()
+	this.SynthSample = function(sample_data)
 	{
 		// every SynthSample is in 44100 Hz, mono, signed 16 bit format
 		
@@ -27,16 +27,16 @@ Synth = function()
 		// DEBUG END
 		
 		/** @type Int16Array */
-		this.samples = null; // sample data
+		this.data = sample_data;
 		
-		this.loadBase64RawData = function(encoded_data)
+		this.getDataLength = function()
 		{
-			this.samples = base64_to_int16array(encoded_data);
+			return this.data.length;
 		}
 		
 		this.getDataOnPosition = function(pos)
 		{
-			return this.samples[pos];
+			return this.data[pos];
 		}
 	}
 	
@@ -161,7 +161,7 @@ Synth = function()
 			}
 			else // no loop
 			{
-				if (pos >= this.sample.samples.length)
+				if (pos >= this.sample.getDataLength())
 				{
 					pos = -1;
 				}
@@ -231,7 +231,7 @@ Synth = function()
 		this.pattern_order_table = [];
 	}
 	
-	this.render = function(samples, file_base64, dictionary_base64)
+	this.render = function(samples, file, dictionary)
 	{
 		var i, j, k, l, m,
 			_samples = [],
@@ -254,15 +254,9 @@ Synth = function()
 		/* load the samples, instruments and patterns */
 		for (i in samples)
 		{
-			_samples[i] = new this.SynthSample();
-			_samples[i].loadBase64RawData(samples[i]);
+			_samples[i] = new this.SynthSample(samples[i]);
 		}
 		
-		file = new ArbitaryArray(base64_decode(file_base64));
-		dictionary = new Dictionary();
-		dictionary.setContents(base64_decode(dictionary_base64));
-		
-		pos = 0;
 		song_count = file.readOne();
 		number_of_instruments = file.readOne();
 		
