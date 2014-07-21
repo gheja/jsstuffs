@@ -13,20 +13,20 @@
   *
   * @constructor
   * @class ArbitaryArray
-  * @param {Array} a (optional) initial items in array
-  * @param {number} b (optional) multiplier for readTwo()
+  * @param {Array} initial_items (optional) initial items in array
+  * @param {number} multiplier (optional) multiplier for readTwo()
   */
-ArbitaryArray = function(a, b)
+ArbitaryArray = function(initial_items, multiplier)
 {
-	/** @private {Array} */ this.array = a ? a : [];
-	/** @private {number} */ this.multiplier = b ? b : 256;
+	/** @private {Array} */ this.array = initial_items ? initial_items : [];
+	/** @private {number} */ this.multiplier = multiplier ? multiplier : 256;
 	/** @private {number} */ this.pointer = 0;
 	
 	/**
 	  * Add an item into the array.
 	  *
 	  * @method add
-	  * @param {number} the item to be added
+	  * @param {number} value the item to be added
 	  */
 	this.add = function(value)
 	{
@@ -37,7 +37,7 @@ ArbitaryArray = function(a, b)
 	  * Add two items to the array.
 	  *
 	  * @method addTwo
-	  * @param {number} the item to be added
+	  * @param {number} value the item to be added
 	  */
 	this.addTwo = function(value)
 	{
