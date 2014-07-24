@@ -1,0 +1,124 @@
+<html>
+	<head>
+		<style type="text/css">
+			html,
+			body
+			{
+				padding: 0;
+				background: #000;
+				color: #fff;
+				font-family: Verdana;
+				font-size: 8pt;
+			}
+			.tabs
+			{
+				position: fixed;
+				left: 0;
+				top: 0;
+				right: 0;
+				height: 18px;
+				background: #000;
+				border-bottom: 1px solid #444;
+				overflow: hidden;
+			}
+			.tab
+			{
+				width: 110px;
+				float: left;
+				height: 16px;
+				padding: 2px 4px 0 4px;
+				background: #222;
+				border-right: 1px solid #444;
+				border-left: 1px solid #111;
+				color: #aaa;
+			}
+			.new_tab
+			{
+				width: 18px;
+				float: left;
+				height: 16px;
+				text-align: center;
+				padding: 2px 0 0 0;
+				background: #444;
+				border-left: 1px solid #111;
+			}
+			.active
+			{
+				background: #444;
+				color: #fff;
+			}
+			.main
+			{
+				position: fixed;
+				left: 0;
+				top: 19px;
+				bottom: 19px;
+				right: 301px;
+				background: #000;
+			}
+			.sidebar
+			{
+				position: fixed;
+				right: 0;
+				top: 19px;
+				bottom: 19px;
+				width: 300px;
+				background: #222;
+				border-left: 1px solid #444;
+			}
+			.statusbar
+			{
+				position: fixed;
+				left: 0;
+				bottom: 0;
+				right: 0;
+				padding: 2px 4px 0 4px;
+				height: 16px;
+				background: #111;
+				border-top: 1px solid #444;
+			}
+			.version
+			{
+				position: fixed;
+				right: 0;
+				bottom: 0;
+				padding: 2px 4px 0 0;
+				height: 16px;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="tabs">
+			<div class="tab">
+				Tab 1
+			</div>
+			<div class="tab">
+				Tab 2
+			</div>
+			<div class="tab active">
+				Tab 3
+			</div>
+			<div class="tab">
+				Tab 4
+			</div>
+			<div class="tab">
+				Tab 5
+			</div>
+			<div class="new_tab">
+				+
+			</div>
+		</div>
+		<div class="window">
+			<div class="main">
+			</div>
+			<div class="sidebar">
+			</div>
+		</div>
+		<div class="statusbar">
+			Hi there!
+		</div>
+		<div class="version">
+			v0.0.0
+		</div>
+	</body>
+</html>
