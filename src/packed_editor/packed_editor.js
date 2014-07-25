@@ -64,7 +64,7 @@ PackedEditor = function(building_blocks)
 			new_blocks.push(this.blocks[i]);
 		}
 		
-		block = this.building_blocks[j];
+		block = deep_copy_object(this.building_blocks[j]);
 		block.collapsed = 0;
 		
 		new_blocks.push(block);
