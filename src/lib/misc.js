@@ -159,3 +159,16 @@ clamp_and_round_uint32 = function(value)
 	*/
 	return clamp(Math.round(value), 0, 4294967295);
 }
+
+/**
+  * Copies an object recursively - this is NOT a proper cloning technique! And
+  * also this is slow.
+  *
+  * @nosideeffects
+  * @param {Object} obj the object to be copied
+  * @returns {Object}
+  */
+function deep_copy_object(obj)
+{
+	return JSON.parse(JSON.stringify(obj));
+}
