@@ -67,7 +67,7 @@ PackedEditor = function(building_blocks)
 		block = this.building_blocks[j];
 		block.collapsed = 0;
 		
-		new_blocks.push(this.building_blocks[j]);
+		new_blocks.push(block);
 		
 		this.log("Added block with block_identifier " + block_identifier + " at position " + i);
 		
