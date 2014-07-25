@@ -7,7 +7,7 @@ body
 	font-family: Verdana;
 	font-size: 8pt;
 }
-.tabs
+#tabs
 {
 	position: fixed;
 	left: 0;
@@ -39,6 +39,26 @@ body
 	background: #444;
 	border-left: 1px solid #111;
 }
+.tab.sample
+{
+	border-left: 4px solid #eebb00;
+}
+.tab.instrument
+{
+	border-left: 4px solid #ee4400;
+}
+.tab.skeleton
+{
+	border-left: 4px solid #22aaff;
+}
+.tab.skeletal_animation
+{
+	border-left: 4px solid #0055ee;
+}
+.tab.model
+{
+	border-left: 4px solid #00cc00;
+}
 .tab.active
 {
 	background: #444;
@@ -53,7 +73,7 @@ body
 	right: 301px;
 	background: #000;
 }
-.sidebar
+#sidebar
 {
 	position: fixed;
 	right: 0;
@@ -82,13 +102,13 @@ body
 	padding: 2px 4px 0 0;
 	height: 16px;
 }
-.sidebar ul
+#sidebar ul
 {
 	padding: 0;
 	margin: 0;
 	list-style: none;
 }
-.sidebar ul li
+#sidebar ul li
 {
 	border-bottom: 1px solid #111;
 	border-left: 1px solid #111;

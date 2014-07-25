@@ -2,20 +2,25 @@
 	<head>
 		<title>Packed Editor</title>
 		<link href="editor.css" rel="stylesheet" type="text/css" />
+		<script type="text/javascript" src="../src/packed_editor/packed_editor.js"></script>
+		<script type="text/javascript" src="editor.js"></script>
 	</head>
 	<body>
-		<div class="tabs">
-			<div class="tab active">
-				[S] Lorem
+		<div id="tabs">
+			<div class="tab sample active">
+				Sample 1
 			</div>
-			<div class="tab">
-				[S] Ipsum
+			<div class="tab instrument">
+				Instrument 1
 			</div>
-			<div class="tab">
-				[I] Synth 1
+			<div class="tab skeleton">
+				Skeleton 1
 			</div>
-			<div class="tab">
-				Tab 4
+			<div class="tab skeletal_animation">
+				Skel animation 1
+			</div>
+			<div class="tab model">
+				Model 1
 			</div>
 			<div class="tab">
 				Tab 5
@@ -27,7 +32,7 @@
 		<div class="window">
 			<div class="main">
 			</div>
-			<div class="sidebar">
+			<div id="sidebar">
 				<ul>
 					<li class="block">
 						<div class="title">
@@ -110,6 +115,7 @@
 		</div>
 		<div class="statusbar">
 			Hi there!
+		<a href="#" onclick="create_sample_tab(); return false;">new sample</a>
 		</div>
 		<div class="version">
 			v0.0.0
