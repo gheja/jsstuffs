@@ -1,0 +1,150 @@
+html,
+body
+{
+	padding: 0;
+	background: #000;
+	color: #fff;
+	font-family: Verdana;
+	font-size: 8pt;
+}
+.tabs
+{
+	position: fixed;
+	left: 0;
+	top: 0;
+	right: 0;
+	height: 18px;
+	background: #000;
+	border-bottom: 1px solid #444;
+	overflow: hidden;
+}
+.tab
+{
+	width: 110px;
+	float: left;
+	height: 16px;
+	padding: 2px 4px 0 4px;
+	background: #222;
+	border-right: 1px solid #444;
+	border-left: 1px solid #111;
+	color: #aaa;
+}
+.new_tab
+{
+	width: 18px;
+	float: left;
+	height: 16px;
+	text-align: center;
+	padding: 2px 0 0 0;
+	background: #444;
+	border-left: 1px solid #111;
+}
+.tab.active
+{
+	background: #444;
+	color: #fff;
+}
+.main
+{
+	position: fixed;
+	left: 0;
+	top: 19px;
+	bottom: 19px;
+	right: 301px;
+	background: #000;
+}
+.sidebar
+{
+	position: fixed;
+	right: 0;
+	top: 19px;
+	bottom: 19px;
+	width: 300px;
+	background: #222;
+	border-left: 1px solid #444;
+}
+.statusbar
+{
+	position: fixed;
+	left: 0;
+	bottom: 0;
+	right: 0;
+	padding: 2px 4px 0 4px;
+	height: 16px;
+	background: #111;
+	border-top: 1px solid #444;
+}
+.version
+{
+	position: fixed;
+	right: 0;
+	bottom: 0;
+	padding: 2px 4px 0 0;
+	height: 16px;
+}
+.sidebar ul
+{
+	padding: 0;
+	margin: 0;
+	list-style: none;
+}
+.sidebar ul li
+{
+	border-bottom: 1px solid #111;
+	border-left: 1px solid #111;
+	border-right: 1px solid #111;
+	background: #111;
+	padding: 0;
+	margin: 0;
+}
+li.block .title
+{
+	width: 300px;
+	padding: 2px 0 2px 4px;
+	font-weight: bold;
+	background: #444;
+}
+li.block .buttons .button
+{
+	width: 21px;
+	float: left;
+	margin: 0 0 0 2px;
+	background: #111;
+	color: #fff;
+	text-align: center;
+	text-decoration: none;
+}
+li.block .buttons .button.collapse
+{
+	display: block;
+}
+li.block .buttons .button.expand
+{
+	display: none;
+}
+li.block.collapsed .buttons .button.collapse
+{
+	display: none;
+}
+li.block.collapsed .buttons .button.expand
+{
+	display: block;
+}
+li.block .buttons
+{
+	width: 100px;
+	float: right;
+	display: none;
+}
+li.block:hover .buttons
+{
+	display: block;
+}
+li.block .details
+{
+	padding: 4px;
+}
+li.block.collapsed .details
+{
+	display: none;
+}

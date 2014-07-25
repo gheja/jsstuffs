@@ -1,102 +1,18 @@
 <html>
 	<head>
-		<style type="text/css">
-			html,
-			body
-			{
-				padding: 0;
-				background: #000;
-				color: #fff;
-				font-family: Verdana;
-				font-size: 8pt;
-			}
-			.tabs
-			{
-				position: fixed;
-				left: 0;
-				top: 0;
-				right: 0;
-				height: 18px;
-				background: #000;
-				border-bottom: 1px solid #444;
-				overflow: hidden;
-			}
-			.tab
-			{
-				width: 110px;
-				float: left;
-				height: 16px;
-				padding: 2px 4px 0 4px;
-				background: #222;
-				border-right: 1px solid #444;
-				border-left: 1px solid #111;
-				color: #aaa;
-			}
-			.new_tab
-			{
-				width: 18px;
-				float: left;
-				height: 16px;
-				text-align: center;
-				padding: 2px 0 0 0;
-				background: #444;
-				border-left: 1px solid #111;
-			}
-			.active
-			{
-				background: #444;
-				color: #fff;
-			}
-			.main
-			{
-				position: fixed;
-				left: 0;
-				top: 19px;
-				bottom: 19px;
-				right: 301px;
-				background: #000;
-			}
-			.sidebar
-			{
-				position: fixed;
-				right: 0;
-				top: 19px;
-				bottom: 19px;
-				width: 300px;
-				background: #222;
-				border-left: 1px solid #444;
-			}
-			.statusbar
-			{
-				position: fixed;
-				left: 0;
-				bottom: 0;
-				right: 0;
-				padding: 2px 4px 0 4px;
-				height: 16px;
-				background: #111;
-				border-top: 1px solid #444;
-			}
-			.version
-			{
-				position: fixed;
-				right: 0;
-				bottom: 0;
-				padding: 2px 4px 0 0;
-				height: 16px;
-			}
-		</style>
+		<title>Packed Editor</title>
+		<link href="editor.css" rel="stylesheet" type="text/css" />
 	</head>
 	<body>
 		<div class="tabs">
-			<div class="tab">
-				Tab 1
-			</div>
-			<div class="tab">
-				Tab 2
-			</div>
 			<div class="tab active">
-				Tab 3
+				[S] Lorem
+			</div>
+			<div class="tab">
+				[S] Ipsum
+			</div>
+			<div class="tab">
+				[I] Synth 1
 			</div>
 			<div class="tab">
 				Tab 4
@@ -112,6 +28,68 @@
 			<div class="main">
 			</div>
 			<div class="sidebar">
+				<ul>
+					<li class="block">
+						<div class="title">
+							Create sine
+							<div class="buttons">
+								<a href="#" onclick="this.parentNode.parentNode.parentNode.className='block'; return false;" class="button expand" title="Expand">&#9606;</a>
+								<a href="#" onclick="this.parentNode.parentNode.parentNode.className='block collapsed'; return false;" class="button collapse" title="Collapse">&#9602;</a>
+								<a href="#" onclick="return false;"class="button" title="Move item">&#9650;&#9660;</a>
+								<a href="#" onclick="return false;"class="button" title="Add item above this">+&#9650;</a>
+								<a href="#" onclick="return false;"class="button" title="Add item below this">+&#9660;</a>
+							</div>
+						</div>
+						<div class="details">
+							test
+						</div>
+					</li>
+					<li class="block collapsed">
+						<div class="title">
+							Volume
+							<div class="buttons">
+								<a href="#" onclick="this.parentNode.parentNode.parentNode.className='block'; return false;" class="button expand" title="Expand">&#9606;</a>
+								<a href="#" onclick="this.parentNode.parentNode.parentNode.className='block collapsed'; return false;" class="button collapse" title="Collapse">&#9602;</a>
+								<a href="#" onclick="return false;"class="button" title="Move item">&#9650;&#9660;</a>
+								<a href="#" onclick="return false;"class="button" title="Add item above this">+&#9650;</a>
+								<a href="#" onclick="return false;"class="button" title="Add item below this">+&#9660;</a>
+							</div>
+						</div>
+						<div class="details">
+							test
+						</div>
+					</li>
+					<li class="block collapsed">
+						<div class="title">
+							Repeat
+							<div class="buttons">
+								<a href="#" onclick="this.parentNode.parentNode.parentNode.className='block'; return false;" class="button expand" title="Expand">&#9606;</a>
+								<a href="#" onclick="this.parentNode.parentNode.parentNode.className='block collapsed'; return false;" class="button collapse" title="Collapse">&#9602;</a>
+								<a href="#" onclick="return false;" class="button" title="Move item">&#9650;&#9660;</a>
+								<a href="#" onclick="return false;" class="button" title="Add item above this">+&#9650;</a>
+								<a href="#" onclick="return false;" class="button" title="Add item below this">+&#9660;</a>
+							</div>
+						</div>
+						<div class="details">
+							test
+						</div>
+					</li>
+					<li class="block collapsed">
+						<div class="title">
+							Volume envelope (8 points)
+							<div class="buttons">
+								<a href="#" onclick="this.parentNode.parentNode.parentNode.className='block'; return false;" class="button expand" title="Expand">&#9606;</a>
+								<a href="#" onclick="this.parentNode.parentNode.parentNode.className='block collapsed'; return false;" class="button collapse" title="Collapse">&#9602;</a>
+								<a href="#" onclick="return false;" class="button" title="Move item">&#9650;&#9660;</a>
+								<a href="#" onclick="return false;" class="button" title="Add item above this">+&#9650;</a>
+								<a href="#" onclick="return false;" class="button" title="Add item below this">+&#9660;</a>
+							</div>
+						</div>
+						<div class="details">
+							test
+						</div>
+					</li>
+				</ul>
 			</div>
 		</div>
 		<div class="statusbar">
