@@ -21,8 +21,100 @@ function redraw_tabs()
 
 function tab_create_sample()
 {
-	var pe = new PackedEditor(
+	var pe, seed_bullshits;
+	
+	seed_bullshits = [ "jiffies", "ducklings", "hammers", "impalas", "hamsters" ];
+	
+	pe = new PackedEditor(
 	[
+		{
+			title: "Create four point",
+			block_identifier: 0x03,
+			parameters:
+			[
+				{
+					title: "Length",
+					unit: "samples",
+					type: "uint16",
+					value: 120,
+					min: 0,
+					max: 65535,
+					display_multiplier: 1
+				},
+				{
+					title: "Point 1 value",
+					unit: "samples",
+					type: "uint8",
+					value: 128,
+					min: 0,
+					max: 255,
+					display_multiplier: 1
+				},
+				{
+					title: "Point 2 offset",
+					unit: "samples",
+					type: "uint8",
+					value: 128,
+					min: 0,
+					max: 255,
+					display_multiplier: 1
+				},
+				{
+					title: "... value",
+					unit: "samples",
+					type: "uint8",
+					value: 128,
+					min: 0,
+					max: 255,
+					display_multiplier: 1
+				},
+				{
+					title: "Point 3 offset",
+					unit: "samples",
+					type: "uint8",
+					value: 128,
+					min: 0,
+					max: 255,
+					display_multiplier: 1
+				},
+				{
+					title: "... value",
+					unit: "samples",
+					type: "uint8",
+					value: 128,
+					min: 0,
+					max: 255,
+					display_multiplier: 1
+				},
+				{
+					title: "Point 4 offset",
+					unit: "samples",
+					type: "uint8",
+					value: 128,
+					min: 0,
+					max: 255,
+					display_multiplier: 1
+				},
+				{
+					title: "... value",
+					unit: "samples",
+					type: "uint8",
+					value: 128,
+					min: 0,
+					max: 255,
+					display_multiplier: 1
+				},
+				{
+					title: "Trailing offset",
+					unit: "samples",
+					type: "uint8",
+					value: 128,
+					min: 0,
+					max: 255,
+					display_multiplier: 1
+				}
+			]
+		},
 		{
 			title: "Create sine",
 			block_identifier: 0x04,
@@ -33,6 +125,40 @@ function tab_create_sample()
 					unit: "samples",
 					type: "uint16",
 					value: 1000,
+					min: 0,
+					max: 65535,
+					display_multiplier: 1
+				}
+			]
+		},
+		{
+			title: "Create noise",
+			block_identifier: 0x05,
+			parameters:
+			[
+				{
+					title: "Length",
+					unit: "samples",
+					type: "uint16",
+					value: 1000,
+					min: 0,
+					max: 65535,
+					display_multiplier: 1
+				},
+				{
+					title: "Volume",
+					unit: "samples",
+					type: "uint8",
+					value: 100,
+					min: 0,
+					max: 100,
+					display_multiplier: 1
+				},
+				{
+					title: "Seed",
+					unit: seed_bullshits[Math.floor(Math.random() * seed_bullshits.length)],
+					type: "uint8",
+					value: 100,
 					min: 0,
 					max: 65535,
 					display_multiplier: 1
