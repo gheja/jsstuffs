@@ -1,5 +1,6 @@
 var _tabs = [];
 var _current_tab = -1;
+var _mouse_position = [ 0, 0 ];
 
 function redraw_tabs()
 {
@@ -283,9 +284,41 @@ function select_tab(i)
 
 function popup_show(html)
 {
-	document.getElementById("popup").innerHTML = html;
-	document.getElementById("popup_background").style.display = "block";
-	document.getElementById("popup").style.display = "block";
+	var popup, popup_background, x, y;
+	
+	popup = document.getElementById("popup");
+	popup_background = document.getElementById("popup_background");
+	
+	popup.innerHTML = html;
+	
+	x = _mouse_position[0] - 10;
+	y = _mouse_position[1] + 10;
+	
+	if (x + 200 > window.innerWidth)
+	{
+		x = window.innerWidth - 200;
+	}
+	
+	// just an approximation
+	if (y + 200 > window.innerHeight)
+	{
+		y = window.innerHeight - 200;
+	}
+	
+	if (x < 0)
+	{
+		x = 0;
+	}
+	
+	if (y < 0)
+	{
+		y = 0;
+	}
+	
+	popup.style.left = x;
+	popup.style.top = y;
+	popup_background.style.display = "block";
+	popup.style.display = "block";
 }
 
 function popup_hide()
@@ -326,7 +359,15 @@ function popup_new_tab()
 	]);
 }
 
+function handle_mouse_move(event)
+{
+	// will have no window scrolling on the page
+	_mouse_position[0] = event.pageX;
+	_mouse_position[1] = event.pageY;
+}
+
 function init()
 {
+	window.onmousemove = handle_mouse_move;
 	update_all();
 }
