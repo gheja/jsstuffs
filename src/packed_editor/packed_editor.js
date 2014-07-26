@@ -81,6 +81,29 @@ PackedEditor = function(building_blocks)
 		return true;
 	}
 	
+	this.removeBlock = function(position)
+	{
+		var i, new_blocks;
+		
+		new_blocks = [];
+		
+		for (i=0; i<this.blocks.length; i++)
+		{
+			if (i == position)
+			{
+				continue;
+			}
+			new_blocks.push(this.blocks[i]);
+		}
+		
+		this.blocks = new_blocks;
+		
+		this.log("Removed block at position " + i);
+		
+		return true;
+
+	}
+	
 	this.getBlocks = function()
 	{
 		return this.blocks;
