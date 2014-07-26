@@ -17,7 +17,6 @@ function redraw_tabs()
 	document.getElementById("tabs").innerHTML = html;
 }
 
-
 function tab_create_sample()
 {
 	var pe = new PackedEditor(
@@ -79,6 +78,7 @@ function tab_create_sample()
 		class: "sample"
 	});
 	
+	select_tab(_tabs.length - 1);
 	redraw_tabs();
 }
 
@@ -100,6 +100,7 @@ function tab_create_instrument()
 		class: "instrument"
 	});
 	
+	select_tab(_tabs.length - 1);
 	redraw_tabs();
 };
 
@@ -121,6 +122,7 @@ function tab_create_skeleton()
 		class: "skeleton"
 	});
 	
+	select_tab(_tabs.length - 1);
 	redraw_tabs();
 };
 
@@ -142,6 +144,7 @@ function tab_create_skeletal_animation()
 		class: "skeletal_animation"
 	});
 	
+	select_tab(_tabs.length - 1);
 	redraw_tabs();
 };
 
@@ -163,6 +166,7 @@ function tab_create_model()
 		class: "model"
 	});
 	
+	select_tab(_tabs.length - 1);
 	redraw_tabs();
 };
 
