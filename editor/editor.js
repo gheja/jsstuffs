@@ -196,6 +196,23 @@ function tab_create_sample()
 					display_multiplier: 1
 				}
 			]
+		},
+		{
+			title: "Finish",
+			block_identifier: 0x101,
+			parameters:
+			[
+				{
+					title: "Operation",
+					unit: "",
+					type: "uint8",
+					value: 0,
+					min: 0,
+					max: 4,
+					display_multiplier: 1,
+					description: "0: overwrite<br/>1: add<br/>2: subtract<br/>3: multiply<br/>4: divide"
+				}
+			],
 		}
 	]);
 	
