@@ -115,6 +115,16 @@ body
 	padding: 0;
 	margin: 0;
 }
+#sidebar .button
+{
+	display: block;
+	background: #111;
+	color: #fff;
+	text-decoration: none;
+	text-align: center;
+	border-top: 1px solid #333;
+	border-bottom: 1px solid #333;
+}
 li.block .title
 {
 	width: 300px;
@@ -140,19 +150,19 @@ li.block .buttons .button
 }
 li.block .buttons .button.collapse
 {
-	display: block;
+	display: block !important;
 }
 li.block .buttons .button.expand
 {
-	display: none;
+	display: none !important;
 }
 li.block.collapsed .buttons .button.collapse
 {
-	display: none;
+	display: none !important;
 }
 li.block.collapsed .buttons .button.expand
 {
-	display: block;
+	display: block !important;
 }
 li.block:hover .buttons
 {

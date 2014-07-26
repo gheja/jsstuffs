@@ -176,41 +176,45 @@ function update_sidebar()
 	
 	html = "";
 	
-	if (_current_tab != -1 && _tabs[_current_tab].pe)
-	{
-		blocks = _tabs[_current_tab].pe.getBlocks();
-		
-		// yeah, this is ugly, but... you expect me to write all those document.createElement()s? you can't be that cruel.
-		
-		html += "<ul>";
-		for (i=0; i<blocks.length; i++)
-		{
-			block = blocks[i];
-			html += "<li class=\"block " + (block.collapsed ? "collapsed" : "") + "\">\n";
-			html += "\t<div class=\"title\">\n";
-			html += "\t\t" + block.title + "\n";
-			html += "\t\t<div class=\"buttons\">\n";
-			html += "\t\t\t<a href=\"#\" onclick=\"block_expand(" + i + "); return false;\" class=\"button expand\" title=\"Expand\">&#9606;</a>\n";
-			html += "\t\t\t<a href=\"#\" onclick=\"block_collapse(" + i + "); return false;\" class=\"button collapse\" title=\"Collapse\">&#9602;</a>\n";
-			html += "\t\t\t<a href=\"#\" onclick=\"block_remove(" + i + "); return false;\" class=\"button\" title=\"Remove this block\">x</a>\n";
-			html += "\t\t\t<a href=\"#\" onclick=\"popup_block_add(" + i + "); return false;\" class=\"button\" title=\"Add item above this\">+&#9650;</a>\n";
-			html += "\t\t\t<a href=\"#\" onclick=\"popup_block_add(" + (i + 1) + "); return false;\" class=\"button\" title=\"Add item below this\">+&#9660;</a>\n";
-			html += "\t\t\t<a href=\"#\" onclick=\"return false;\" class=\"button\" title=\"Move item\">&#9650;&#9660;</a>\n";
-			html += "\t\t</div>\n";
-			html += "\t</div>\n";
-			html += "\t<div class=\"details\">\n";
-			for (j=0; j<block.parameters.length; j++)
-			{
-				parameter = block.parameters[j];
-				html += "\t\t<div><label for=\"parameter_" + i + "_" + j + "\">" + parameter.title + ":</label><div class=\"gauge\"><div class=\"used\" style=\"width: " + Math.round(parameter.value / (parameter.max - parameter.min) * 100) + "\">&nbsp;</div></div><input id=\"parameter_" + i + "_" + j + "\" type=\"text\" value=\"" + parameter.value + "\" /><div class=\"unit\">" + parameter.unit + "</div><br class=\"clearer\" /></div>\n";
-			}
-			html += "\t</div>\n";
-			html += "</li>\n";
-		}
-		html += "</ul>";
-	}
 	
-	html += "<a href=\"#\" onclick=\"popup_block_add(9999); return false;\"title=\"Add item here\">+</a>\n";
+	if (_current_tab != -1)
+	{
+		if (_tabs[_current_tab].pe)
+		{
+			blocks = _tabs[_current_tab].pe.getBlocks();
+			
+			// yeah, this is ugly, but... you expect me to write all those document.createElement()s? you can't be that cruel.
+			
+			html += "<ul>";
+			for (i=0; i<blocks.length; i++)
+			{
+				block = blocks[i];
+				html += "<li class=\"block " + (block.collapsed ? "collapsed" : "") + "\">\n";
+				html += "\t<div class=\"title\">\n";
+				html += "\t\t" + block.title + "\n";
+				html += "\t\t<div class=\"buttons\">\n";
+				html += "\t\t\t<a href=\"#\" onclick=\"block_expand(" + i + "); return false;\" class=\"button expand\" title=\"Expand\">&#9606;</a>\n";
+				html += "\t\t\t<a href=\"#\" onclick=\"block_collapse(" + i + "); return false;\" class=\"button collapse\" title=\"Collapse\">&#9602;</a>\n";
+				html += "\t\t\t<a href=\"#\" onclick=\"block_remove(" + i + "); return false;\" class=\"button\" title=\"Remove this block\">x</a>\n";
+				html += "\t\t\t<a href=\"#\" onclick=\"popup_block_add(" + i + "); return false;\" class=\"button\" title=\"Add item above this\">+&#9650;</a>\n";
+				html += "\t\t\t<a href=\"#\" onclick=\"popup_block_add(" + (i + 1) + "); return false;\" class=\"button\" title=\"Add item below this\">+&#9660;</a>\n";
+				html += "\t\t\t<a href=\"#\" onclick=\"return false;\" class=\"button\" title=\"Move item\">&#9650;&#9660;</a>\n";
+				html += "\t\t</div>\n";
+				html += "\t</div>\n";
+				html += "\t<div class=\"details\">\n";
+				for (j=0; j<block.parameters.length; j++)
+				{
+					parameter = block.parameters[j];
+					html += "\t\t<div><label for=\"parameter_" + i + "_" + j + "\">" + parameter.title + ":</label><div class=\"gauge\"><div class=\"used\" style=\"width: " + Math.round(parameter.value / (parameter.max - parameter.min) * 100) + "\">&nbsp;</div></div><input id=\"parameter_" + i + "_" + j + "\" type=\"text\" value=\"" + parameter.value + "\" /><div class=\"unit\">" + parameter.unit + "</div><br class=\"clearer\" /></div>\n";
+				}
+				html += "\t</div>\n";
+				html += "</li>\n";
+			}
+			html += "</ul>";
+			
+			html += "<a href=\"#\" class=\"button\" onclick=\"popup_block_add(9999); return false;\" title=\"Add item here\">+</a>\n";
+		}
+	}
 	
 	document.getElementById("sidebar").innerHTML = html;
 }
