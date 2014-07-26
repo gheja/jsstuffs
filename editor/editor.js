@@ -11,7 +11,7 @@ function redraw_tabs()
 	html += "<div class=\"tab menu\" onclick=\"popup_menu(); return false;\">&#9776;</div>\n";
 	for (i=0; i<_tabs.length; i++)
 	{
-		html += "<div class=\"tab " + _tabs[i].class + " " + (_current_tab == i ? "active" : "") + "\" onclick=\"select_tab(" + i + "); return false;\" ondblclick=\"update_tab_title(" + i + ", prompt('New title', '" + _tabs[i].pe.getTitle() + "'));\">\n";
+		html += "<div class=\"tab " + _tabs[i].class + " " + (_current_tab == i ? "active" : "") + "\" onclick=\"select_tab(" + i + "); return false;\" ondblclick=\"tab_rename(" + i + "); return false;\">\n";
 		html += "\t" + _tabs[i].pe.getTitle() + "\n";
 		html += "</div>\n";
 	}
@@ -316,6 +316,59 @@ function tab_create_model()
 	redraw_tabs();
 };
 
+function tab_remove(j)
+{
+	var i, new_tabs;
+	
+	new_tabs = [];
+	
+	for (i=0; i<_tabs.length; i++)
+	{
+		if (i == j)
+		{
+			continue;
+		}
+		new_tabs.push(_tabs[i]);
+	}
+	
+	_tabs = new_tabs;
+	
+	if (_current_tab == j)
+	{
+		_current_tab--;
+	}
+	if (_current_tab < 0 && _tabs.length > 0)
+	{
+		_current_tab = 0;
+	}
+	
+	update_all();
+}
+
+function tab_remove_current()
+{
+	popup_list([
+		{ js_code: "tab_remove(" + _current_tab + ");", title: "Remove \"" + _tabs[_current_tab].pe.title + "\""}
+	]);
+}
+
+function tab_rename(i)
+{
+	var new_title;
+	
+	new_title = prompt('New title', _tabs[i].pe.getTitle());
+	
+	if (new_title)
+	{
+		update_tab_title(i, new_title);
+	}
+}
+
+function tab_rename_current()
+{
+	tab_rename(_current_tab);
+}
+
 function update_sidebar()
 {
 	var html, blocks, block, parameter, i, j;
@@ -509,7 +562,14 @@ function popup_list(list)
 	
 	for (i=0; i<list.length; i++)
 	{
-		html += "\t<li><a href=\"#\" onclick=\"" + list[i].js_code + "; popup_hide(); return false;\">" + list[i].title + "</a></li>\n";
+		if (list[i].disabled)
+		{
+			html += "\t<li><a href=\"#\" onclick=\"return false;\" class=\"disabled\">" + list[i].title + "</a></li>\n";
+		}
+		else
+		{
+			html += "\t<li><a href=\"#\" onclick=\"" + list[i].js_code + "; " + (list[i].dont_hide_popup ? "event.stopPropagation(); " : "") + "return false;\">" + list[i].title + "</a></li>\n";
+		}
 	}
 	html += "\t<li><a href=\"#\" onclick=\"popup_hide(); return false;\">Cancel</a></li>\n";
 	html += "</ul>\n";
@@ -533,15 +593,19 @@ function popup_new_tab()
 	]);
 }
 
+
 function popup_menu()
 {
 	popup_list([
 		{ js_code: "", title: "Undo" },
 		{ js_code: "", title: "Redo" },
+		{ js_code: "popup_new_tab();", title: "Add new ...", dont_hide_popup: 1 },
 		(_show_friendly_values ?
 			{ js_code: "set_friendly_values(0);", title: "Show raw values" } :
 			{ js_code: "set_friendly_values(1);", title: "Show friendly values" }
 		),
+		{ js_code: "popup_rename_tab();", title: "Set title for current tab", disabled: _current_tab == -1, dont_hide_popup: 1 },
+		{ js_code: "tab_remove_current();", title: "Discard current tab", disabled: _current_tab == -1, dont_hide_popup: 1 },
 		{ js_code: "", title: "Save session" },
 		{ js_code: "", title: "Load session" }
 	]);

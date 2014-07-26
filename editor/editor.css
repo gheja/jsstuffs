@@ -318,3 +318,9 @@ li.block.collapsed .details
 	background: #222;
 	color: #fff;
 }
+#popup ul li a.disabled,
+#popup ul li a.disabled:hover
+{
+	color: #444;
+	background: inherit;
+}
