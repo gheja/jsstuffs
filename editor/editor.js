@@ -215,7 +215,7 @@ function update_sidebar()
 	document.getElementById("sidebar").innerHTML = html;
 }
 
-function popup_block_add(i)
+function popup_block_add(position)
 {
 	var i, pe, blocks, list;
 	
@@ -225,32 +225,32 @@ function popup_block_add(i)
 	list = [];
 	for (i=0; i<blocks.length; i++)
 	{
-		list.push({ js_code: "block_add(" + blocks[i].block_identifier + "," + i + ");", title: blocks[i].title });
+		list.push({ js_code: "block_add(" + blocks[i].block_identifier + "," + position + ");", title: blocks[i].title });
 	}
 	popup_list(list);
 }
 
-function block_collapse(i)
+function block_collapse(position)
 {
-	_tabs[_current_tab].pe.setBlockProperty(i, "collapsed", 1);
+	_tabs[_current_tab].pe.setBlockProperty(position, "collapsed", 1);
 	update_sidebar();
 }
 
-function block_expand(i)
+function block_expand(position)
 {
-	_tabs[_current_tab].pe.setBlockProperty(i, "collapsed", 0);
+	_tabs[_current_tab].pe.setBlockProperty(position, "collapsed", 0);
 	update_sidebar();
 }
 
-function block_add(block_identifer, order)
+function block_add(block_identifer, position)
 {
-	_tabs[_current_tab].pe.addBlock(block_identifer, order);
+	_tabs[_current_tab].pe.addBlock(block_identifer, position);
 	update_sidebar();
 }
 
-function block_remove(order)
+function block_remove(position)
 {
-	_tabs[_current_tab].pe.removeBlock(order);
+	_tabs[_current_tab].pe.removeBlock(position);
 	update_sidebar();
 }
 
