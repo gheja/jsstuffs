@@ -518,8 +518,17 @@ function popup_show(html)
 	
 	popup.innerHTML = html;
 	
-	x = _mouse_position[0] - 10;
-	y = _mouse_position[1] + 10;
+	// new popups will appear below cursor, sub-popus beside it
+	if (popup.style.display != "block")
+	{
+		x = _mouse_position[0] - 10;
+		y = _mouse_position[1] + 10;
+	}
+	else
+	{
+		x = _mouse_position[0];
+		y = _mouse_position[1] - 10;
+	}
 	
 	if (x + 204 > window.innerWidth)
 	{
