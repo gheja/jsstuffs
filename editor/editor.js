@@ -294,9 +294,9 @@ function popup_show(html)
 	x = _mouse_position[0] - 10;
 	y = _mouse_position[1] + 10;
 	
-	if (x + 200 > window.innerWidth)
+	if (x + 204 > window.innerWidth)
 	{
-		x = window.innerWidth - 200;
+		x = window.innerWidth - 204;
 	}
 	
 	// just an approximation
