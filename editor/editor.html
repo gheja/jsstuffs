@@ -6,117 +6,17 @@
 		<script type="text/javascript" src="../src/lib/misc.js"></script>
 		<script type="text/javascript" src="editor.js"></script>
 	</head>
-	<body>
+	<body onload="init();">
 		<div id="tabs">
-			<div class="tab sample active">
-				Sample 1
-			</div>
-			<div class="tab instrument">
-				Instrument 1
-			</div>
-			<div class="tab skeleton">
-				Skeleton 1
-			</div>
-			<div class="tab skeletal_animation">
-				Skel animation 1
-			</div>
-			<div class="tab model">
-				Model 1
-			</div>
-			<div class="tab">
-				Tab 5
-			</div>
-			<div class="new_tab">
-				+
-			</div>
 		</div>
 		<div class="window">
 			<div class="main">
 			</div>
 			<div id="sidebar">
-				<ul>
-					<li class="block">
-						<div class="title">
-							Create sine
-							<div class="buttons">
-								<a href="#" onclick="this.parentNode.parentNode.parentNode.className='block'; return false;" class="button expand" title="Expand">&#9606;</a>
-								<a href="#" onclick="this.parentNode.parentNode.parentNode.className='block collapsed'; return false;" class="button collapse" title="Collapse">&#9602;</a>
-								<a href="#" onclick="return false;"class="button" title="Move item">&#9650;&#9660;</a>
-								<a href="#" onclick="return false;"class="button" title="Add item above this">+&#9650;</a>
-								<a href="#" onclick="return false;"class="button" title="Add item below this">+&#9660;</a>
-							</div>
-						</div>
-						<div class="details">
-							<div><label for="parameter_1234">Length:</label><div class="gauge"><div class="used">&nbsp;</div></div><input type="text" value="417" /><div class="unit">samples</div><br class="clearer" /></div>
-							<div><label for="parameter_1235">Amplitude:</label><div class="gauge"><div class="used" style="width: 90px;">&nbsp;</div></div><input type="text" value="90" /><div class="unit">%</div><br class="clearer" /></div>
-						</div>
-					</li>
-					<li class="block">
-						<div class="title">
-							Volume
-							<div class="buttons">
-								<a href="#" onclick="this.parentNode.parentNode.parentNode.className='block'; return false;" class="button expand" title="Expand">&#9606;</a>
-								<a href="#" onclick="this.parentNode.parentNode.parentNode.className='block collapsed'; return false;" class="button collapse" title="Collapse">&#9602;</a>
-								<a href="#" onclick="return false;"class="button" title="Move item">&#9650;&#9660;</a>
-								<a href="#" onclick="return false;"class="button" title="Add item above this">+&#9650;</a>
-								<a href="#" onclick="return false;"class="button" title="Add item below this">+&#9660;</a>
-							</div>
-						</div>
-						<div class="details">
-							<div><label for="parameter_1235">Volume:</label><div class="gauge"><div class="used" style="width: 90px;">&nbsp;</div></div><input type="text" value="90" /><div class="unit">%</div><br class="clearer" /></div>
-						</div>
-					</li>
-					<li class="block">
-						<div class="title">
-							Repeat
-							<div class="buttons">
-								<a href="#" onclick="this.parentNode.parentNode.parentNode.className='block'; return false;" class="button expand" title="Expand">&#9606;</a>
-								<a href="#" onclick="this.parentNode.parentNode.parentNode.className='block collapsed'; return false;" class="button collapse" title="Collapse">&#9602;</a>
-								<a href="#" onclick="return false;" class="button" title="Move item">&#9650;&#9660;</a>
-								<a href="#" onclick="return false;" class="button" title="Add item above this">+&#9650;</a>
-								<a href="#" onclick="return false;" class="button" title="Add item below this">+&#9660;</a>
-							</div>
-						</div>
-						<div class="details">
-							<div><label for="parameter_1235">Count:</label><div class="gauge"><div class="used" style="width: 17px;">&nbsp;</div></div><input type="text" value="17" /><div class="unit">times</div><br class="clearer" /></div>
-						</div>
-					</li>
-					<li class="block">
-						<div class="title">
-							Volume envelope (8 points)
-							<div class="buttons">
-								<a href="#" onclick="this.parentNode.parentNode.parentNode.className='block'; return false;" class="button expand" title="Expand">&#9606;</a>
-								<a href="#" onclick="this.parentNode.parentNode.parentNode.className='block collapsed'; return false;" class="button collapse" title="Collapse">&#9602;</a>
-								<a href="#" onclick="return false;" class="button" title="Move item">&#9650;&#9660;</a>
-								<a href="#" onclick="return false;" class="button" title="Add item above this">+&#9650;</a>
-								<a href="#" onclick="return false;" class="button" title="Add item below this">+&#9660;</a>
-							</div>
-						</div>
-						<div class="details">
-							<div><label for="parameter_1234">Point 1 position:</label><div class="gauge"><div class="used">&nbsp;</div></div><input type="text" value="417" /><div class="unit">samples</div><br class="clearer" /></div>
-							<div><label for="parameter_1235"> ... volume:</label><div class="gauge"><div class="used" style="width: 100px;">&nbsp;</div></div><input type="text" value="100" /><div class="unit">%</div><br class="clearer" /></div>
-							<div><label for="parameter_1234">Point 2 position:</label><div class="gauge"><div class="used">&nbsp;</div></div><input type="text" value="417" /><div class="unit">samples</div><br class="clearer" /></div>
-							<div><label for="parameter_1235"> ... volume:</label><div class="gauge"><div class="used" style="width: 80px;">&nbsp;</div></div><input type="text" value="80" /><div class="unit">%</div><br class="clearer" /></div>
-							<div><label for="parameter_1234">Point 3 position:</label><div class="gauge"><div class="used">&nbsp;</div></div><input type="text" value="417" /><div class="unit">samples</div><br class="clearer" /></div>
-							<div><label for="parameter_1235"> ... volume:</label><div class="gauge"><div class="used" style="width: 70px;">&nbsp;</div></div><input type="text" value="70" /><div class="unit">%</div><br class="clearer" /></div>
-							<div><label for="parameter_1234">Point 4 position:</label><div class="gauge"><div class="used">&nbsp;</div></div><input type="text" value="417" /><div class="unit">samples</div><br class="clearer" /></div>
-							<div><label for="parameter_1235"> ... volume:</label><div class="gauge"><div class="used" style="width: 70px;">&nbsp;</div></div><input type="text" value="70" /><div class="unit">%</div><br class="clearer" /></div>
-							<div><label for="parameter_1234">Point 5 position:</label><div class="gauge"><div class="used">&nbsp;</div></div><input type="text" value="417" /><div class="unit">samples</div><br class="clearer" /></div>
-							<div><label for="parameter_1235"> ... volume:</label><div class="gauge"><div class="used" style="width: 70px;">&nbsp;</div></div><input type="text" value="70" /><div class="unit">%</div><br class="clearer" /></div>
-							<div><label for="parameter_1234">Point 6 position:</label><div class="gauge"><div class="used">&nbsp;</div></div><input type="text" value="417" /><div class="unit">samples</div><br class="clearer" /></div>
-							<div><label for="parameter_1235"> ... volume:</label><div class="gauge"><div class="used" style="width: 30px;">&nbsp;</div></div><input type="text" value="30" /><div class="unit">%</div><br class="clearer" /></div>
-							<div><label for="parameter_1234">Point 7 position:</label><div class="gauge"><div class="used">&nbsp;</div></div><input type="text" value="417" /><div class="unit">samples</div><br class="clearer" /></div>
-							<div><label for="parameter_1235"> ... volume:</label><div class="gauge"><div class="used" style="width: 20px;">&nbsp;</div></div><input type="text" value="20" /><div class="unit">%</div><br class="clearer" /></div>
-							<div><label for="parameter_1234">Point 8 position:</label><div class="gauge"><div class="used">&nbsp;</div></div><input type="text" value="417" /><div class="unit">samples</div><br class="clearer" /></div>
-							<div><label for="parameter_1235"> ... volume:</label><div class="gauge"><div class="used" style="width: 5px;">&nbsp;</div></div><input type="text" value="5" /><div class="unit">%</div><br class="clearer" /></div>
-						</div>
-					</li>
-				</ul>
 			</div>
 		</div>
 		<div class="statusbar">
 			Hi there!
-		<a href="#" onclick="create_sample_tab(); return false;">new sample</a>
 		</div>
 		<div class="version">
 			v0.0.0

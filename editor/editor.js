@@ -178,10 +178,6 @@ function create_sample_tab()
 	
 	pe.setTitle("#" + (_tabs.length + 1) + ": sample");
 	
-	pe.addBlock(0x04, 9999);
-	pe.addBlock(0x51, 9999);
-	pe.addBlock(0x53, 9999);
-	
 	_tabs.push({
 		pe: pe,
 		class: "sample"
@@ -322,4 +318,9 @@ function popup_new_tab()
 		{ js_code: "create_skeletal_animation_tab();", title: "New skeletal animation" },
 		{ js_code: "create_model_tab();", title: "New model" }
 	]);
+}
+
+function init()
+{
+	update_all();
 }
