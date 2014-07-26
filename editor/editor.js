@@ -17,7 +17,7 @@ function redraw_tabs()
 	document.getElementById("tabs").innerHTML = html;
 }
 
-function create_sample_tab()
+function tab_create_sample()
 {
 	var pe = new PackedEditor(
 	[
@@ -38,7 +38,7 @@ function create_sample_tab()
 	redraw_tabs();
 };
 
-function create_instrument_tab()
+function tab_create_instrument()
 {
 	var pe = new PackedEditor(
 	[
@@ -59,7 +59,7 @@ function create_instrument_tab()
 	redraw_tabs();
 };
 
-function create_skeleton_tab()
+function tab_create_skeleton()
 {
 	var pe = new PackedEditor(
 	[
@@ -80,7 +80,7 @@ function create_skeleton_tab()
 	redraw_tabs();
 };
 
-function create_skeletal_animation_tab()
+function tab_create_skeletal_animation()
 {
 	var pe = new PackedEditor(
 	[
@@ -101,7 +101,7 @@ function create_skeletal_animation_tab()
 	redraw_tabs();
 };
 
-function create_model_tab()
+function tab_create_model()
 {
 	var pe = new PackedEditor(
 	[
@@ -312,11 +312,11 @@ function popup_yesno(message, yes_callback, no_callback)
 function popup_new_tab()
 {
 	popup_list([
-		{ js_code: "create_sample_tab();", title: "New sample" },
-		{ js_code: "create_instrument_tab();", title: "New instrument" },
-		{ js_code: "create_skeleton_tab();", title: "New skeleton" },
-		{ js_code: "create_skeletal_animation_tab();", title: "New skeletal animation" },
-		{ js_code: "create_model_tab();", title: "New model" }
+		{ js_code: "tab_create_sample();", title: "New sample" },
+		{ js_code: "tab_create_instrument();", title: "New instrument" },
+		{ js_code: "tab_create_skeleton();", title: "New skeleton" },
+		{ js_code: "tab_create_skeletal_animation();", title: "New skeletal animation" },
+		{ js_code: "tab_create_model();", title: "New model" }
 	]);
 }
 
