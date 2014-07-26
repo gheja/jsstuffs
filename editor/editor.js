@@ -17,26 +17,70 @@ function redraw_tabs()
 	document.getElementById("tabs").innerHTML = html;
 }
 
+
 function tab_create_sample()
 {
 	var pe = new PackedEditor(
 	[
 		{
-			title: "Dummy",
-			block_identifier: 0x00,
-			parameters: [],
+			title: "Create sine",
+			block_identifier: 0x04,
+			parameters:
+			[
+				{
+					title: "Length",
+					unit: "samples",
+					type: "uint16",
+					value: 1000,
+					min: 0,
+					max: 65535,
+					display_multiplier: 1
+				}
+			]
 		},
+		{
+			title: "Volume",
+			block_identifier: 0x51,
+			parameters:
+			[
+				{
+					title: "Volume",
+					unit: "%",
+					type: "uint8",
+					value: 63,
+					min: 0,
+					max: 255,
+					display_multiplier: 100 / 63
+				}
+			]
+		},
+		{
+			title: "Repeat",
+			block_identifier: 0x53,
+			parameters:
+			[
+				{
+					title: "Count",
+					unit: "times",
+					type: "uint8",
+					value: 10,
+					min: 1,
+					max: 255,
+					display_multiplier: 1
+				}
+			]
+		}
 	]);
 	
-	pe.setTitle("#" + (_tabs.length + 1));
+	pe.setTitle("#" + (_tabs.length + 1) + ": sample");
 	
 	_tabs.push({
 		pe: pe,
-		class: "instrument"
+		class: "sample"
 	});
 	
 	redraw_tabs();
-};
+}
 
 function tab_create_instrument()
 {
@@ -121,70 +165,6 @@ function tab_create_model()
 	
 	redraw_tabs();
 };
-
-function create_sample_tab()
-{
-	var pe = new PackedEditor(
-	[
-		{
-			title: "Create sine",
-			block_identifier: 0x04,
-			parameters:
-			[
-				{
-					title: "Length",
-					unit: "samples",
-					type: "uint16",
-					value: 1000,
-					min: 0,
-					max: 65535,
-					display_multiplier: 1
-				}
-			]
-		},
-		{
-			title: "Volume",
-			block_identifier: 0x51,
-			parameters:
-			[
-				{
-					title: "Volume",
-					unit: "%",
-					type: "uint8",
-					value: 63,
-					min: 0,
-					max: 255,
-					display_multiplier: 100 / 63
-				}
-			]
-		},
-		{
-			title: "Repeat",
-			block_identifier: 0x53,
-			parameters:
-			[
-				{
-					title: "Count",
-					unit: "times",
-					type: "uint8",
-					value: 10,
-					min: 1,
-					max: 255,
-					display_multiplier: 1
-				}
-			]
-		}
-	]);
-	
-	pe.setTitle("#" + (_tabs.length + 1) + ": sample");
-	
-	_tabs.push({
-		pe: pe,
-		class: "sample"
-	});
-	
-	redraw_tabs();
-}
 
 function update_sidebar()
 {
