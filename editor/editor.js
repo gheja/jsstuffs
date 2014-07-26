@@ -613,7 +613,7 @@ function popup_menu()
 			{ js_code: "set_friendly_values(0);", title: "Show raw values" } :
 			{ js_code: "set_friendly_values(1);", title: "Show friendly values" }
 		),
-		{ js_code: "popup_rename_tab();", title: "Set title for current tab", disabled: _current_tab_index == -1, dont_hide_popup: 1 },
+		{ js_code: "tab_rename_current();", title: "Set title for current tab", disabled: _current_tab_index == -1 },
 		{ js_code: "tab_remove_current();", title: "Discard current tab", disabled: _current_tab_index == -1, dont_hide_popup: 1 },
 		{ js_code: "", title: "Save session" },
 		{ js_code: "", title: "Load session" }
