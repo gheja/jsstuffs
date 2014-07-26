@@ -1,5 +1,5 @@
 var _tabs = [];
-var _current_tab = -1;
+var _current_tab_index = -1;
 var _mouse_position = [ 0, 0 ];
 var _show_friendly_values = 1;
 
@@ -11,7 +11,7 @@ function redraw_tabs()
 	html += "<div class=\"tab menu\" onclick=\"popup_menu(); return false;\">&#9776;</div>\n";
 	for (i=0; i<_tabs.length; i++)
 	{
-		html += "<div class=\"tab " + _tabs[i].class + " " + (_current_tab == i ? "active" : "") + "\" onclick=\"select_tab(" + i + "); return false;\" ondblclick=\"tab_rename(" + i + "); return false;\">\n";
+		html += "<div class=\"tab " + _tabs[i].class + " " + (_current_tab_index == i ? "active" : "") + "\" onclick=\"select_tab(" + i + "); return false;\" ondblclick=\"tab_rename(" + i + "); return false;\">\n";
 		html += "\t" + _tabs[i].pe.getTitle() + "\n";
 		html += "</div>\n";
 	}
@@ -333,13 +333,13 @@ function tab_remove(j)
 	
 	_tabs = new_tabs;
 	
-	if (_current_tab == j)
+	if (_current_tab_index == j)
 	{
-		_current_tab--;
+		_current_tab_index--;
 	}
-	if (_current_tab < 0 && _tabs.length > 0)
+	if (_current_tab_index < 0 && _tabs.length > 0)
 	{
-		_current_tab = 0;
+		_current_tab_index = 0;
 	}
 	
 	update_all();
@@ -348,7 +348,7 @@ function tab_remove(j)
 function tab_remove_current()
 {
 	popup_list([
-		{ js_code: "tab_remove(" + _current_tab + ");", title: "Remove \"" + _tabs[_current_tab].pe.title + "\""}
+		{ js_code: "tab_remove(" + _current_tab_index + ");", title: "Remove \"" + _tabs[_current_tab_index].pe.title + "\""}
 	]);
 }
 
@@ -366,7 +366,7 @@ function tab_rename(i)
 
 function tab_rename_current()
 {
-	tab_rename(_current_tab);
+	tab_rename(_current_tab_index);
 }
 
 function update_sidebar()
@@ -376,11 +376,11 @@ function update_sidebar()
 	html = "";
 	
 	
-	if (_current_tab != -1)
+	if (_current_tab_index != -1)
 	{
-		if (_tabs[_current_tab].pe)
+		if (_tabs[_current_tab_index].pe)
 		{
-			blocks = _tabs[_current_tab].pe.getBlocks();
+			blocks = _tabs[_current_tab_index].pe.getBlocks();
 			
 			// yeah, this is ugly, but... you expect me to write all those document.createElement()s? you can't be that cruel.
 			
@@ -445,7 +445,7 @@ function popup_block_add(position)
 {
 	var i, pe, blocks, list;
 	
-	pe = _tabs[_current_tab].pe;
+	pe = _tabs[_current_tab_index].pe;
 	blocks = pe.getBuildingBlocks();
 	
 	list = [];
@@ -458,25 +458,25 @@ function popup_block_add(position)
 
 function block_collapse(position)
 {
-	_tabs[_current_tab].pe.setBlockProperty(position, "collapsed", 1);
+	_tabs[_current_tab_index].pe.setBlockProperty(position, "collapsed", 1);
 	update_sidebar();
 }
 
 function block_expand(position)
 {
-	_tabs[_current_tab].pe.setBlockProperty(position, "collapsed", 0);
+	_tabs[_current_tab_index].pe.setBlockProperty(position, "collapsed", 0);
 	update_sidebar();
 }
 
 function block_add(block_identifer, position)
 {
-	_tabs[_current_tab].pe.addBlock(block_identifer, position);
+	_tabs[_current_tab_index].pe.addBlock(block_identifer, position);
 	update_sidebar();
 }
 
 function block_remove(position)
 {
-	_tabs[_current_tab].pe.removeBlock(position);
+	_tabs[_current_tab_index].pe.removeBlock(position);
 	update_sidebar();
 }
 
@@ -499,7 +499,7 @@ function update_all()
 
 function select_tab(i)
 {
-	_current_tab = i;
+	_current_tab_index = i;
 	update_all();
 }
 
@@ -604,8 +604,8 @@ function popup_menu()
 			{ js_code: "set_friendly_values(0);", title: "Show raw values" } :
 			{ js_code: "set_friendly_values(1);", title: "Show friendly values" }
 		),
-		{ js_code: "popup_rename_tab();", title: "Set title for current tab", disabled: _current_tab == -1, dont_hide_popup: 1 },
-		{ js_code: "tab_remove_current();", title: "Discard current tab", disabled: _current_tab == -1, dont_hide_popup: 1 },
+		{ js_code: "popup_rename_tab();", title: "Set title for current tab", disabled: _current_tab_index == -1, dont_hide_popup: 1 },
+		{ js_code: "tab_remove_current();", title: "Discard current tab", disabled: _current_tab_index == -1, dont_hide_popup: 1 },
 		{ js_code: "", title: "Save session" },
 		{ js_code: "", title: "Load session" }
 	]);
