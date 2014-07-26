@@ -221,6 +221,10 @@ li.block.collapsed .details
 	width: 30px;
 	text-align: right;
 }
+.details div input.raw
+{
+	color: #cc0;
+}
 .details div div.unit
 {
 	margin: 1px 0 0 0;
@@ -253,6 +257,10 @@ li.block.collapsed .details
 {
 	background: #444;
 	color: #fff;
+}
+.details div:hover input.raw
+{
+	color: #ff0;
 }
 .details div:hover div.unit
 {

@@ -361,7 +361,7 @@ function update_sidebar()
 					}
 					else
 					{
-						html += "\t\t\t<input id=\"parameter_" + i + "_" + j + "\" type=\"text\" value=\"" + parameter.value + "\" />\n";
+						html += "\t\t\t<input class=\"raw\" id=\"parameter_" + i + "_" + j + "\" type=\"text\" value=\"" + parameter.value + "\" />\n";
 						html += "\t\t\t<div class=\"unit\">&nbsp;</div>\n";
 					}
 					
