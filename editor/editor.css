@@ -29,13 +29,18 @@ body
 	border-left: 4px solid #666;
 	color: #aaa;
 }
-.tab.new_tab
+.tab.new_tab,
+.tab.menu
 {
 	width: 18px;
 	float: left;
 	height: 16px;
 	text-align: center;
 	padding: 2px 0 0 0;
+}
+.tab.menu
+{
+	border-left: none;
 }
 .tab.sample
 {

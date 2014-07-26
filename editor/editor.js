@@ -7,6 +7,7 @@ function redraw_tabs()
 	var obj, html, i;
 	
 	html = "";
+	html += "<div class=\"tab menu\" onclick=\"popup_menu(); return false;\">&#9776;</div>\n";
 	for (i=0; i<_tabs.length; i++)
 	{
 		html += "<div class=\"tab " + _tabs[i].class + " " + (_current_tab == i ? "active" : "") + "\" onclick=\"select_tab(" + i + "); return false;\" ondblclick=\"update_tab_title(" + i + ", prompt('New title', '" + _tabs[i].pe.getTitle() + "'));\">\n";
@@ -356,6 +357,16 @@ function popup_new_tab()
 		{ js_code: "tab_create_skeleton();", title: "New skeleton" },
 		{ js_code: "tab_create_skeletal_animation();", title: "New skeletal animation" },
 		{ js_code: "tab_create_model();", title: "New model" }
+	]);
+}
+
+function popup_menu()
+{
+	popup_list([
+		{ js_code: "", title: "Undo" },
+		{ js_code: "", title: "Redo" },
+		{ js_code: "", title: "Save session" },
+		{ js_code: "", title: "Load session" }
 	]);
 }
 
