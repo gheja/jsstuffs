@@ -12,9 +12,115 @@ function redraw_tabs()
 		html += "\t" + _tabs[i].pe.getTitle() + "\n";
 		html += "</div>\n";
 	}
+	html += "<div class=\"tab new_tab\" onclick=\"popup_new_tab(); return false;\">+</div>\n";
 	
 	document.getElementById("tabs").innerHTML = html;
 }
+
+function create_sample_tab()
+{
+	var pe = new PackedEditor(
+	[
+		{
+			title: "Dummy",
+			block_identifier: 0x00,
+			parameters: [],
+		},
+	]);
+	
+	pe.setTitle("#" + (_tabs.length + 1));
+	
+	_tabs.push({
+		pe: pe,
+		class: "instrument"
+	});
+	
+	redraw_tabs();
+};
+
+function create_instrument_tab()
+{
+	var pe = new PackedEditor(
+	[
+		{
+			title: "Dummy",
+			block_identifier: 0x00,
+			parameters: [],
+		},
+	]);
+	
+	pe.setTitle("#" + (_tabs.length + 1));
+	
+	_tabs.push({
+		pe: pe,
+		class: "instrument"
+	});
+	
+	redraw_tabs();
+};
+
+function create_skeleton_tab()
+{
+	var pe = new PackedEditor(
+	[
+		{
+			title: "Dummy",
+			block_identifier: 0x00,
+			parameters: [],
+		},
+	]);
+	
+	pe.setTitle("#" + (_tabs.length + 1));
+	
+	_tabs.push({
+		pe: pe,
+		class: "skeleton"
+	});
+	
+	redraw_tabs();
+};
+
+function create_skeletal_animation_tab()
+{
+	var pe = new PackedEditor(
+	[
+		{
+			title: "Dummy",
+			block_identifier: 0x00,
+			parameters: [],
+		},
+	]);
+	
+	pe.setTitle("#" + (_tabs.length + 1));
+	
+	_tabs.push({
+		pe: pe,
+		class: "skeletal_animation"
+	});
+	
+	redraw_tabs();
+};
+
+function create_model_tab()
+{
+	var pe = new PackedEditor(
+	[
+		{
+			title: "Dummy",
+			block_identifier: 0x00,
+			parameters: [],
+		},
+	]);
+	
+	pe.setTitle("#" + (_tabs.length + 1));
+	
+	_tabs.push({
+		pe: pe,
+		class: "model"
+	});
+	
+	redraw_tabs();
+};
 
 function create_sample_tab()
 {
@@ -125,9 +231,17 @@ function update_sidebar()
 
 function popup_block_add(i)
 {
-	// TODO: create a real popup window
-	_tabs[_current_tab].pe.addBlock(0x53, i);
-	update_sidebar();
+	var i, pe, blocks, list;
+	
+	pe = _tabs[_current_tab].pe;
+	blocks = pe.getBuildingBlocks();
+	
+	list = [];
+	for (i=0; i<blocks.length; i++)
+	{
+		list.push({ js_code: "_tabs[_current_tab].addBlock(" + blocks[i].block_identifier + "," + i + "); update_sidebar();", title: blocks[i].title });
+	}
+	popup_list(list);
 }
 
 function block_collapse(i)
@@ -165,3 +279,47 @@ function select_tab(i)
 	update_all();
 }
 
+function popup_show(html)
+{
+	document.getElementById("popup").innerHTML = html;
+	document.getElementById("popup_background").style.display = "block";
+	document.getElementById("popup").style.display = "block";
+}
+
+function popup_hide()
+{
+	document.getElementById("popup_background").style.display = "none";
+	document.getElementById("popup").style.display = "none";
+}
+
+function popup_list(list)
+{
+	var i, html;
+	
+	html = "<ul>\n";
+	
+	for (i=0; i<list.length; i++)
+	{
+		html += "\t<li><a href=\"#\" onclick=\"" + list[i].js_code + "; popup_hide(); return false;\">" + list[i].title + "</a></li>\n";
+	}
+	html += "\t<li><a href=\"#\" onclick=\"popup_hide(); return false;\">Cancel</a></li>\n";
+	html += "</ul>\n";
+	
+	popup_show(html);
+}
+
+function popup_yesno(message, yes_callback, no_callback)
+{
+	
+}
+
+function popup_new_tab()
+{
+	popup_list([
+		{ js_code: "create_sample_tab();", title: "New sample" },
+		{ js_code: "create_instrument_tab();", title: "New instrument" },
+		{ js_code: "create_skeleton_tab();", title: "New skeleton" },
+		{ js_code: "create_skeletal_animation_tab();", title: "New skeletal animation" },
+		{ js_code: "create_model_tab();", title: "New model" }
+	]);
+}
