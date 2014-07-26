@@ -1,6 +1,7 @@
 var _tabs = [];
 var _current_tab = -1;
 var _mouse_position = [ 0, 0 ];
+var _show_friendly_values = 1;
 
 function redraw_tabs()
 {
@@ -353,8 +354,17 @@ function update_sidebar()
 					html += "\t\t<div>\n";
 					html += "\t\t\t<label for=\"parameter_" + i + "_" + j + "\">" + parameter.title + ":</label>\n";
 					html += "\t\t\t<div class=\"gauge\"><div class=\"used\" style=\"width: " + Math.round(parameter.value / (parameter.max - parameter.min) * 100) + "\">&nbsp;</div></div>\n";
-					html += "\t\t\t<input id=\"parameter_" + i + "_" + j + "\" type=\"text\" value=\"" + parameter.value + "\" />\n";
-					html += "\t\t\t<div class=\"unit\">" + parameter.unit + "</div>\n";
+					if (_show_friendly_values)
+					{
+						html += "\t\t\t<input id=\"parameter_" + i + "_" + j + "\" type=\"text\" value=\"" + (parameter.value * parameter.display_multiplier) + "\" />\n";
+						html += "\t\t\t<div class=\"unit\">" + parameter.unit + "</div>\n";
+					}
+					else
+					{
+						html += "\t\t\t<input id=\"parameter_" + i + "_" + j + "\" type=\"text\" value=\"" + parameter.value + "\" />\n";
+						html += "\t\t\t<div class=\"unit\">&nbsp;</div>\n";
+					}
+					
 					if (parameter.description)
 					{
 						// this is a clearer, too
@@ -440,6 +450,12 @@ function select_tab(i)
 	update_all();
 }
 
+function set_friendly_values(new_value)
+{
+	_show_friendly_values = new_value;
+	update_sidebar();
+}
+
 function popup_show(html)
 {
 	var popup, popup_background, x, y;
@@ -522,6 +538,10 @@ function popup_menu()
 	popup_list([
 		{ js_code: "", title: "Undo" },
 		{ js_code: "", title: "Redo" },
+		(_show_friendly_values ?
+			{ js_code: "set_friendly_values(0);", title: "Show raw values" } :
+			{ js_code: "set_friendly_values(1);", title: "Show friendly values" }
+		),
 		{ js_code: "", title: "Save session" },
 		{ js_code: "", title: "Load session" }
 	]);
