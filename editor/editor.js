@@ -564,7 +564,7 @@ function popup_list(list)
 	{
 		if (list[i].disabled)
 		{
-			html += "\t<li><a href=\"#\" onclick=\"return false;\" class=\"disabled\">" + list[i].title + "</a></li>\n";
+			html += "\t<li><a href=\"#\" onclick=\"event.stopPropagation(); return false;\" class=\"disabled\">" + list[i].title + "</a></li>\n";
 		}
 		else
 		{
