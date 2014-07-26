@@ -124,6 +124,12 @@ li.block .title
 	font-weight: bold;
 	background: #444;
 }
+li.block .buttons
+{
+	width: 123px;
+	float: right;
+	display: none;
+}
 li.block .buttons .button
 {
 	width: 21px;
@@ -149,12 +155,6 @@ li.block.collapsed .buttons .button.collapse
 li.block.collapsed .buttons .button.expand
 {
 	display: block;
-}
-li.block .buttons
-{
-	width: 100px;
-	float: right;
-	display: none;
 }
 li.block:hover .buttons
 {

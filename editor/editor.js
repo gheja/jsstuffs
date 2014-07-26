@@ -102,9 +102,10 @@ function update_sidebar()
 		html += "\t\t<div class=\"buttons\">\n";
 		html += "\t\t\t<a href=\"#\" onclick=\"block_expand(" + i + "); return false;\" class=\"button expand\" title=\"Expand\">&#9606;</a>\n";
 		html += "\t\t\t<a href=\"#\" onclick=\"block_collapse(" + i + "); return false;\" class=\"button collapse\" title=\"Collapse\">&#9602;</a>\n";
-		html += "\t\t\t<a href=\"#\" onclick=\"return false;\" class=\"button\" title=\"Move item\">&#9650;&#9660;</a>\n";
+		html += "\t\t\t<a href=\"#\" onclick=\"popup_block_remove(" + i + "); return false;\" class=\"button\" title=\"Remove this block\">x</a>\n";
 		html += "\t\t\t<a href=\"#\" onclick=\"popup_block_add(" + i + "); return false;\" class=\"button\" title=\"Add item above this\">+&#9650;</a>\n";
 		html += "\t\t\t<a href=\"#\" onclick=\"popup_block_add(" + (i + 1) + "); return false;\" class=\"button\" title=\"Add item below this\">+&#9660;</a>\n";
+		html += "\t\t\t<a href=\"#\" onclick=\"return false;\" class=\"button\" title=\"Move item\">&#9650;&#9660;</a>\n";
 		html += "\t\t</div>\n";
 		html += "\t</div>\n";
 		html += "\t<div class=\"details\">\n";
