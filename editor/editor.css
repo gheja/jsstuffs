@@ -228,6 +228,13 @@ li.block.collapsed .details
 	width: 40px;
 	float: left;
 }
+.details div div.description
+{
+	padding: 0 0 0 104px;
+	clear: both;
+	float: none;
+	color: #888;
+}
 .details div:hover
 {
 }

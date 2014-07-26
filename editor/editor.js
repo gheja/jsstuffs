@@ -350,7 +350,21 @@ function update_sidebar()
 				for (j=0; j<block.parameters.length; j++)
 				{
 					parameter = block.parameters[j];
-					html += "\t\t<div><label for=\"parameter_" + i + "_" + j + "\">" + parameter.title + ":</label><div class=\"gauge\"><div class=\"used\" style=\"width: " + Math.round(parameter.value / (parameter.max - parameter.min) * 100) + "\">&nbsp;</div></div><input id=\"parameter_" + i + "_" + j + "\" type=\"text\" value=\"" + parameter.value + "\" /><div class=\"unit\">" + parameter.unit + "</div><br class=\"clearer\" /></div>\n";
+					html += "\t\t<div>\n";
+					html += "\t\t\t<label for=\"parameter_" + i + "_" + j + "\">" + parameter.title + ":</label>\n";
+					html += "\t\t\t<div class=\"gauge\"><div class=\"used\" style=\"width: " + Math.round(parameter.value / (parameter.max - parameter.min) * 100) + "\">&nbsp;</div></div>\n";
+					html += "\t\t\t<input id=\"parameter_" + i + "_" + j + "\" type=\"text\" value=\"" + parameter.value + "\" />\n";
+					html += "\t\t\t<div class=\"unit\">" + parameter.unit + "</div>\n";
+					if (parameter.description)
+					{
+						// this is a clearer, too
+						html += "\t\t\t<div class=\"description\">" + parameter.description + "</div>\n";
+					}
+					else
+					{
+						html += "\t\t\t<br class=\"clearer\" />\n";
+					}
+					html += "\t\t</div>\n";
 				}
 				html += "\t</div>\n";
 				html += "</li>\n";
