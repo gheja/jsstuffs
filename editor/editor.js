@@ -5,6 +5,7 @@ var _current_block_parameter_index = -1;
 var _mouse_position = [ 0, 0 ];
 var _show_friendly_values = 1;
 var _shift_pressed = 0;
+var _render_start_time = null;
 
 function redraw_tabs()
 {
@@ -565,25 +566,25 @@ function popup_block_add(position)
 function block_collapse(position)
 {
 	_tabs[_current_tab_index].pe.setBlockProperty(position, "collapsed", 1);
-	update_sidebar();
+	update_tab();
 }
 
 function block_expand(position)
 {
 	_tabs[_current_tab_index].pe.setBlockProperty(position, "collapsed", 0);
-	update_sidebar();
+	update_tab();
 }
 
 function block_add(block_identifer, position)
 {
 	_tabs[_current_tab_index].pe.addBlock(block_identifer, position);
-	update_sidebar();
+	update_tab();
 }
 
 function block_remove(position)
 {
 	_tabs[_current_tab_index].pe.removeBlock(position);
-	update_sidebar();
+	update_tab();
 }
 
 function update_tab_title(i, new_title)
@@ -597,10 +598,23 @@ function update_tab_title(i, new_title)
 	update_all();
 }
 
+function update_tab()
+{
+	var t1, t2;
+	t1 = (new Date()).getTime();
+	
+	update_sidebar();
+	// update_main_window(); == re-render
+	
+	t2 = (new Date()).getTime();
+	
+	set_status("Everything is up-to-date, render time: " + (t2 - t1) + " ms.");
+}
+
 function update_all()
 {
 	redraw_tabs();
-	update_sidebar();
+	update_tab();
 }
 
 function select_tab(i)
@@ -617,7 +631,7 @@ function set_status(new_status)
 function set_friendly_values(new_value)
 {
 	_show_friendly_values = new_value;
-	update_sidebar();
+	update_tab();
 }
 
 function set_active_block_parameter(block_id, parameter_id)
@@ -633,7 +647,7 @@ function alter_block_parameter_value(block_id, parameter_id, value)
 	new_value =  _tabs[_current_tab_index].pe.getParameterValue(block_id, parameter_id) + value;
 	_tabs[_current_tab_index].pe.setParameterValue(block_id, parameter_id, new_value);
 	
-	update_sidebar();
+	update_tab();
 }
 
 function alter_block_parameter_value_big(block_id, parameter_id, value)
