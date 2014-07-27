@@ -550,7 +550,27 @@ function alter_block_parameter_value(block_id, parameter_id, value)
 
 function alter_block_parameter_value_big(block_id, parameter_id, value)
 {
-	alter_block_parameter_value(block_id, parameter_id, value * 5);
+	var blocks, diff;
+	
+	blocks = _tabs[_current_tab_index].pe.getBlocks();
+	
+	diff = blocks[block_id].parameters[parameter_id].max - blocks[block_id].parameters[parameter_id].min;
+	
+	// // fixed 5%, but 2 at least
+	// alter_block_parameter_value(block_id, parameter_id, Math.max(Math.floor(diff * 0.05), 2) * value);
+	
+	if (diff > 255)
+	{
+		alter_block_parameter_value(block_id, parameter_id, value * 100);
+	}
+	else if (diff > 10)
+	{
+		alter_block_parameter_value(block_id, parameter_id, value * 5);
+	}
+	else
+	{
+		alter_block_parameter_value(block_id, parameter_id, value * 2);
+	}
 }
 
 function popup_show(html)
