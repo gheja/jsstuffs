@@ -275,6 +275,15 @@ function tab_create_skeleton()
 					display_multiplier: 1
 				},
 				{
+					title: "Length",
+					unit: "",
+					type: "uint8",
+					value: 10,
+					min: 0,
+					max: 255,
+					display_multiplier: 1
+				},
+				{
 					title: "Rotation",
 					unit: "degrees",
 					type: "uint8",
