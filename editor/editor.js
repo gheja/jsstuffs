@@ -228,7 +228,8 @@ function tab_create_sample()
 	
 	_tabs.push({
 		pe: pe,
-		class: "sample"
+		class: "sample",
+		show_block_indexes: 0
 	});
 	
 	select_tab(_tabs.length - 1);
@@ -250,7 +251,8 @@ function tab_create_instrument()
 	
 	_tabs.push({
 		pe: pe,
-		class: "instrument"
+		class: "instrument",
+		show_block_indexes: 0
 	});
 	
 	select_tab(_tabs.length - 1);
@@ -331,7 +333,8 @@ function tab_create_skeleton()
 	
 	_tabs.push({
 		pe: pe,
-		class: "skeleton"
+		class: "skeleton",
+		show_block_indexes: 1
 	});
 	
 	select_tab(_tabs.length - 1);
@@ -353,7 +356,8 @@ function tab_create_skeletal_animation()
 	
 	_tabs.push({
 		pe: pe,
-		class: "skeletal_animation"
+		class: "skeletal_animation",
+		show_block_indexes: 0
 	});
 	
 	select_tab(_tabs.length - 1);
@@ -375,7 +379,8 @@ function tab_create_model()
 	
 	_tabs.push({
 		pe: pe,
-		class: "model"
+		class: "model",
+		show_block_indexes: 0
 	});
 	
 	select_tab(_tabs.length - 1);
@@ -456,7 +461,7 @@ function update_sidebar()
 				block = blocks[i];
 				html += "<li class=\"block " + (block.collapsed ? "collapsed" : "") + "\">\n";
 				html += "\t<div class=\"title\">\n";
-				html += "\t\t" + block.title + "\n";
+				html += "\t\t" + block.title + (_tabs[_current_tab_index].show_block_indexes ? " (" + i + ")" : "") + "\n";
 				html += "\t\t<div class=\"buttons\">\n";
 				html += "\t\t\t<a href=\"#\" onclick=\"block_expand(" + i + "); return false;\" class=\"button expand\" title=\"Expand\">&#9606;</a>\n";
 				html += "\t\t\t<a href=\"#\" onclick=\"block_collapse(" + i + "); return false;\" class=\"button collapse\" title=\"Collapse\">&#9602;</a>\n";
