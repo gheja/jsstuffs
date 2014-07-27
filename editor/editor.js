@@ -374,7 +374,7 @@ function tab_rename_current()
 
 function update_sidebar()
 {
-	var html, blocks, block, parameter, i, j;
+	var html, blocks, block, parameter, i, j, value, tmp;
 	
 	html = "";
 	
@@ -412,7 +412,23 @@ function update_sidebar()
 					html += "\t\t\t<div class=\"gauge\"><div class=\"used\" style=\"width: " + Math.round(parameter.value / (parameter.max - parameter.min) * 100) + "\">&nbsp;</div></div>\n";
 					if (_show_friendly_values)
 					{
-						html += "\t\t\t<input id=\"parameter_" + i + "_" + j + "\" type=\"text\" value=\"" + (parameter.value * parameter.display_multiplier) + "\" />\n";
+						value = parameter.value * parameter.display_multiplier;
+						
+						if (parameter.unit == "%" || parameter.unit == "percent")
+						{
+							tmp = "";
+							if (value < 0)
+							{
+								tmp = "-";
+							}
+							tmp += Math.floor(Math.abs(value));
+							tmp += ".";
+							tmp += Math.floor(Math.abs(value * 10)) % 10;
+							
+							value = tmp;
+						}
+						
+						html += "\t\t\t<input id=\"parameter_" + i + "_" + j + "\" type=\"text\" value=\"" + value + "\" />\n";
 						html += "\t\t\t<div class=\"unit\">" + parameter.unit + "</div>\n";
 					}
 					else
