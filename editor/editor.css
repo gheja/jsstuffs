@@ -266,6 +266,10 @@ li.block.collapsed .details
 {
 	color: #fff;
 }
+.details div:hover div.description
+{
+	color: #fff;
+}
 .clearer
 {
 	clear: both;
