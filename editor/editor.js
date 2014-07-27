@@ -4,6 +4,7 @@ var _current_block_index = -1;
 var _current_block_parameter_index = -1;
 var _mouse_position = [ 0, 0 ];
 var _show_friendly_values = 1;
+var _shift_pressed = 0;
 
 function redraw_tabs()
 {
@@ -527,6 +528,11 @@ function alter_block_parameter_value(block_id, parameter_id, value)
 	update_sidebar();
 }
 
+function alter_block_parameter_value_big(block_id, parameter_id, value)
+{
+	alter_block_parameter_value(block_id, parameter_id, value * 5);
+}
+
 function popup_show(html)
 {
 	var popup, popup_background, x, y;
@@ -650,11 +656,40 @@ function handle_mouse_wheel(event)
 {
 	if (event.wheelDelta < 0)
 	{
-		alter_block_parameter_value(_current_block_index, _current_block_parameter_index, -1);
+		if (_shift_pressed)
+		{
+			alter_block_parameter_value_big(_current_block_index, _current_block_parameter_index, -1);
+		}
+		else
+		{
+			alter_block_parameter_value(_current_block_index, _current_block_parameter_index, -1);
+		}
 	}
 	else if (event.wheelDelta > 0)
 	{
-		alter_block_parameter_value(_current_block_index, _current_block_parameter_index, +1);
+		if (_shift_pressed)
+		{
+			alter_block_parameter_value_big(_current_block_index, _current_block_parameter_index, +1);
+		}
+		else
+		{
+			alter_block_parameter_value(_current_block_index, _current_block_parameter_index, +1);
+		}
+	}
+}
+
+function handle_key_down(event)
+{
+	if (event.keyCode === 16 || event.charCode === 16)
+	{
+		_shift_pressed = 1;
+	}
+}
+function handle_key_up(event)
+{
+	if (event.keyCode === 16 || event.charCode === 16)
+	{
+		_shift_pressed = 0;
 	}
 }
 
@@ -662,5 +697,7 @@ function init()
 {
 	window.onmousemove = handle_mouse_move;
 	window.onmousewheel = handle_mouse_wheel;
+	window.onkeydown = handle_key_down;
+	window.onkeyup = handle_key_up;
 	update_all();
 }
