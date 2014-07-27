@@ -828,4 +828,5 @@ function init()
 	window.onkeydown = handle_key_down;
 	window.onkeyup = handle_key_up;
 	update_all();
+	set_status("Initialization successful, welcome!");
 }
