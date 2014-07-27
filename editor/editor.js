@@ -52,7 +52,8 @@ function tab_create_sample()
 					value: 128,
 					min: 0,
 					max: 255,
-					display_multiplier: 100 / 255
+					display_multiplier: 200 / 255,
+					display_correction: -100
 				},
 				{
 					title: "Point 2 offset",
@@ -70,7 +71,8 @@ function tab_create_sample()
 					value: 255,
 					min: 0,
 					max: 255,
-					display_multiplier: 100 / 255
+					display_multiplier: 200 / 255,
+					display_correction: -100
 				},
 				{
 					title: "Point 3 offset",
@@ -88,7 +90,8 @@ function tab_create_sample()
 					value: 128,
 					min: 0,
 					max: 255,
-					display_multiplier: 100 / 255
+					display_multiplier: 200 / 255,
+					display_correction: -100
 				},
 				{
 					title: "Point 4 offset",
@@ -106,7 +109,8 @@ function tab_create_sample()
 					value: 0,
 					min: 0,
 					max: 255,
-					display_multiplier: 100 / 255
+					display_multiplier: 200 / 255,
+					display_correction: -100
 				},
 				{
 					title: "Trailing offset",
@@ -412,7 +416,7 @@ function update_sidebar()
 					html += "\t\t\t<div class=\"gauge\"><div class=\"used\" style=\"width: " + Math.round(parameter.value / (parameter.max - parameter.min) * 100) + "\">&nbsp;</div></div>\n";
 					if (_show_friendly_values)
 					{
-						value = parameter.value * parameter.display_multiplier;
+						value = parameter.value * parameter.display_multiplier + (parameter.display_correction ? parameter.display_correction : 0);
 						
 						if (parameter.unit == "%" || parameter.unit == "percent")
 						{
