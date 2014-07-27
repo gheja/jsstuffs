@@ -101,7 +101,16 @@ PackedEditor = function(building_blocks)
 		this.log("Removed block at position " + i);
 		
 		return true;
-
+	}
+	
+	this.getParameterValue = function(block_id, parameter_id)
+	{
+		return this.blocks[block_id].parameters[parameter_id].value;
+	}
+	
+	this.setParameterValue = function(block_id, parameter_id, new_value)
+	{
+		this.blocks[block_id].parameters[parameter_id].value = Math.min(this.blocks[block_id].parameters[parameter_id].max, Math.max(this.blocks[block_id].parameters[parameter_id].min, new_value));
 	}
 	
 	this.getBlocks = function()

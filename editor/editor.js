@@ -1,5 +1,7 @@
 var _tabs = [];
 var _current_tab_index = -1;
+var _current_block_index = -1;
+var _current_block_parameter_index = -1;
 var _mouse_position = [ 0, 0 ];
 var _show_friendly_values = 1;
 
@@ -404,7 +406,7 @@ function update_sidebar()
 				for (j=0; j<block.parameters.length; j++)
 				{
 					parameter = block.parameters[j];
-					html += "\t\t<div>\n";
+					html += "\t\t<div onmouseover=\"set_active_block_parameter(" + i + ", " + j + ");\" onmouseout=\"set_active_block_parameter(-1, -1);\">\n";
 					html += "\t\t\t<label for=\"parameter_" + i + "_" + j + "\">" + parameter.title + ":</label>\n";
 					html += "\t\t\t<div class=\"gauge\"><div class=\"used\" style=\"width: " + Math.round(parameter.value / (parameter.max - parameter.min) * 100) + "\">&nbsp;</div></div>\n";
 					if (_show_friendly_values)
@@ -506,6 +508,22 @@ function select_tab(i)
 function set_friendly_values(new_value)
 {
 	_show_friendly_values = new_value;
+	update_sidebar();
+}
+
+function set_active_block_parameter(block_id, parameter_id)
+{
+	_current_block_index = block_id;
+	_current_block_parameter_index = parameter_id;
+}
+
+function alter_block_parameter_value(block_id, parameter_id, value)
+{
+	var new_value;
+	
+	new_value =  _tabs[_current_tab_index].pe.getParameterValue(block_id, parameter_id) + value;
+	_tabs[_current_tab_index].pe.setParameterValue(block_id, parameter_id, new_value);
+	
 	update_sidebar();
 }
 
@@ -628,8 +646,21 @@ function handle_mouse_move(event)
 	_mouse_position[1] = event.pageY;
 }
 
+function handle_mouse_wheel(event)
+{
+	if (event.wheelDelta < 0)
+	{
+		alter_block_parameter_value(_current_block_index, _current_block_parameter_index, -1);
+	}
+	else if (event.wheelDelta > 0)
+	{
+		alter_block_parameter_value(_current_block_index, _current_block_parameter_index, +1);
+	}
+}
+
 function init()
 {
 	window.onmousemove = handle_mouse_move;
+	window.onmousewheel = handle_mouse_wheel;
 	update_all();
 }
