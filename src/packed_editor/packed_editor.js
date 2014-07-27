@@ -13,6 +13,7 @@ PackedEditor = function(building_blocks)
 	this.building_blocks = building_blocks;
 	this.render_callback = null;
 	this.highlight_callback = null;
+	this.last_render_message = "";
 	
 	this.title = "Packed Editor";
 	this.blocks = [];
@@ -121,5 +122,42 @@ PackedEditor = function(building_blocks)
 	this.setBlockProperty = function(block_index, property_name, property_value)
 	{
 		this.blocks[block_index][property_name] = property_value;
+	}
+	
+	this.render = function()
+	{
+		var i, j, p, buffer;
+		
+		buffer = new ArbitaryArray();
+		
+		for (i=0; i<this.blocks.length; i++)
+		{
+			buffer.add(this.blocks[i].block_identifier);
+			
+			for (j=0; j<this.blocks[i].parameters.length; j++)
+			{
+				p = this.blocks[i].parameters[j];
+				if (p.max - p.min <= 255)
+				{
+					buffer.add(p.value);
+				}
+				else if (p.max - p.min <= 65535)
+				{
+					buffer.addTwo(p.value);
+				}
+				else
+				{
+					console.log("Value too big in block #" + i + ", parameter #" + j + ", aborting.");
+					return false;
+				}
+			}
+		}
+		
+		this.last_render_message = this.blocks.length + " blocks, " + (buffer.getAsUint8Array()).length + " bytes in total.";
+	}
+	
+	this.getLastRenderMessage = function()
+	{
+		return this.last_render_message;
 	}
 }

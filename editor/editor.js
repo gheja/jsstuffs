@@ -6,6 +6,7 @@ var _mouse_position = [ 0, 0 ];
 var _show_friendly_values = 1;
 var _shift_pressed = 0;
 var _render_start_time = null;
+var _last_render_message = "";
 
 function redraw_tabs()
 {
@@ -598,17 +599,31 @@ function update_tab_title(i, new_title)
 	update_all();
 }
 
+function update_main_window()
+{
+	if (_current_tab_index == -1)
+	{
+		return;
+	}
+	
+	if (_tabs[_current_tab_index].pe)
+	{
+		_tabs[_current_tab_index].pe.render();
+		_last_render_message = _tabs[_current_tab_index].pe.getLastRenderMessage();
+	}
+}
+
 function update_tab()
 {
 	var t1, t2;
 	t1 = (new Date()).getTime();
 	
 	update_sidebar();
-	// update_main_window(); == re-render
+	update_main_window();
 	
 	t2 = (new Date()).getTime();
 	
-	set_status("Everything is up-to-date, render time: " + (t2 - t1) + " ms.");
+	set_status("Everything is up-to-date, rendered in " + (t2 - t1) + " ms. " + _last_render_message);
 }
 
 function update_all()
