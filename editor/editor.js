@@ -468,7 +468,7 @@ function update_sidebar()
 					{
 						value = parameter.value * parameter.display_multiplier + (parameter.display_correction ? parameter.display_correction : 0);
 						
-						if (parameter.unit == "%" || parameter.unit == "percent")
+						if (parameter.unit == "%" || parameter.unit == "percent" || parameter.unit == "degrees")
 						{
 							tmp = "";
 							if (value < 0)
