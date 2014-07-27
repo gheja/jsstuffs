@@ -262,9 +262,59 @@ function tab_create_skeleton()
 	var pe = new PackedEditor(
 	[
 		{
-			title: "Dummy",
-			block_identifier: 0x00,
-			parameters: [],
+			title: "Bone",
+			block_identifier: 0x01,
+			parameters: [
+				{
+					title: "Parent bone",
+					unit: "",
+					type: "uint8",
+					value: 0,
+					min: 0,
+					max: 63,
+					display_multiplier: 1
+				},
+				{
+					title: "Rotation",
+					unit: "degrees",
+					type: "uint8",
+					value: 127,
+					min: 0,
+					max: 254,
+					display_multiplier: 720 / 254,
+					display_correction: -360
+				},
+				{
+					title: "Angle X",
+					unit: "degrees",
+					type: "uint8",
+					value: 127,
+					min: 0,
+					max: 254,
+					display_multiplier: 720 / 254,
+					display_correction: -360
+				},
+				{
+					title: "Angle Y",
+					unit: "degrees",
+					type: "uint8",
+					value: 127,
+					min: 0,
+					max: 254,
+					display_multiplier: 720 / 254,
+					display_correction: -360
+				},
+				{
+					title: "Angle Z",
+					unit: "degrees",
+					type: "uint8",
+					value: 127,
+					min: 0,
+					max: 254,
+					display_multiplier: 720 / 254,
+					display_correction: -360
+				}
+			],
 		},
 	]);
 	
