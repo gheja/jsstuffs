@@ -149,10 +149,15 @@ li.block .buttons .button
 	width: 21px;
 	float: left;
 	margin: 0 0 0 2px;
-	background: #111;
+	background: #222 !important;
 	color: #fff;
 	text-align: center;
 	text-decoration: none;
+	cursor: default;
+}
+li.block .buttons .button:hover
+{
+	background: #111 !important;
 }
 li.block .buttons .button.collapse
 {
@@ -306,11 +311,6 @@ li.block.collapsed .details
 }
 #popup ul li
 {
-	margin: 0;
-	padding: 0;
-}
-#popup ul li a
-{
 	padding: 4px;
 	text-decoration: none;
 	color: #aaa;
@@ -318,13 +318,13 @@ li.block.collapsed .details
 	width: 192px;
 	cursor: default;
 }
-#popup ul li a:hover
+#popup ul li:hover
 {
 	background: #222;
 	color: #fff;
 }
-#popup ul li a.disabled,
-#popup ul li a.disabled:hover
+#popup ul li.disabled,
+#popup ul li.disabled:hover
 {
 	color: #444;
 	background: inherit;

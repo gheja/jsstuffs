@@ -157,12 +157,12 @@ function tab_create_sample()
 				},
 				{
 					title: "Volume",
-					unit: "samples",
+					unit: "%",
 					type: "uint8",
-					value: 100,
+					value: 63,
 					min: 0,
-					max: 100,
-					display_multiplier: 1
+					max: 255,
+					display_multiplier: 100 / 63
 				},
 				{
 					title: "Seed",
@@ -484,12 +484,12 @@ function update_sidebar()
 				html += "\t<div class=\"title\">\n";
 				html += "\t\t" + block.title + (_tabs[_current_tab_index].show_block_indexes ? " (" + i + ")" : "") + "\n";
 				html += "\t\t<div class=\"buttons\">\n";
-				html += "\t\t\t<a href=\"#\" onclick=\"block_expand(" + i + "); return false;\" class=\"button expand\" title=\"Expand\">&#9606;</a>\n";
-				html += "\t\t\t<a href=\"#\" onclick=\"block_collapse(" + i + "); return false;\" class=\"button collapse\" title=\"Collapse\">&#9602;</a>\n";
-				html += "\t\t\t<a href=\"#\" onclick=\"block_remove(" + i + "); return false;\" class=\"button\" title=\"Remove this block\">x</a>\n";
-				html += "\t\t\t<a href=\"#\" onclick=\"popup_block_add(" + i + "); return false;\" class=\"button\" title=\"Add item above this\">+&#9650;</a>\n";
-				html += "\t\t\t<a href=\"#\" onclick=\"popup_block_add(" + (i + 1) + "); return false;\" class=\"button\" title=\"Add item below this\">+&#9660;</a>\n";
-				html += "\t\t\t<a href=\"#\" onclick=\"return false;\" class=\"button\" title=\"Move item\">&#9650;&#9660;</a>\n";
+				html += "\t\t\t<div onclick=\"block_expand(" + i + "); return false;\" class=\"button expand\" title=\"Expand\">&#9606;</div>\n";
+				html += "\t\t\t<div onclick=\"block_collapse(" + i + "); return false;\" class=\"button collapse\" title=\"Collapse\">&#9602;</div>\n";
+				html += "\t\t\t<div onclick=\"block_remove(" + i + "); return false;\" class=\"button\" title=\"Remove this block\">x</div>\n";
+				html += "\t\t\t<div onclick=\"popup_block_add(" + i + "); return false;\" class=\"button\" title=\"Add item above this\">+&#9650;</div>\n";
+				html += "\t\t\t<div onclick=\"popup_block_add(" + (i + 1) + "); return false;\" class=\"button\" title=\"Add item below this\">+&#9660;</div>\n";
+				html += "\t\t\t<div onclick=\"return false;\" class=\"button\" title=\"Move item\">&#9650;&#9660;</div>\n";
 				html += "\t\t</div>\n";
 				html += "\t</div>\n";
 				html += "\t<div class=\"details\">\n";
@@ -542,7 +542,7 @@ function update_sidebar()
 			}
 			html += "</ul>";
 			
-			html += "<a href=\"#\" class=\"button\" onclick=\"popup_block_add(9999); return false;\" title=\"Add item here\">+</a>\n";
+			html += "<div class=\"button\" onclick=\"popup_block_add(9999); return false;\" title=\"Add item here\">+</div>\n";
 		}
 	}
 	
@@ -754,14 +754,14 @@ function popup_list(list)
 	{
 		if (list[i].disabled)
 		{
-			html += "\t<li><a href=\"#\" onclick=\"event.stopPropagation(); return false;\" class=\"disabled\">" + list[i].title + "</a></li>\n";
+			html += "\t<li onclick=\"event.stopPropagation(); return false;\" class=\"disabled\">" + list[i].title + "</li>\n";
 		}
 		else
 		{
-			html += "\t<li><a href=\"#\" onclick=\"" + list[i].js_code + "; " + (list[i].dont_hide_popup ? "event.stopPropagation(); " : "") + "return false;\">" + list[i].title + "</a></li>\n";
+			html += "\t<li onclick=\"" + list[i].js_code + "; " + (list[i].dont_hide_popup ? "event.stopPropagation(); " : "") + "return false;\">" + list[i].title + "</li>\n";
 		}
 	}
-	html += "\t<li><a href=\"#\" onclick=\"popup_hide(); return false;\">Cancel</a></li>\n";
+	html += "\t<li onclick=\"popup_hide(); return false;\">Cancel</li>\n";
 	html += "</ul>\n";
 	
 	popup_show(html);
