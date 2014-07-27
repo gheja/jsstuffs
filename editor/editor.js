@@ -608,7 +608,8 @@ function popup_menu()
 	popup_list([
 		{ js_code: "", title: "Undo" },
 		{ js_code: "", title: "Redo" },
-		{ js_code: "popup_new_tab();", title: "Add new ...", dont_hide_popup: 1 },
+		{ js_code: "popup_new_tab();", title: "Add new tab ...", dont_hide_popup: 1 },
+		{ js_code: "popup_block_add(9999);", title: "Add new block ...", disabled: _current_tab_index == -1, dont_hide_popup: 1 },
 		(_show_friendly_values ?
 			{ js_code: "set_friendly_values(0);", title: "Show raw values" } :
 			{ js_code: "set_friendly_values(1);", title: "Show friendly values" }
