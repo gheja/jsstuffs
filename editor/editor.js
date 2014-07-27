@@ -44,72 +44,72 @@ function tab_create_sample()
 				},
 				{
 					title: "Point 1 value",
-					unit: "samples",
+					unit: "%",
 					type: "uint8",
 					value: 128,
 					min: 0,
 					max: 255,
-					display_multiplier: 1
+					display_multiplier: 100 / 255
 				},
 				{
 					title: "Point 2 offset",
 					unit: "samples",
 					type: "uint8",
-					value: 128,
+					value: 20,
 					min: 0,
 					max: 255,
 					display_multiplier: 1
 				},
 				{
 					title: "... value",
-					unit: "samples",
+					unit: "%",
 					type: "uint8",
-					value: 128,
+					value: 255,
 					min: 0,
 					max: 255,
-					display_multiplier: 1
+					display_multiplier: 100 / 255
 				},
 				{
 					title: "Point 3 offset",
 					unit: "samples",
 					type: "uint8",
-					value: 128,
+					value: 20,
 					min: 0,
 					max: 255,
 					display_multiplier: 1
 				},
 				{
 					title: "... value",
-					unit: "samples",
+					unit: "%",
 					type: "uint8",
 					value: 128,
 					min: 0,
 					max: 255,
-					display_multiplier: 1
+					display_multiplier: 100 / 255
 				},
 				{
 					title: "Point 4 offset",
 					unit: "samples",
 					type: "uint8",
-					value: 128,
+					value: 20,
 					min: 0,
 					max: 255,
 					display_multiplier: 1
 				},
 				{
 					title: "... value",
-					unit: "samples",
+					unit: "%",
 					type: "uint8",
-					value: 128,
+					value: 0,
 					min: 0,
 					max: 255,
-					display_multiplier: 1
+					display_multiplier: 100 / 255
 				},
 				{
 					title: "Trailing offset",
 					unit: "samples",
 					type: "uint8",
-					value: 128,
+					value: 20,
 					min: 0,
 					max: 255,
 					display_multiplier: 1
