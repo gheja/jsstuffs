@@ -87,7 +87,7 @@ body
 	background: #222;
 	border-left: 1px solid #444;
 }
-.statusbar
+#statusbar
 {
 	position: fixed;
 	left: 0;
@@ -98,7 +98,7 @@ body
 	background: #111;
 	border-top: 1px solid #444;
 }
-.version
+#versionbar
 {
 	position: fixed;
 	right: 0;

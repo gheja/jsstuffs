@@ -234,6 +234,8 @@ function tab_create_sample()
 	
 	select_tab(_tabs.length - 1);
 	redraw_tabs();
+	
+	set_status("Created new sample.");
 }
 
 function tab_create_instrument()
@@ -257,6 +259,8 @@ function tab_create_instrument()
 	
 	select_tab(_tabs.length - 1);
 	redraw_tabs();
+	
+	set_status("Created new instrument.");
 };
 
 function tab_create_skeleton()
@@ -339,6 +343,8 @@ function tab_create_skeleton()
 	
 	select_tab(_tabs.length - 1);
 	redraw_tabs();
+	
+	set_status("Created new skeleton.");
 };
 
 function tab_create_skeletal_animation()
@@ -362,6 +368,8 @@ function tab_create_skeletal_animation()
 	
 	select_tab(_tabs.length - 1);
 	redraw_tabs();
+	
+	set_status("Created new skeletal animation.");
 };
 
 function tab_create_model()
@@ -385,6 +393,8 @@ function tab_create_model()
 	
 	select_tab(_tabs.length - 1);
 	redraw_tabs();
+	
+	set_status("Created new model.");
 };
 
 function tab_remove(j)
@@ -414,6 +424,8 @@ function tab_remove(j)
 	}
 	
 	update_all();
+	
+	set_status("Removed tab.");
 }
 
 function tab_remove_current()
@@ -425,13 +437,20 @@ function tab_remove_current()
 
 function tab_rename(i)
 {
-	var new_title;
+	var old_title, new_title;
 	
-	new_title = prompt('New title', _tabs[i].pe.getTitle());
+	old_title = _tabs[i].pe.getTitle();
+	new_title = prompt('New title', old_title);
 	
-	if (new_title)
+	if (new_title && new_title != old_title)
 	{
 		update_tab_title(i, new_title);
+		
+		set_status("Renamed tab from \"" + old_title + "\" to \"" + new_title + "\".");
+	}
+	else
+	{
+		set_status("Tab was not renamed.");
 	}
 }
 
@@ -588,6 +607,11 @@ function select_tab(i)
 {
 	_current_tab_index = i;
 	update_all();
+}
+
+function set_status(new_status)
+{
+	document.getElementById("statusbar").innerHTML = new_status;
 }
 
 function set_friendly_values(new_value)
