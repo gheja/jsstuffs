@@ -496,12 +496,12 @@ function update_sidebar()
 							value = tmp;
 						}
 						
-						html += "\t\t\t<input id=\"parameter_" + i + "_" + j + "\" type=\"text\" value=\"" + value + "\" />\n";
+						html += "\t\t\t<input readonly=\"readonly\" id=\"parameter_" + i + "_" + j + "\" type=\"text\" value=\"" + value + "\" />\n";
 						html += "\t\t\t<div class=\"unit\">" + parameter.unit + "</div>\n";
 					}
 					else
 					{
-						html += "\t\t\t<input class=\"raw\" id=\"parameter_" + i + "_" + j + "\" type=\"text\" value=\"" + parameter.value + "\" />\n";
+						html += "\t\t\t<input readonly=\"readonly\" class=\"raw\" id=\"parameter_" + i + "_" + j + "\" type=\"text\" value=\"" + parameter.value + "\" />\n";
 						html += "\t\t\t<div class=\"unit\">&nbsp;</div>\n";
 					}
 					

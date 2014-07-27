@@ -256,7 +256,6 @@ li.block.collapsed .details
 }
 .details div:hover input
 {
-	background: #444;
 	color: #fff;
 }
 .details div:hover input.raw
