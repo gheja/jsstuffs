@@ -1,6 +1,15 @@
 /** @constructor */
 SynthSampleGenerator = function(file, return_final)
 {
+	// DEBGUG BEGIN
+	this.after_block_callback = null;
+	
+	this.setAfterBlockCallback = function(callback)
+	{
+		this.after_block_callback = callback;
+	}
+	
+	// DEBUG END
 	this.render = function(file, return_final)
 	{
 		var i, j, a, b,
@@ -9,6 +18,15 @@ SynthSampleGenerator = function(file, return_final)
 			final_component = [], // 16-bit signed integer
 			points,
 			random = new AlmostRandom();
+		
+		// DEBUG BEGIN
+		if (file == null)
+		{
+			return;
+		}
+		
+		var block_number = 0;
+		// DEBUG END
 		
 		while (!file.eof())
 		{
@@ -180,7 +198,22 @@ SynthSampleGenerator = function(file, return_final)
 					component = [];
 				break;
 			}
+			
+			// DEBUG BEGIN
+			if (this.after_block_callback)
+			{
+				this.after_block_callback(block_number, component);
+				block_number++;
+			}
+			// DEBUG END
 		}
+		
+		// DEBUG BEGIN
+		if (this.after_block_callback)
+		{
+			this.after_block_callback(block_number, final_component);
+		}
+		// DEBUG END
 		
 		// return new Int16Array(final_component);
 		return new Int16Array(return_final ? final_component : component);
