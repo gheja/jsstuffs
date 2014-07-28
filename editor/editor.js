@@ -35,7 +35,7 @@ function tab_create_sample()
 	[
 		{
 			title: "Create four point",
-			block_identifier: 0x03,
+			block_identifier: 3,
 			parameters:
 			[
 				{
@@ -127,7 +127,7 @@ function tab_create_sample()
 		},
 		{
 			title: "Create sine",
-			block_identifier: 0x04,
+			block_identifier: 4,
 			parameters:
 			[
 				{
@@ -143,7 +143,7 @@ function tab_create_sample()
 		},
 		{
 			title: "Create noise",
-			block_identifier: 0x05,
+			block_identifier: 5,
 			parameters:
 			[
 				{
@@ -177,7 +177,7 @@ function tab_create_sample()
 		},
 		{
 			title: "Volume",
-			block_identifier: 0x51,
+			block_identifier: 51,
 			parameters:
 			[
 				{
@@ -193,7 +193,7 @@ function tab_create_sample()
 		},
 		{
 			title: "Repeat",
-			block_identifier: 0x53,
+			block_identifier: 53,
 			parameters:
 			[
 				{
@@ -209,7 +209,7 @@ function tab_create_sample()
 		},
 		{
 			title: "Finish",
-			block_identifier: 0x101,
+			block_identifier: 101,
 			parameters:
 			[
 				{
