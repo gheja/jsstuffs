@@ -8,6 +8,9 @@ var _shift_pressed = 0;
 var _render_start_time = null;
 var _last_render_message = "";
 
+var _canvas = null;
+var _canvas_y_position = 0;
+
 function redraw_tabs()
 {
 	var obj, html, i;
@@ -599,6 +602,30 @@ function update_tab_title(i, new_title)
 	update_all();
 }
 
+function canvas_show()
+{
+	_canvas.style.display = "block";
+}
+
+function canvas_hide()
+{
+	_canvas.style.display = "none";
+}
+
+function canvas_clear()
+{
+	var ctx;
+	
+	_canvas.width = _canvas.parentNode.clientWidth;
+	_canvas.height = _canvas.parentNode.clientHeight;
+	
+	ctx = _canvas.getContext("2d");
+	ctx.fillStyle = "#111";
+	ctx.fillRect(0, 0, _canvas.width, _canvas.height);
+	
+	_canvas_y_position = 0;
+}
+
 function update_main_window()
 {
 	if (_current_tab_index == -1)
@@ -635,6 +662,14 @@ function update_all()
 function select_tab(i)
 {
 	_current_tab_index = i;
+	
+	canvas_hide();
+	
+	if (_tabs[_current_tab_index].class == "sample")
+	{
+		canvas_show();
+	}
+	
 	update_all();
 }
 
@@ -856,6 +891,9 @@ function init()
 	window.onmousewheel = handle_mouse_wheel;
 	window.onkeydown = handle_key_down;
 	window.onkeyup = handle_key_up;
+	
+	_canvas = document.getElementById("main_canvas");
+	
 	update_all();
 	set_status("Initialization successful, welcome!");
 }
