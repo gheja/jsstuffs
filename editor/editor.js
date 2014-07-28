@@ -626,17 +626,103 @@ function canvas_clear()
 	_canvas_y_position = 0;
 }
 
+function render_samples(wave, color, collapsed)
+{
+	var ctx = _canvas.getContext("2d");
+	var scale = 1;
+	var i, j, height;
+	
+	if (wave == null)
+	{
+		j = _canvas.width;
+		
+		// force collapse as this cannot be rendered...
+		collapsed = 1;
+	}
+	else
+	{
+		j = Math.min(_canvas.width, wave.length / scale);
+	}
+	
+	y = _canvas_y_position;
+	
+	if (collapsed)
+	{
+		height = 4;
+		ctx.fillStyle = color;
+		ctx.fillRect(0, y, j, height);
+	}
+	else
+	{
+		// this should be an even number
+		height = 104;
+		
+		ctx.fillStyle = "rgba(0,0,0,0.66)";
+		ctx.fillRect(0, y, j, height);
+		
+		ctx.beginPath();
+		ctx.moveTo(0, y + height / 2 - wave[0]/32768 * 50);
+		for (i=0; i<j; i++)
+		{
+			ctx.lineTo(i, y + height / 2 - wave[(i*scale) | 0] / 32768 * 50);
+		}
+		
+		ctx.strokeStyle = color;
+		ctx.lineWidth = 2;
+		ctx.stroke();
+	}
+	
+	_canvas_y_position += height + 2;
+}
+
+function callback_synth_sample_generator_block(block_id, data)
+{
+	var blocks;
+	
+	blocks = _tabs[_current_tab_index].pe.getBlocks();
+	if (block_id < blocks.length)
+	{
+		if (blocks[block_id].block_identifier < 10)
+		{
+			render_samples(data, "#eb0", blocks[block_id].collapsed);
+		}
+		else if (blocks[block_id].block_identifier < 100)
+		{
+			render_samples(data, "#a94", blocks[block_id].collapsed);
+		}
+		else
+		{
+			render_samples(null, "#444", 1);
+		}
+	}
+	else
+	{
+		render_samples(data, "#fff", 0);
+	}
+}
+
 function update_main_window()
 {
+	var buffer, tab, obj;
+	
 	if (_current_tab_index == -1)
 	{
 		return;
 	}
 	
-	if (_tabs[_current_tab_index].pe)
+	tab = _tabs[_current_tab_index];
+	if (tab.pe)
 	{
-		_tabs[_current_tab_index].pe.render();
-		_last_render_message = _tabs[_current_tab_index].pe.getLastRenderMessage();
+		buffer = tab.pe.render();
+		_last_render_message = tab.pe.getLastRenderMessage();
+		
+		if (tab.class == "sample")
+		{
+			canvas_clear();
+			obj = new SynthSampleGenerator(null);
+			obj.setAfterBlockCallback(callback_synth_sample_generator_block.bind());
+			obj.render(buffer);
+		}
 	}
 }
 
