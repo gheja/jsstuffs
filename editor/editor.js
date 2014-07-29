@@ -34,6 +34,25 @@ function tab_create_sample()
 	
 	seed_bullshits = [ "jiffies", "ducklings", "hammers", "impalas", "hamsters" ];
 	
+	pe_settings = new PackedEditor(
+	[
+		{
+			title: "Settings",
+			block_identifier: 0,
+			parameters:
+			[
+				{
+					title: "Zoom",
+					unit: "%",
+					value: 100,
+					min: 0,
+					max: 255
+				},
+			]
+		},
+	]);
+	pe_settings.addBlock(0, 0);
+	
 	pe = new PackedEditor(
 	[
 		{
@@ -206,6 +225,7 @@ function tab_create_sample()
 	pe.setTitle("#" + (_tabs.length + 1) + ": sample");
 	
 	_tabs.push({
+		pe_settings: pe_settings,
 		pe: pe,
 		class: "sample",
 		show_block_indexes: 0
@@ -514,6 +534,16 @@ function update_sidebar()
 	if (_current_tab_index != -1)
 	{
 		html += "<ul>\n";
+		if (_tabs[_current_tab_index].pe_settings)
+		{
+			blocks = _tabs[_current_tab_index].pe_settings.getBlocks();
+			
+			for (i=0; i<blocks.length; i++)
+			{
+				html += _get_block_html(blocks[i], i, 'settings', false);
+			}
+		}
+		
 		if (_tabs[_current_tab_index].pe)
 		{
 			blocks = _tabs[_current_tab_index].pe.getBlocks();
