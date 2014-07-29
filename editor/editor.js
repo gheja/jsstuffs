@@ -242,7 +242,28 @@ function tab_create_sample()
 
 function tab_create_instrument()
 {
-	var pe = new PackedEditor(
+	var pe, pe_settings;
+	
+	pe_settings = new PackedEditor(
+	[
+		{
+			title: "Settings",
+			block_identifier: 0,
+			parameters:
+			[
+				{
+					title: "Sample number",
+					unit: "",
+					value: 0,
+					min: 0,
+					max: 255
+				}
+			]
+		},
+	]);
+	pe_settings.addBlock(0, 0);
+	
+	pe = new PackedEditor(
 	[
 		{
 			title: "Dummy",
@@ -254,6 +275,7 @@ function tab_create_instrument()
 	pe.setTitle("#" + (_tabs.length + 1));
 	
 	_tabs.push({
+		pe_settings: pe_settings,
 		pe: pe,
 		class: "instrument",
 		show_block_indexes: 0
