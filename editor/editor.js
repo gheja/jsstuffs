@@ -430,12 +430,86 @@ function tab_rename_current()
 	tab_rename(_current_tab_index);
 }
 
-function update_sidebar()
+function _get_block_html(block, block_id, block_prefix, show_reorganizer_buttons)
 {
-	var html, blocks, block, parameter, i, j, value, tmp;
+	var html, parameter, tmp, value, j, i;
+	
+	i = block_id;
+	
+	// yeah, this is ugly, but... you expect me to write all those document.createElement()s? you can't be that cruel.
 	
 	html = "";
+	html += "<li class=\"block " + (block.collapsed ? "collapsed" : "") + "\">\n";
+	html += "\t<div class=\"title\">\n";
+	html += "\t\t" + block.title + (_tabs[_current_tab_index].show_block_indexes ? " (" + i + ")" : "") + "\n";
+	html += "\t\t<div class=\"buttons\">\n";
+	html += "\t\t\t<div onclick=\"block_expand(" + i + "); return false;\" class=\"button expand\" title=\"Expand\">&#9606;</div>\n";
+	html += "\t\t\t<div onclick=\"block_collapse(" + i + "); return false;\" class=\"button collapse\" title=\"Collapse\">&#9602;</div>\n";
+	if (show_reorganizer_buttons)
+	{
+		html += "\t\t\t<div onclick=\"block_remove(" + i + "); return false;\" class=\"button\" title=\"Remove this block\">x</div>\n";
+		html += "\t\t\t<div onclick=\"popup_block_add(" + i + "); return false;\" class=\"button\" title=\"Add item above this\">+&#9650;</div>\n";
+		html += "\t\t\t<div onclick=\"popup_block_add(" + (i + 1) + "); return false;\" class=\"button\" title=\"Add item below this\">+&#9660;</div>\n";
+		html += "\t\t\t<div onclick=\"return false;\" class=\"button\" title=\"Move item\">&#9650;&#9660;</div>\n";
+	}
+	html += "\t\t</div>\n";
+	html += "\t</div>\n";
+	html += "\t<div class=\"details\">\n";
+	for (j=0; j<block.parameters.length; j++)
+	{
+		parameter = block.parameters[j];
+		html += "\t\t<div onmouseover=\"set_active_block_parameter(" + i + ", " + j + ");\" onmouseout=\"set_active_block_parameter(-1, -1);\">\n";
+		html += "\t\t\t<label for=\"parameter_" + i + "_" + j + "\">" + parameter.title + ":</label>\n";
+		html += "\t\t\t<div class=\"gauge\"><div class=\"used\" style=\"width: " + Math.round(parameter.value / (parameter.max - parameter.min) * 100) + "\">&nbsp;</div></div>\n";
+		if (_show_friendly_values)
+		{
+			value = parameter.value * (parameter.display_multiplier != undefined ? parameter.display_multiplier : 1) + (parameter.display_correction != undefined ? parameter.display_correction : 0);
+			
+			if (parameter.unit == "%" || parameter.unit == "percent" || parameter.unit == "degrees")
+			{
+				tmp = "";
+				if (value < 0)
+				{
+					tmp = "-";
+				}
+				tmp += Math.floor(Math.abs(value));
+				tmp += ".";
+				tmp += Math.floor(Math.abs(value * 10)) % 10;
+				
+				value = tmp;
+			}
+			
+			html += "\t\t\t<input readonly=\"readonly\" id=\"parameter_" + i + "_" + j + "\" type=\"text\" value=\"" + value + "\" />\n";
+			html += "\t\t\t<div class=\"unit\">" + parameter.unit + "</div>\n";
+		}
+		else
+		{
+			html += "\t\t\t<input readonly=\"readonly\" class=\"raw\" id=\"parameter_" + i + "_" + j + "\" type=\"text\" value=\"" + parameter.value + "\" />\n";
+			html += "\t\t\t<div class=\"unit\">&nbsp;</div>\n";
+		}
+		
+		if (parameter.description)
+		{
+			// this is a clearer, too
+			html += "\t\t\t<div class=\"description\">" + parameter.description + "</div>\n";
+		}
+		else
+		{
+			html += "\t\t\t<br class=\"clearer\" />\n";
+		}
+		html += "\t\t</div>\n";
+	}
+	html += "\t</div>\n";
+	html += "</li>\n";
 	
+	return html;
+}
+
+function update_sidebar()
+{
+	var html, blocks, block, i;
+	
+	html = "";
 	
 	if (_current_tab_index != -1)
 	{
@@ -443,73 +517,13 @@ function update_sidebar()
 		{
 			blocks = _tabs[_current_tab_index].pe.getBlocks();
 			
-			// yeah, this is ugly, but... you expect me to write all those document.createElement()s? you can't be that cruel.
-			
-			html += "<ul>";
+			html += "<ul>\n";
 			for (i=0; i<blocks.length; i++)
 			{
 				block = blocks[i];
-				html += "<li class=\"block " + (block.collapsed ? "collapsed" : "") + "\">\n";
-				html += "\t<div class=\"title\">\n";
-				html += "\t\t" + block.title + (_tabs[_current_tab_index].show_block_indexes ? " (" + i + ")" : "") + "\n";
-				html += "\t\t<div class=\"buttons\">\n";
-				html += "\t\t\t<div onclick=\"block_expand(" + i + "); return false;\" class=\"button expand\" title=\"Expand\">&#9606;</div>\n";
-				html += "\t\t\t<div onclick=\"block_collapse(" + i + "); return false;\" class=\"button collapse\" title=\"Collapse\">&#9602;</div>\n";
-				html += "\t\t\t<div onclick=\"block_remove(" + i + "); return false;\" class=\"button\" title=\"Remove this block\">x</div>\n";
-				html += "\t\t\t<div onclick=\"popup_block_add(" + i + "); return false;\" class=\"button\" title=\"Add item above this\">+&#9650;</div>\n";
-				html += "\t\t\t<div onclick=\"popup_block_add(" + (i + 1) + "); return false;\" class=\"button\" title=\"Add item below this\">+&#9660;</div>\n";
-				html += "\t\t\t<div onclick=\"return false;\" class=\"button\" title=\"Move item\">&#9650;&#9660;</div>\n";
-				html += "\t\t</div>\n";
-				html += "\t</div>\n";
-				html += "\t<div class=\"details\">\n";
-				for (j=0; j<block.parameters.length; j++)
-				{
-					parameter = block.parameters[j];
-					html += "\t\t<div onmouseover=\"set_active_block_parameter(" + i + ", " + j + ");\" onmouseout=\"set_active_block_parameter(-1, -1);\">\n";
-					html += "\t\t\t<label for=\"parameter_" + i + "_" + j + "\">" + parameter.title + ":</label>\n";
-					html += "\t\t\t<div class=\"gauge\"><div class=\"used\" style=\"width: " + Math.round(parameter.value / (parameter.max - parameter.min) * 100) + "\">&nbsp;</div></div>\n";
-					if (_show_friendly_values)
-					{
-						value = parameter.value * (parameter.display_multiplier != undefined ? parameter.display_multiplier : 1) + (parameter.display_correction != undefined ? parameter.display_correction : 0);
-						
-						if (parameter.unit == "%" || parameter.unit == "percent" || parameter.unit == "degrees")
-						{
-							tmp = "";
-							if (value < 0)
-							{
-								tmp = "-";
-							}
-							tmp += Math.floor(Math.abs(value));
-							tmp += ".";
-							tmp += Math.floor(Math.abs(value * 10)) % 10;
-							
-							value = tmp;
-						}
-						
-						html += "\t\t\t<input readonly=\"readonly\" id=\"parameter_" + i + "_" + j + "\" type=\"text\" value=\"" + value + "\" />\n";
-						html += "\t\t\t<div class=\"unit\">" + parameter.unit + "</div>\n";
-					}
-					else
-					{
-						html += "\t\t\t<input readonly=\"readonly\" class=\"raw\" id=\"parameter_" + i + "_" + j + "\" type=\"text\" value=\"" + parameter.value + "\" />\n";
-						html += "\t\t\t<div class=\"unit\">&nbsp;</div>\n";
-					}
-					
-					if (parameter.description)
-					{
-						// this is a clearer, too
-						html += "\t\t\t<div class=\"description\">" + parameter.description + "</div>\n";
-					}
-					else
-					{
-						html += "\t\t\t<br class=\"clearer\" />\n";
-					}
-					html += "\t\t</div>\n";
-				}
-				html += "\t</div>\n";
-				html += "</li>\n";
+				html += _get_block_html(block, i, '', true);
 			}
-			html += "</ul>";
+			html += "</ul>\n";
 			
 			html += "<div class=\"button\" onclick=\"popup_block_add(9999); return false;\" title=\"Add item here\">+</div>\n";
 		}
