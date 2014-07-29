@@ -44,7 +44,6 @@ function tab_create_sample()
 				{
 					title: "Length",
 					unit: "samples",
-					type: "uint16",
 					value: 120,
 					min: 0,
 					max: 65535,
@@ -53,7 +52,6 @@ function tab_create_sample()
 				{
 					title: "Point 1 value",
 					unit: "%",
-					type: "uint8",
 					value: 128,
 					min: 0,
 					max: 255,
@@ -63,7 +61,6 @@ function tab_create_sample()
 				{
 					title: "Point 2 offset",
 					unit: "samples",
-					type: "uint8",
 					value: 20,
 					min: 0,
 					max: 255,
@@ -72,7 +69,6 @@ function tab_create_sample()
 				{
 					title: "... value",
 					unit: "%",
-					type: "uint8",
 					value: 255,
 					min: 0,
 					max: 255,
@@ -82,7 +78,6 @@ function tab_create_sample()
 				{
 					title: "Point 3 offset",
 					unit: "samples",
-					type: "uint8",
 					value: 20,
 					min: 0,
 					max: 255,
@@ -91,7 +86,6 @@ function tab_create_sample()
 				{
 					title: "... value",
 					unit: "%",
-					type: "uint8",
 					value: 128,
 					min: 0,
 					max: 255,
@@ -101,7 +95,6 @@ function tab_create_sample()
 				{
 					title: "Point 4 offset",
 					unit: "samples",
-					type: "uint8",
 					value: 20,
 					min: 0,
 					max: 255,
@@ -110,7 +103,6 @@ function tab_create_sample()
 				{
 					title: "... value",
 					unit: "%",
-					type: "uint8",
 					value: 0,
 					min: 0,
 					max: 255,
@@ -120,7 +112,6 @@ function tab_create_sample()
 				{
 					title: "Trailing offset",
 					unit: "samples",
-					type: "uint8",
 					value: 20,
 					min: 0,
 					max: 255,
@@ -136,7 +127,6 @@ function tab_create_sample()
 				{
 					title: "Length",
 					unit: "samples",
-					type: "uint16",
 					value: 1000,
 					min: 0,
 					max: 65535,
@@ -152,7 +142,6 @@ function tab_create_sample()
 				{
 					title: "Length",
 					unit: "samples",
-					type: "uint16",
 					value: 1000,
 					min: 0,
 					max: 65535,
@@ -161,7 +150,6 @@ function tab_create_sample()
 				{
 					title: "Volume",
 					unit: "%",
-					type: "uint8",
 					value: 63,
 					min: 0,
 					max: 255,
@@ -170,7 +158,6 @@ function tab_create_sample()
 				{
 					title: "Seed",
 					unit: seed_bullshits[Math.floor(Math.random() * seed_bullshits.length)],
-					type: "uint8",
 					value: 100,
 					min: 0,
 					max: 65535,
@@ -186,7 +173,6 @@ function tab_create_sample()
 				{
 					title: "Volume",
 					unit: "%",
-					type: "uint8",
 					value: 63,
 					min: 0,
 					max: 255,
@@ -202,7 +188,6 @@ function tab_create_sample()
 				{
 					title: "Count",
 					unit: "times",
-					type: "uint8",
 					value: 10,
 					min: 1,
 					max: 255,
@@ -218,7 +203,6 @@ function tab_create_sample()
 				{
 					title: "Operation",
 					unit: "",
-					type: "uint8",
 					value: 0,
 					min: 0,
 					max: 4,
@@ -279,7 +263,6 @@ function tab_create_skeleton()
 				{
 					title: "Parent bone",
 					unit: "",
-					type: "uint8",
 					value: 0,
 					min: 0,
 					max: 63,
@@ -288,7 +271,6 @@ function tab_create_skeleton()
 				{
 					title: "Length",
 					unit: "",
-					type: "uint8",
 					value: 10,
 					min: 0,
 					max: 255,
@@ -297,7 +279,6 @@ function tab_create_skeleton()
 				{
 					title: "Rotation",
 					unit: "degrees",
-					type: "uint8",
 					value: 127,
 					min: 0,
 					max: 254,
@@ -307,7 +288,6 @@ function tab_create_skeleton()
 				{
 					title: "Angle X",
 					unit: "degrees",
-					type: "uint8",
 					value: 127,
 					min: 0,
 					max: 254,
@@ -317,7 +297,6 @@ function tab_create_skeleton()
 				{
 					title: "Angle Y",
 					unit: "degrees",
-					type: "uint8",
 					value: 127,
 					min: 0,
 					max: 254,
@@ -327,7 +306,6 @@ function tab_create_skeleton()
 				{
 					title: "Angle Z",
 					unit: "degrees",
-					type: "uint8",
 					value: 127,
 					min: 0,
 					max: 254,
