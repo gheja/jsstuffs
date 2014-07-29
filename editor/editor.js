@@ -2,6 +2,8 @@ var _tabs = [];
 var _current_tab_index = -1;
 var _current_block_index = -1;
 var _current_block_parameter_index = -1;
+var _current_pe_name = '';
+var _p_current_pe = null;
 var _mouse_position = [ 0, 0 ];
 var _show_friendly_values = 1;
 var _shift_pressed = 0;
@@ -450,7 +452,7 @@ function tab_rename_current()
 	tab_rename(_current_tab_index);
 }
 
-function _get_block_html(block, block_id, block_prefix, show_reorganizer_buttons)
+function _get_block_html(block, block_id, pe_name, show_reorganizer_buttons)
 {
 	var html, parameter, tmp, value, j, i;
 	
@@ -459,7 +461,7 @@ function _get_block_html(block, block_id, block_prefix, show_reorganizer_buttons
 	// yeah, this is ugly, but... you expect me to write all those document.createElement()s? you can't be that cruel.
 	
 	html = "";
-	html += "<li class=\"block " + (block.collapsed ? "collapsed" : "") + "\">\n";
+	html += "<li class=\"block " + (block.collapsed ? "collapsed" : "") + "\" onmouseover=\"set_active_pe('" + pe_name + "');\" onmouseout=\"set_active_pe('');\">\n";
 	html += "\t<div class=\"title\">\n";
 	html += "\t\t" + block.title + (_tabs[_current_tab_index].show_block_indexes ? " (" + i + ")" : "") + "\n";
 	html += "\t\t<div class=\"buttons\">\n";
@@ -479,7 +481,7 @@ function _get_block_html(block, block_id, block_prefix, show_reorganizer_buttons
 	{
 		parameter = block.parameters[j];
 		html += "\t\t<div onmouseover=\"set_active_block_parameter(" + i + ", " + j + ");\" onmouseout=\"set_active_block_parameter(-1, -1);\">\n";
-		html += "\t\t\t<label for=\"parameter_" + i + "_" + j + "\">" + parameter.title + ":</label>\n";
+		html += "\t\t\t<label for=\"parameter_" + i + "_" + j + "_" + pe_name + "\">" + parameter.title + ":</label>\n";
 		html += "\t\t\t<div class=\"gauge\"><div class=\"used\" style=\"width: " + Math.round(parameter.value / (parameter.max - parameter.min) * 100) + "\">&nbsp;</div></div>\n";
 		if (_show_friendly_values)
 		{
@@ -499,12 +501,12 @@ function _get_block_html(block, block_id, block_prefix, show_reorganizer_buttons
 				value = tmp;
 			}
 			
-			html += "\t\t\t<input readonly=\"readonly\" id=\"parameter_" + i + "_" + j + "\" type=\"text\" value=\"" + value + "\" />\n";
+			html += "\t\t\t<input readonly=\"readonly\" id=\"parameter_" + i + "_" + j + "_" + pe_name + "\" type=\"text\" value=\"" + value + "\" />\n";
 			html += "\t\t\t<div class=\"unit\">" + parameter.unit + "</div>\n";
 		}
 		else
 		{
-			html += "\t\t\t<input readonly=\"readonly\" class=\"raw\" id=\"parameter_" + i + "_" + j + "\" type=\"text\" value=\"" + parameter.value + "\" />\n";
+			html += "\t\t\t<input readonly=\"readonly\" class=\"raw\" id=\"parameter_" + i + "_" + j + "_" + pe_name + "\" type=\"text\" value=\"" + parameter.value + "\" />\n";
 			html += "\t\t\t<div class=\"unit\">&nbsp;</div>\n";
 		}
 		
@@ -563,10 +565,9 @@ function update_sidebar()
 
 function popup_block_add(position)
 {
-	var i, pe, blocks, list;
+	var i, blocks, list;
 	
-	pe = _tabs[_current_tab_index].pe;
-	blocks = pe.getBuildingBlocks();
+	blocks = _p_current_pe.getBuildingBlocks();
 	
 	list = [];
 	for (i=0; i<blocks.length; i++)
@@ -578,25 +579,25 @@ function popup_block_add(position)
 
 function block_collapse(position)
 {
-	_tabs[_current_tab_index].pe.setBlockProperty(position, "collapsed", 1);
+	_p_current_pe.setBlockProperty(position, "collapsed", 1);
 	update_tab();
 }
 
 function block_expand(position)
 {
-	_tabs[_current_tab_index].pe.setBlockProperty(position, "collapsed", 0);
+	_p_current_pe.setBlockProperty(position, "collapsed", 0);
 	update_tab();
 }
 
 function block_add(block_identifer, position)
 {
-	_tabs[_current_tab_index].pe.addBlock(block_identifer, position);
+	_p_current_pe.addBlock(block_identifer, position);
 	update_tab();
 }
 
 function block_remove(position)
 {
-	_tabs[_current_tab_index].pe.removeBlock(position);
+	_p_current_pe.removeBlock(position);
 	update_tab();
 }
 
@@ -780,6 +781,20 @@ function set_friendly_values(new_value)
 	update_tab();
 }
 
+function set_active_pe(pe_name)
+{
+	_current_pe_name = pe_name;
+	
+	if (pe_name == 'settings')
+	{
+		_p_current_pe = _tabs[_current_tab_index].pe_settings;
+	}
+	else
+	{
+		_p_current_pe = _tabs[_current_tab_index].pe;
+	}
+}
+
 function set_active_block_parameter(block_id, parameter_id)
 {
 	_current_block_index = block_id;
@@ -790,8 +805,8 @@ function alter_block_parameter_value(block_id, parameter_id, value)
 {
 	var new_value;
 	
-	new_value =  _tabs[_current_tab_index].pe.getParameterValue(block_id, parameter_id) + value;
-	_tabs[_current_tab_index].pe.setParameterValue(block_id, parameter_id, new_value);
+	new_value = _p_current_pe.getParameterValue(block_id, parameter_id) + value;
+	_p_current_pe.setParameterValue(block_id, parameter_id, new_value);
 	
 	update_tab();
 }
@@ -800,7 +815,7 @@ function alter_block_parameter_value_big(block_id, parameter_id, value)
 {
 	var blocks, diff;
 	
-	blocks = _tabs[_current_tab_index].pe.getBlocks();
+	blocks = _p_current_pe.getBlocks();
 	
 	diff = blocks[block_id].parameters[parameter_id].max - blocks[block_id].parameters[parameter_id].min;
 	
