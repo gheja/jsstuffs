@@ -507,26 +507,25 @@ function _get_block_html(block, block_id, block_prefix, show_reorganizer_buttons
 
 function update_sidebar()
 {
-	var html, blocks, block, i;
+	var html, blocks, i;
 	
 	html = "";
 	
 	if (_current_tab_index != -1)
 	{
+		html += "<ul>\n";
 		if (_tabs[_current_tab_index].pe)
 		{
 			blocks = _tabs[_current_tab_index].pe.getBlocks();
 			
-			html += "<ul>\n";
 			for (i=0; i<blocks.length; i++)
 			{
-				block = blocks[i];
-				html += _get_block_html(block, i, '', true);
+				html += _get_block_html(blocks[i], i, '', true);
 			}
-			html += "</ul>\n";
-			
-			html += "<div class=\"button\" onclick=\"popup_block_add(9999); return false;\" title=\"Add item here\">+</div>\n";
+			html += "<li><div class=\"button\" onclick=\"popup_block_add(9999); return false;\" title=\"Add item here\">+</div></li>\n";
 		}
+		html += "</ul>\n";
+		
 	}
 	
 	document.getElementById("sidebar").innerHTML = html;
