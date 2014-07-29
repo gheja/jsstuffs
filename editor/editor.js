@@ -703,7 +703,7 @@ function callback_synth_sample_generator_block(block_id, data)
 
 function update_main_window()
 {
-	var buffer, tab, obj;
+	var buffer, tab, obj, tmp;
 	
 	if (_current_tab_index == -1)
 	{
@@ -721,7 +721,8 @@ function update_main_window()
 			canvas_clear();
 			obj = new SynthSampleGenerator(null);
 			obj.setAfterBlockCallback(callback_synth_sample_generator_block.bind());
-			obj.render(buffer);
+			tmp = obj.render(buffer, 1);
+			_last_render_message += " | Final output: " + tmp.length + " samples, " + (tmp.length * 2) + " bytes, " + Math.round(tmp.length / 44100 * 1000) + " ms (44.1 kHz, 16 bit, mono).";
 		}
 	}
 }
@@ -736,7 +737,7 @@ function update_tab()
 	
 	t2 = (new Date()).getTime();
 	
-	set_status("Everything is up-to-date, rendered in " + (t2 - t1) + " ms. " + _last_render_message);
+	set_status("Everything is up-to-date, rendered in " + (t2 - t1) + " ms. | " + _last_render_message);
 }
 
 function update_all()
