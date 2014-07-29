@@ -705,12 +705,12 @@ function callback_synth_sample_generator_block(block_id, data)
 		}
 		else
 		{
-			render_samples(null, "#444", 1);
+			render_samples(null, "#444", 1, scale);
 		}
 	}
 	else
 	{
-		render_samples(data, "#fff", 0);
+		render_samples(data, "#fff", 0, scale);
 	}
 }
 
