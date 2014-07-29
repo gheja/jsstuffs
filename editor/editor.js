@@ -46,8 +46,7 @@ function tab_create_sample()
 					unit: "samples",
 					value: 120,
 					min: 0,
-					max: 65535,
-					display_multiplier: 1
+					max: 65535
 				},
 				{
 					title: "Point 1 value",
@@ -63,8 +62,7 @@ function tab_create_sample()
 					unit: "samples",
 					value: 20,
 					min: 0,
-					max: 255,
-					display_multiplier: 1
+					max: 255
 				},
 				{
 					title: "... value",
@@ -80,8 +78,7 @@ function tab_create_sample()
 					unit: "samples",
 					value: 20,
 					min: 0,
-					max: 255,
-					display_multiplier: 1
+					max: 255
 				},
 				{
 					title: "... value",
@@ -97,8 +94,7 @@ function tab_create_sample()
 					unit: "samples",
 					value: 20,
 					min: 0,
-					max: 255,
-					display_multiplier: 1
+					max: 255
 				},
 				{
 					title: "... value",
@@ -114,8 +110,7 @@ function tab_create_sample()
 					unit: "samples",
 					value: 20,
 					min: 0,
-					max: 255,
-					display_multiplier: 1
+					max: 255
 				}
 			]
 		},
@@ -129,8 +124,7 @@ function tab_create_sample()
 					unit: "samples",
 					value: 1000,
 					min: 0,
-					max: 65535,
-					display_multiplier: 1
+					max: 65535
 				}
 			]
 		},
@@ -144,8 +138,7 @@ function tab_create_sample()
 					unit: "samples",
 					value: 1000,
 					min: 0,
-					max: 65535,
-					display_multiplier: 1
+					max: 65535
 				},
 				{
 					title: "Volume",
@@ -160,8 +153,7 @@ function tab_create_sample()
 					unit: seed_bullshits[Math.floor(Math.random() * seed_bullshits.length)],
 					value: 100,
 					min: 0,
-					max: 65535,
-					display_multiplier: 1
+					max: 65535
 				}
 			]
 		},
@@ -190,8 +182,7 @@ function tab_create_sample()
 					unit: "times",
 					value: 10,
 					min: 1,
-					max: 255,
-					display_multiplier: 1
+					max: 255
 				}
 			]
 		},
@@ -206,7 +197,6 @@ function tab_create_sample()
 					value: 0,
 					min: 0,
 					max: 4,
-					display_multiplier: 1,
 					description: "0: overwrite<br/>1: add<br/>2: subtract<br/>3: multiply<br/>4: divide"
 				}
 			],
@@ -265,16 +255,14 @@ function tab_create_skeleton()
 					unit: "",
 					value: 0,
 					min: 0,
-					max: 63,
-					display_multiplier: 1
+					max: 63
 				},
 				{
 					title: "Length",
 					unit: "",
 					value: 10,
 					min: 0,
-					max: 255,
-					display_multiplier: 1
+					max: 255
 				},
 				{
 					title: "Rotation",
@@ -482,7 +470,7 @@ function update_sidebar()
 					html += "\t\t\t<div class=\"gauge\"><div class=\"used\" style=\"width: " + Math.round(parameter.value / (parameter.max - parameter.min) * 100) + "\">&nbsp;</div></div>\n";
 					if (_show_friendly_values)
 					{
-						value = parameter.value * parameter.display_multiplier + (parameter.display_correction ? parameter.display_correction : 0);
+						value = parameter.value * (parameter.display_multiplier != undefined ? parameter.display_multiplier : 1) + (parameter.display_correction != undefined ? parameter.display_correction : 0);
 						
 						if (parameter.unit == "%" || parameter.unit == "percent" || parameter.unit == "degrees")
 						{
