@@ -168,7 +168,7 @@ clamp_and_round_uint32 = function(value)
   * @param {Object} obj the object to be copied
   * @returns {Object}
   */
-function deep_copy_object(obj)
+deep_copy_object = function(obj)
 {
 	return JSON.parse(JSON.stringify(obj));
 }
@@ -185,7 +185,7 @@ function deep_copy_object(obj)
   * @param {string} string_other string to be appended if number != 1
   * @returns {string}
   */
-function plural_or_not(number, string_one, string_other)
+plural_or_not = function(number, string_one, string_other)
 {
 	return number + " " + (number == 1 ? string_one : string_other);
 }
