@@ -46,9 +46,10 @@ function tab_create_sample()
 				{
 					title: "Zoom",
 					unit: "%",
-					value: 100,
-					min: 0,
-					max: 255
+					value: 255,
+					min: 1,
+					max: 255,
+					display_multiplier: 100 / 255
 				},
 			]
 		},
@@ -636,10 +637,9 @@ function canvas_clear()
 	_canvas_y_position = 0;
 }
 
-function render_samples(wave, color, collapsed)
+function render_samples(wave, color, collapsed, scale)
 {
 	var ctx = _canvas.getContext("2d");
-	var scale = 1;
 	var i, j, height;
 	
 	if (wave == null)
@@ -687,18 +687,21 @@ function render_samples(wave, color, collapsed)
 
 function callback_synth_sample_generator_block(block_id, data)
 {
-	var blocks;
+	var blocks, scale;
+	
+	blocks = _tabs[_current_tab_index].pe_settings.getBlocks();
+	scale = 1 / (blocks[0].parameters[0].value / 255);
 	
 	blocks = _tabs[_current_tab_index].pe.getBlocks();
 	if (block_id < blocks.length)
 	{
 		if (blocks[block_id].block_identifier < 10)
 		{
-			render_samples(data, "#eb0", blocks[block_id].collapsed);
+			render_samples(data, "#eb0", blocks[block_id].collapsed, scale);
 		}
 		else if (blocks[block_id].block_identifier < 100)
 		{
-			render_samples(data, "#a94", blocks[block_id].collapsed);
+			render_samples(data, "#a94", blocks[block_id].collapsed, scale);
 		}
 		else
 		{
