@@ -190,4 +190,22 @@ describe('Miscellaneous helpers', function() {
 			assert.equal(result, 4294967295);
 		});
 	});
+	describe('plural_or_not()', function() {
+		it('plural_or_not(0, "thing", "things") should return "0 things"', function () {
+			var result = plural_or_not(0, "thing", "things");
+			assert.equal(result, "0 things");
+		});
+		it('plural_or_not(1, "thing", "things") should return "1 thing"', function () {
+			var result = plural_or_not(1, "thing", "things");
+			assert.equal(result, "1 thing");
+		});
+		it('plural_or_not(2, "thing", "things") should return "2 things"', function () {
+			var result = plural_or_not(2, "thing", "things");
+			assert.equal(result, "2 things");
+		});
+		it('plural_or_not(-1, "thing", "things") should return "-1 things"', function () {
+			var result = plural_or_not(-1, "thing", "things");
+			assert.equal(result, "-1 things");
+		});
+	});
 });
