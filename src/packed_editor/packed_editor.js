@@ -147,7 +147,7 @@ PackedEditor = function(building_blocks)
 				}
 				else
 				{
-					console.log("Value too big in block #" + i + ", parameter #" + j + ", aborting.");
+					this.log("Value too big in block #" + i + ", parameter #" + j + ", aborting.");
 					return null;
 				}
 			}
