@@ -6,7 +6,7 @@ jsstuffs
 This is a library for javascript game projects, intending to be
 minimalistic and size-optimized.
 
-See the [src/] directory for the modules.
+See the [src/](src/) directory for the modules.
 
 
 The modules
