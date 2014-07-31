@@ -3,10 +3,10 @@ jsstuffs
 
 [![Build Status](https://travis-ci.org/gheja/jsstuffs.png?branch=master)](https://travis-ci.org/gheja/jsstuffs)
 
-This is a library for javascript game projects intending to be
+This is a library for javascript game projects, intending to be
 minimalistic and size-optimized.
 
-See the src/ directory for the modules.
+See the [src/] directory for the modules.
 
 
 The modules
