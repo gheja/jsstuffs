@@ -13,6 +13,8 @@ var _last_render_message = "";
 var _canvas = null;
 var _canvas_y_position = 0;
 
+var _synth_keyboard = null;
+
 function redraw_tabs()
 {
 	var obj, html, i;
@@ -659,6 +661,85 @@ function canvas_clear()
 	_canvas_y_position = 0;
 }
 
+function synth_keyboard_init()
+{
+	var keys, key, i, html, left, width, w, two_rows;
+	
+	html = "";
+	
+	keys = [
+		[ "z", 0, 0 ],
+		[ "s", 1, 1 ],
+		[ "x", 0, 2 ],
+		[ "d", 1, 3 ],
+		[ "c", 0, 4 ],
+		[ "v", 0, 5 ],
+		[ "g", 1, 6 ],
+		[ "b", 0, 7 ],
+		[ "h", 1, 8 ],
+		[ "n", 0, 9 ],
+		[ "j", 1, 10 ],
+		[ "m", 0, 11 ],
+		
+		[ "q", 0, 12 ],
+		[ "2", 1, 13 ],
+		[ "w", 0, 14 ],
+		[ "3", 1, 15 ],
+		[ "e", 0, 16 ],
+		[ "r", 0, 17 ],
+		[ "5", 1, 18 ],
+		[ "t", 0, 19 ],
+		[ "6", 1, 20 ],
+		[ "y", 0, 21 ],
+		[ "7", 1, 22 ],
+		[ "u", 0, 23 ],
+		
+		[ "i", 0, 24 ],
+		[ "9", 1, 25 ],
+		[ "o", 0, 26 ],
+		[ "0", 1, 27 ],
+		[ "p", 0, 28 ],
+		[ "[", 0, 29 ],
+		[ "=", 1, 30 ],
+		[ "]", 0, 31 ]
+	];
+	
+	html += "<ul>";
+	left = -40;
+	left_corr = 0;
+	for (i=0; i<keys.length; i++)
+	{
+		key = keys[i];
+		if (key[1] != 1)
+		{
+			class_name = "white";
+			left += 40;
+			left_corr =0 ;
+		}
+		else
+		{
+			class_name = "black";
+			left_corr += 27;
+		}
+		
+		html += "<li id=\"synth_key_" + key[2] + "_" + i + "\" class=\"" + class_name + "\" style=\"left: " + (left + left_corr) + "px\">" + key[0] + "<br/>C4</li>\n";
+	}
+	html += "</ul>";
+	
+	_synth_keyboard.innerHTML = html;
+}
+function synth_keyboard_show()
+{
+	_synth_keyboard.style.width = _synth_keyboard.parentNode.clientWidth;
+	// _synth_keyboard.height = _synth_keyboard.parentNode.clientHeight;
+	_synth_keyboard.style.display = "block";
+}
+
+function synth_keyboard_hide()
+{
+	_synth_keyboard.style.display = "none";
+}
+
 function render_samples(wave, color, collapsed, scale)
 {
 	var ctx = _canvas.getContext("2d");
@@ -786,10 +867,15 @@ function select_tab(i)
 	_current_tab_index = i;
 	
 	canvas_hide();
+	synth_keyboard_hide();
 	
 	if (_tabs[_current_tab_index].class == "sample")
 	{
 		canvas_show();
+	}
+	else if (_tabs[_current_tab_index].class == "instrument")
+	{
+		synth_keyboard_show();
 	}
 	
 	update_all();
@@ -1029,6 +1115,9 @@ function init()
 	window.onkeyup = handle_key_up;
 	
 	_canvas = document.getElementById("main_canvas");
+	_synth_keyboard = document.getElementById("main_synth_keyboard");
+	
+	synth_keyboard_init();
 	
 	update_all();
 	set_status("Initialization successful, welcome!");

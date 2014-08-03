@@ -329,3 +329,44 @@ li.block.collapsed .details
 	color: #444;
 	background: inherit;
 }
+
+
+#main_synth_keyboard
+{
+	background: #111;
+	border-top: 1px solid #333;
+	display: none;
+	height: 164px;
+	width: 100px;
+	position: fixed;
+	bottom: 19px;
+	left: 0;
+}
+#main_synth_keyboard ul
+{
+	
+}
+#main_synth_keyboard ul li
+{
+	display: block;
+	width: 38px;
+	border: 2px solid #000;
+	height: 30px;
+	position: fixed;
+	background: #ccc;
+	z-index: 999;
+	text-align: center;
+	padding: 130px 0 0 0;
+	color: #333;
+	bottom: 19px;
+}
+#main_synth_keyboard ul li.black
+{
+	height: 30px;
+	width: 26px;
+	padding: 70px 0 0 0;
+	background: #333;
+	color: #aaa;
+	z-index: 1000;
+	bottom: 79px;
+}
