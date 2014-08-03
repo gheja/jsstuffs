@@ -417,7 +417,7 @@ function tab_create_model()
 
 function tab_remove(j)
 {
-	var i, new_tabs;
+	var i, new_tabs, new_tab_index;
 	
 	new_tabs = [];
 	
@@ -432,14 +432,24 @@ function tab_remove(j)
 	
 	_tabs = new_tabs;
 	
-	if (_current_tab_index == j)
+	if (_tabs.length == 0)
 	{
-		_current_tab_index--;
+		new_tab_index = -1;
 	}
-	if (_current_tab_index < 0 && _tabs.length > 0)
+	else
 	{
-		_current_tab_index = 0;
+		if (_current_tab_index == j)
+		{
+			new_tab_index = j - 1;
+		}
+		
+		if (new_tab_index < 0 && _tabs.length > 0)
+		{
+			new_tab_index = 0;
+		}
 	}
+	
+	select_tab(new_tab_index);
 	
 	update_all();
 	
@@ -728,6 +738,7 @@ function synth_keyboard_init()
 	
 	_synth_keyboard.innerHTML = html;
 }
+
 function synth_keyboard_show()
 {
 	_synth_keyboard.style.width = _synth_keyboard.parentNode.clientWidth;
@@ -868,6 +879,11 @@ function select_tab(i)
 	
 	canvas_hide();
 	synth_keyboard_hide();
+	
+	if (_current_tab_index == -1)
+	{
+		return;
+	}
 	
 	if (_tabs[_current_tab_index].class == "sample")
 	{
