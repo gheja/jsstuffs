@@ -331,6 +331,12 @@ li.block.collapsed .details
 }
 
 
+#main_canvas
+{
+	display: none;
+}
+
+
 #main_synth_keyboard
 {
 	background: #111;
