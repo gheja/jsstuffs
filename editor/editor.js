@@ -903,6 +903,7 @@ function select_tab(i, popup_menu_if_selected)
 		synth_keyboard_show();
 	}
 	
+	set_active_pe('');
 	update_all();
 }
 
