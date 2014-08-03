@@ -23,7 +23,7 @@ function redraw_tabs()
 	html += "<div class=\"tab menu\" onclick=\"popup_menu(); return false;\">&#9776;</div>\n";
 	for (i=0; i<_tabs.length; i++)
 	{
-		html += "<div class=\"tab " + _tabs[i].class + " " + (_current_tab_index == i ? "active" : "") + "\" onclick=\"select_tab(" + i + "); return false;\" ondblclick=\"tab_rename(" + i + "); return false;\">\n";
+		html += "<div class=\"tab " + _tabs[i].class + " " + (_current_tab_index == i ? "active" : "") + "\" onclick=\"select_tab(" + i + ", true); return false;\" ondblclick=\"tab_rename(" + i + "); return false;\">\n";
 		html += "\t" + _tabs[i].pe.getTitle() + "\n";
 		html += "</div>\n";
 	}
@@ -873,8 +873,17 @@ function update_all()
 	update_tab();
 }
 
-function select_tab(i)
+function select_tab(i, popup_menu_if_selected)
 {
+	if (_current_tab_index == i)
+	{
+		popup_list([
+			{ js_code: "tab_rename_current();", title: "Set title for current tab", disabled: _current_tab_index == -1 },
+			{ js_code: "tab_remove_current();", title: "Discard current tab", disabled: _current_tab_index == -1, dont_hide_popup: 1 }
+		]);
+		return;
+	}
+	
 	_current_tab_index = i;
 	
 	canvas_hide();
