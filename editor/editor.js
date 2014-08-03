@@ -663,7 +663,7 @@ function canvas_clear()
 
 function synth_keyboard_init()
 {
-	var keys, key, i, html, left, width, w, two_rows;
+	var keys, key, i, html, left, left_corr;
 	
 	html = "";
 	
