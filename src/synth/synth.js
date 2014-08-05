@@ -550,6 +550,8 @@ Synth = function(context)
 	
 	this.renderWaveFile = function()
 	{
+		throw "Error: this function is disabled.";
+		
 		/* render the songs */
 		var i, j, data_current, data, data2;
 		
