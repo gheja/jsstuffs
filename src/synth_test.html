@@ -11,7 +11,7 @@
 		<script type="text/javascript">
 			var synth = new Synth();
 			
-			function synth_demo_render()
+			function synth_demo_setup()
 			{
 				var samples = [
 					base64_to_int16array("AADSBKAJZQ4XE7wXRRyzIAAlJSkkLfMwlTT4NzA7Hj7ZQExDfUVnRwxJYUpySy9Mp0zLTKVMMkxvS2NKC0lnR35FS0PYQCE+LDv9N5E09DAkLSYp/yS0IEMcvRcXE2YOnwnRBAMAKPtn9pXx7OxB6LvjTd8A29nW3NIMz23LA8jVxN3BKL+0vIC6mrj0tp21kLTNs1uzMrNas86zj7SetfS2mLiCurK8Kr/cwdXEAshvywrP3tLX1gLbTN+640Xo5Oyf8V/2Lfs="),
@@ -21,15 +21,16 @@
 				var dictionary = new Dictionary();
 				dictionary.setContents(base64_decode("DFUAAABVAAAAVQAAAAwBAAAAAQAAAAEAAAAMAABQMAAAUDAAAFAwDAAAAAAAAAAAAAAAAAwAPQAAAEEAAABEAAAMAAIAAAACAAAAAgAADBAAIAAQACAAEAAgAA=="));
 				
-				synth.render(samples, file, dictionary);
+				synth.setup(samples, file, dictionary);
 			}
 			
 			function synth_demo_play()
 			{
+				synth.renderWaveFile();
 				synth.play(0);
 			}
 		</script>
-		<a href="#" onclick="synth_demo_render(); return false;">render</a> |
+		<a href="#" onclick="synth_demo_setup(); return false;">setup</a> |
 		<a href="#" onclick="synth_demo_play(); return false;">play</a><br/>
 		See the javascript console for details.
 	</body>

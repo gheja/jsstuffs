@@ -9,6 +9,7 @@
 Synth = function()
 {
 	this.audio_objects = [];
+	this.songs = [];
 	
 	// DEBUG BEGIN
 	this.log = function(s)
@@ -225,19 +226,128 @@ Synth = function()
 		this.name = "";
 		// DEBUG END
 		
+		this.channels = [];
 		this.bpm = 120;
 		this.speed = 3;
-		this.audio_object = null;
+		this.samples_per_tick = 1; // to be recalculated
 		this.pattern_order_table = [];
+		this.extracted_patterns = [];
+		this.current_row_number = 0;
+		this.number_of_channels = 0;
+		
+		// shared
+		this.samples = [];
+		this.instruments = [];
+		this.patterns = [];
+		this.SynthChannel = null;
+		
+		// DEBUG BEGIN
+		this.log = function(s)
+		{
+			console.log("SynthSong: " + s);
+		}
+		// DEBUG END
+		
+		
+		this.setParameters = function(bpm, speed, number_of_channels, samples, instruments, patterns, synth_channel_object)
+		{
+			this.bpm = bpm;
+			this.speed = speed;
+			
+			// this is just an approximation, I could not get my head over the correct calculation...
+			// TODO: make a correct calculation for this
+			this.samples_per_tick = Math.round((1 / this.bpm * 2.501129) * 44100);
+			
+			this.number_of_channels = number_of_channels;
+			this.samples = samples;
+			this.instruments = instruments;
+			this.patterns = patterns;
+			this.SynthChannel = synth_channel_object;
+		}
+		
+		this.extractPatterns = function()
+		{
+			var j, k, l, pattern;
+			
+			// hardcoded to 32 channels, the maximum of an XM file
+			// TODO: make it dynamic?
+			for (j=0; j<32; j++)
+			{
+				this.channels[j] = new this.SynthChannel();
+				this.extracted_patterns[j] = [];
+			}
+			
+			for (j in this.pattern_order_table)
+			{
+				pattern = this.patterns[this.pattern_order_table[j]];
+				
+				for (l=0; l<pattern.number_of_channels; l++)
+				{
+					for (k=0; k<pattern.number_of_rows; k++)
+					{
+						this.extracted_patterns[l].push(pattern.channel_data[l][k]);
+					}
+				}
+			}
+			
+		}
+		
+		this.renderNextRow = function()
+		{
+			var j, k, l, m, pos, samples_per_tick, pattern, data;
+			
+			pos = 0;
+			// data is in 44100 Hz, stereo, signed float, left-right interleaved format
+			data = [];
+			
+			if (this.current_row_number >= this.extracted_patterns.length)
+			{
+				return data;
+			}
+			
+			k = this.current_row_number;
+			
+			// Note: it is important to have the setup separated from
+			// render as command effects can effect the whole song not
+			// just their channels
+			for (m=0; m<this.number_of_channels; m++)
+			{
+				this.log("rendering pattern: row: " + k + ", pos: " + pos + ", time: " + Math.round(pos / 44100 * 1000) + "ms, ticks: " + this.speed + ", channel: " + m + ", row data: " + this.extracted_patterns[m][k]);
+				
+				// NNA is "cut"
+				this.extracted_patterns[m][k][1] && this.channels[m].setInstrument(this.instruments[this.extracted_patterns[m][k][1] - 1]);
+				this.extracted_patterns[m][k][0] && this.channels[m].setNote(this.extracted_patterns[m][k][0]);
+				this.extracted_patterns[m][k][2] && this.channels[m].setVolume(this.extracted_patterns[m][k][2] - 16);
+			}
+			
+			// initialize the buffer for this row
+			for (l=0; l<this.samples_per_tick * this.speed; l++)
+			{
+				data[(pos + l) * 2] = 0;
+				data[(pos + l) * 2 + 1] = 0;
+			}
+			
+			for (l=0; l<this.speed; l++)
+			{
+				for (m=0; m<this.number_of_channels; m++)
+				{
+					this.channels[m].renderNote(data, pos, this.samples_per_tick);
+				}
+				pos += this.samples_per_tick;
+			}
+			
+			this.current_row_number++;
+			
+			return data;
+		}
 	}
 	
-	this.render = function(samples, file, dictionary)
+	this.setup = function(samples, file, dictionary)
 	{
 		var i, j, k, l, m,
 			_samples = [],
 			_instruments = [],
 			_patterns = [],
-			_songs = [],
 			file,
 			dictionary,
 			pos,
@@ -245,6 +355,8 @@ Synth = function()
 			pattern,
 			columns,
 			song_count,
+			song_bpm,
+			song_speed,
 			number_of_patterns,
 			number_of_channels,
 			number_of_instruments,
@@ -286,9 +398,8 @@ Synth = function()
 		for (i=0; i<song_count; i++)
 		{
 			song = new this.SynthSong();
-			song.bpm = file.readOne();
-			song.speed = file.readOne();
-			_songs[0] = song;
+			song_bpm = file.readOne();
+			song_speed = file.readOne();
 			
 			number_of_patterns = file.readOne();
 			number_of_channels = file.readOne();
@@ -324,92 +435,78 @@ Synth = function()
 				}
 				_patterns[j] = pattern;
 			}
+			
+			song.setParameters(song_bpm, song_speed, number_of_channels, _samples, _instruments, _patterns, this.SynthChannel);
+			song.extractPatterns();
+			
+			this.songs[i] = song;
 		}
+	}
+	
+	this.fillBuffer = function(buffer)
+	{
+		var i, tmp;
 		
-		/* render the songs */
-		var channels,
-			samples_per_tick,
-			data,
-			tmp;
+		// buffer is in 44100 Hz, stereo, signed 16 bit integer, left-right interleaved format
 		
-		// hardcoded to 32 channels, the maximum of an XM file
-		// TODO: make it dynamic?
-		channels = [];
-		for (i=0; i<32; i++)
+		for (i=0; i<this.songs.length; i++)
 		{
-			channels[i] = new this.SynthChannel();
-		}
-		
-		for (i in _songs)
-		{
-			song = _songs[i];
-			data = [];
-			
-			// this is just an approximation, I could not get my head over the correct calculation...
-			// TODO: make a correct calculation for this
-			samples_per_tick = Math.round((1 / song.bpm * 2.501129) * 44100);
-			
-			// leave the first 44 bytes empty for the WAVE header
-			// = 11 samples, 2 channels, 2 bytes
-			pos = 11;
-			
-			for (j in song.pattern_order_table)
+			tmp = this.songs[i].renderNextRow();
+			for (j=0; j<tmp.length; j++)
 			{
-				pattern = _patterns[song.pattern_order_table[j]];
-				
-				for (k=0; k<pattern.number_of_rows; k++)
-				{
-					// Note: it is important to have the setup separated from
-					// render as command effects can effect the whole song not
-					// just their channels
-					for (m=0; m<pattern.number_of_channels; m++)
-					{
-						this.log("rendering pattern: row: " + k + ", pos: " + pos + ", time: " + Math.round(pos / 44100 * 1000) + "ms, ticks: " + song.speed + ", channel: " + m + ", row data: " + pattern.channel_data[m][k]);
-						
-						// NNA is "cut"
-						pattern.channel_data[m][k][1] && channels[m].setInstrument(_instruments[pattern.channel_data[m][k][1] - 1]);
-						pattern.channel_data[m][k][0] && channels[m].setNote(pattern.channel_data[m][k][0]);
-						pattern.channel_data[m][k][2] && channels[m].setVolume(pattern.channel_data[m][k][2] - 16);
-					}
-					
-					// initialize the buffer for this row
-					for (l=0; l<samples_per_tick * song.speed; l++)
-					{
-						data[(pos + l) * 2] = 0;
-						data[(pos + l) * 2 + 1] = 0;
-					}
-					
-					for (l=0; l<song.speed; l++)
-					{
-						for (m=0; m<pattern.number_of_channels; m++)
-						{
-							channels[m].renderNote(data, pos, samples_per_tick);
-						}
-						pos += samples_per_tick;
-					}
-				}
+				buffer[j] += Math.round(tmp[j]);
+			}
+		}
+	}
+	
+	this.renderWaveFile = function()
+	{
+		/* render the songs */
+		var i, j, data_current, data, data2;
+		
+		data = [];
+		data_current = [];
+		
+		/* allocate space for the WAVE header */
+		for (i=0; i<22; i++)
+		{
+			data[i] = 0;
+		}
+		
+		for (i=0; i<10; i++)
+		{
+			/* prepare the buffer */
+			for (j=0; j<44112; j++)
+			{
+				data_current[j] = 0;
 			}
 			
-			data2 = new Int16Array(data);
-			
-			/* prepare the WAV file, create the headers */
-			var used = data2.length*2, dv = new Uint32Array(data2.buffer, 0, 44);
-			
-			dv[0] = 0x46464952; // "RIFF"
-			dv[1] = used + 36;  // total file size
-			dv[2] = 0x45564157; // "WAVE"
-			dv[3] = 0x20746D66; // "fmt " chunk
-			dv[4] = 0x00000010; // size of the following
-			dv[5] = 0x00020001; // format: PCM, channels: 2
-			dv[6] = 0x0000AC44; // samples per second: 44100
-			dv[7] = 0x00015888; // byte rate: two bytes per sample
-			dv[8] = 0x00100002; // data align: 2 bytes, bits per sample: 16 bits
-			dv[9] = 0x61746164; // "data" chunk
-			dv[10] = used;      // number of samples
-			
-			/* encode the WAV file to a data URL with base64 encoding and create the player HTML object */
-			this.audio_objects[i] = new Audio("data:audio/wav;base64," + base64_encode(new Uint8Array(data2.buffer, 0, data2.length * 2)));
+			this.fillBuffer(data_current);
+			for (j=0; j<data_current.length; j++)
+			{
+				data.push(data_current[j]);
+			}
 		}
+		
+		data2 = new Int16Array(data);
+		
+		/* prepare the WAV file, create the headers */
+		var used = data2.length*2, dv = new Uint32Array(data2.buffer, 0, 44);
+		
+		dv[0] = 0x46464952; // "RIFF"
+		dv[1] = used + 36;  // total file size
+		dv[2] = 0x45564157; // "WAVE"
+		dv[3] = 0x20746D66; // "fmt " chunk
+		dv[4] = 0x00000010; // size of the following
+		dv[5] = 0x00020001; // format: PCM, channels: 2
+		dv[6] = 0x0000AC44; // samples per second: 44100
+		dv[7] = 0x00015888; // byte rate: two bytes per sample
+		dv[8] = 0x00100002; // data align: 2 bytes, bits per sample: 16 bits
+		dv[9] = 0x61746164; // "data" chunk
+		dv[10] = used;      // number of samples
+		
+		/* encode the WAV file to a data URL with base64 encoding and create the player HTML object */
+		this.audio_objects[0] = new Audio("data:audio/wav;base64," + base64_encode(new Uint8Array(data2.buffer, 0, data2.length * 2)));
 	}
 	
 	this.play = function(song_id)
