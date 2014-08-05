@@ -506,7 +506,8 @@ Synth = function()
 			data[i] = 0;
 		}
 		
-		for (i=0; i<10; i++)
+		// render about 10 seconds
+		for (i=0; i<(44100 * 2 * 10 / 10000); i++)
 		{
 			/* prepare the buffer */
 			for (j=0; j<10000; j++)
