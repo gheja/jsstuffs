@@ -305,7 +305,7 @@ Synth = function()
 		{
 			var j, k, l, m, pattern;
 			
-			if (this.current_row_number >= this.extracted_patterns.length)
+			if (this.current_row_number >= this.extracted_patterns[0].length)
 			{
 				this.playing = 0;
 				return false;
