@@ -529,25 +529,6 @@ Synth = function(context)
 		}
 	}
 	
-/*
-	this.fillBuffer = function(buffer)
-	{
-		var i, tmp;
-		
-		// buffer is in 44100 Hz, stereo, signed 16 bit integer, left-right interleaved format
-		
-		for (i=0; i<this.songs.length; i++)
-		{
-			tmp = this.songs[i].renderAndGetSamples(buffer.length / 2);
-			
-			for (j=0; j<tmp.length; j++)
-			{
-				buffer[j] += Math.round(tmp[j]);
-			}
-		}
-	}
-*/
-	
 	this.renderWaveFile = function()
 	{
 		throw "Error: this function is disabled.";
