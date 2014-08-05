@@ -234,6 +234,12 @@ Synth = function()
 		this.extracted_patterns = [];
 		this.current_row_number = 0;
 		this.number_of_channels = 0;
+		this.playing = 0;
+		
+		// buffer to be filled by renderNextRow() and read by the Synth
+		// in 44100 Hz, stereo, signed float, left-right interleaved format
+		this.ikeapolc = [];
+		this.ikeapolc_pos = 0;
 		
 		// shared
 		this.samples = [];
@@ -263,6 +269,9 @@ Synth = function()
 			this.instruments = instruments;
 			this.patterns = patterns;
 			this.SynthChannel = synth_channel_object;
+			
+			// TODO
+			this.playing = 1;
 		}
 		
 		this.extractPatterns = function()
@@ -294,15 +303,12 @@ Synth = function()
 		
 		this.renderNextRow = function()
 		{
-			var j, k, l, m, pos, samples_per_tick, pattern, data;
-			
-			pos = 0;
-			// data is in 44100 Hz, stereo, signed float, left-right interleaved format
-			data = [];
+			var j, k, l, m, pattern;
 			
 			if (this.current_row_number >= this.extracted_patterns.length)
 			{
-				return data;
+				this.playing = 0;
+				return false;
 			}
 			
 			k = this.current_row_number;
@@ -312,7 +318,7 @@ Synth = function()
 			// just their channels
 			for (m=0; m<this.number_of_channels; m++)
 			{
-				this.log("rendering pattern: row: " + k + ", pos: " + pos + ", time: " + Math.round(pos / 44100 * 1000) + "ms, ticks: " + this.speed + ", channel: " + m + ", row data: " + this.extracted_patterns[m][k]);
+				this.log("rendering pattern: row: " + k + ", pos: " + this.ikeapolc_pos + ", time: " + Math.round(this.ikeapolc_pos / 44100 * 1000) + "ms, ticks: " + this.speed + ", channel: " + m + ", row data: " + this.extracted_patterns[m][k]);
 				
 				// NNA is "cut"
 				this.extracted_patterns[m][k][1] && this.channels[m].setInstrument(this.instruments[this.extracted_patterns[m][k][1] - 1]);
@@ -323,22 +329,48 @@ Synth = function()
 			// initialize the buffer for this row
 			for (l=0; l<this.samples_per_tick * this.speed; l++)
 			{
-				data[(pos + l) * 2] = 0;
-				data[(pos + l) * 2 + 1] = 0;
+				this.ikeapolc[(this.ikeapolc_pos + l) * 2] = 0;
+				this.ikeapolc[(this.ikeapolc_pos + l) * 2 + 1] = 0;
 			}
 			
 			for (l=0; l<this.speed; l++)
 			{
 				for (m=0; m<this.number_of_channels; m++)
 				{
-					this.channels[m].renderNote(data, pos, this.samples_per_tick);
+					this.channels[m].renderNote(this.ikeapolc, this.ikeapolc_pos, this.samples_per_tick);
 				}
-				pos += this.samples_per_tick;
+				this.ikeapolc_pos += this.samples_per_tick;
 			}
 			
 			this.current_row_number++;
 			
-			return data;
+			return true;
+		}
+		
+		this.renderAndGetSamples = function(count)
+		{
+			var buffer, a;
+			
+			if (this.ikeapolc.length == 0 && !this.playing)
+			{
+				return [];
+			}
+			
+			this.log("Requested " + count + " samples...");
+			if (this.ikeapolc.length < count * 2 && this.playing)
+			{
+				this.log("  rendering next row...");
+				this.renderNextRow();
+			}
+			
+			a = Math.min(count, this.ikeapolc_pos);
+			
+			this.log("  returning " + a + " samples.");
+			
+			buffer = this.ikeapolc.splice(0, a * 2);
+			this.ikeapolc_pos -= a;
+			
+			return buffer;
 		}
 	}
 	
@@ -451,7 +483,8 @@ Synth = function()
 		
 		for (i=0; i<this.songs.length; i++)
 		{
-			tmp = this.songs[i].renderNextRow();
+			tmp = this.songs[i].renderAndGetSamples(buffer.length / 2);
+			
 			for (j=0; j<tmp.length; j++)
 			{
 				buffer[j] += Math.round(tmp[j]);
@@ -476,7 +509,7 @@ Synth = function()
 		for (i=0; i<10; i++)
 		{
 			/* prepare the buffer */
-			for (j=0; j<44112; j++)
+			for (j=0; j<10000; j++)
 			{
 				data_current[j] = 0;
 			}
