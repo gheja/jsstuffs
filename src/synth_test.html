@@ -9,7 +9,9 @@
 	</head>
 	<body>
 		<script type="text/javascript">
-			var synth = new Synth();
+			var audio_context = new (window.AudioContext || window.webkitAudioContext)();
+			
+			var synth = new Synth(audio_context);
 			
 			function synth_demo_setup()
 			{
@@ -26,7 +28,6 @@
 			
 			function synth_demo_play()
 			{
-				synth.renderWaveFile();
 				synth.play(0);
 			}
 		</script>

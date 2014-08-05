@@ -6,9 +6,11 @@
   */
 
 /** @constructor */
-Synth = function()
+Synth = function(context)
 {
-	this.audio_objects = [];
+	this.context = context;
+	this.sample_rate = context.sampleRate;
+	
 	this.songs = [];
 	
 	// DEBUG BEGIN
@@ -87,6 +89,7 @@ Synth = function()
 		this.sample_loop_length = 0;
 		this.relative_note_number = 0; // -96..+95, 0 means C-4 = C-4
 		this.finished = 0;
+		this.sample_rate = 0;
 		
 		// DEBUG BEGIN
 		this.log = function(s)
@@ -108,6 +111,7 @@ Synth = function()
 			this.sample_loop_type = instrument.sample_loop_type;
 			this.sample_loop_start = instrument.sample_loop_start;
 			this.sample_loop_length = instrument.sample_loop_length;
+			this.sample_rate = instrument.sample_rate;
 			this.relative_note_number = instrument.relative_note_number;
 			this.finetune = instrument.finetune;
 			this.sample_position = 0;
@@ -182,7 +186,7 @@ Synth = function()
 			}
 			
 			// the notes in XM files seem to be one note off - correcting it here
-			speed = this.getFrequency(this.note + this.relative_note_number + this.finetune / 128 - 1, 0) / 44100;
+			speed = this.getFrequency(this.note + this.relative_note_number + this.finetune / 128 - 1, 0) / this.sample_rate;
 			
 			for (i=0; i<length; i++)
 			{
@@ -226,6 +230,8 @@ Synth = function()
 		this.name = "";
 		// DEBUG END
 		
+		this.audio_context = null;
+		this.audio_node = null;
 		this.channels = [];
 		this.bpm = 120;
 		this.speed = 3;
@@ -235,9 +241,10 @@ Synth = function()
 		this.current_row_number = 0;
 		this.number_of_channels = 0;
 		this.playing = 0;
+		this.sample_rate = 0;
 		
 		// buffer to be filled by renderNextRow() and read by the Synth
-		// in 44100 Hz, stereo, signed float, left-right interleaved format
+		// in (this.sample_rate) Hz, stereo, signed float, left-right interleaved format
 		this.ikeapolc = [];
 		this.ikeapolc_pos = 0;
 		
@@ -255,14 +262,18 @@ Synth = function()
 		// DEBUG END
 		
 		
-		this.setParameters = function(bpm, speed, number_of_channels, samples, instruments, patterns, synth_channel_object)
+		this.setParameters = function(audio_context, bpm, speed, sample_rate, number_of_channels, samples, instruments, patterns, synth_channel_object)
 		{
+			var that;
+			
+			this.audio_context = audio_context;
 			this.bpm = bpm;
 			this.speed = speed;
+			this.sample_rate = sample_rate;
 			
 			// this is just an approximation, I could not get my head over the correct calculation...
 			// TODO: make a correct calculation for this
-			this.samples_per_tick = Math.round((1 / this.bpm * 2.501129) * 44100);
+			this.samples_per_tick = Math.round((1 / this.bpm * 2.501129) * this.sample_rate);
 			
 			this.number_of_channels = number_of_channels;
 			this.samples = samples;
@@ -270,8 +281,9 @@ Synth = function()
 			this.patterns = patterns;
 			this.SynthChannel = synth_channel_object;
 			
-			// TODO
-			this.playing = 1;
+			that = this;
+			this.audio_node = this.audio_context.createScriptProcessor(8192, 0, 2);
+			this.audio_node.onaudioprocess = function(e) { that.fillAudioNodeBuffer(e) };
 		}
 		
 		this.extractPatterns = function()
@@ -318,7 +330,7 @@ Synth = function()
 			// just their channels
 			for (m=0; m<this.number_of_channels; m++)
 			{
-				this.log("rendering pattern: row: " + k + ", pos: " + this.ikeapolc_pos + ", time: " + Math.round(this.ikeapolc_pos / 44100 * 1000) + "ms, ticks: " + this.speed + ", channel: " + m + ", row data: " + this.extracted_patterns[m][k]);
+				this.log("rendering pattern: row: " + k + ", pos: " + this.ikeapolc_pos + ", time: " + Math.round(this.sample_rate * 1000) + "ms, ticks: " + this.speed + ", channel: " + m + ", row data: " + this.extracted_patterns[m][k]);
 				
 				// NNA is "cut"
 				this.extracted_patterns[m][k][1] && this.channels[m].setInstrument(this.instruments[this.extracted_patterns[m][k][1] - 1]);
@@ -371,6 +383,47 @@ Synth = function()
 			this.ikeapolc_pos -= a;
 			
 			return buffer;
+		}
+		
+		this.fillAudioNodeBuffer = function(e)
+		{
+			var i, j, tmp, buffer_left, buffer_right, resample_number, samples_requested;
+			
+			// buffer is in 96000 Hz, stereo, signed float
+			buffer_left = e.outputBuffer.getChannelData(0);
+			buffer_right = e.outputBuffer.getChannelData(1);
+			
+			tmp = this.renderAndGetSamples(buffer_left.length);
+			
+			// end of song
+			if (tmp.length == 0)
+			{
+				this.log("No data received from renderAndGetSamples(), disconnecting audio node from output.");
+				this.audio_node.disconnect();
+				return;
+			}
+			
+			j = 0;
+			for (i=0; i<tmp.length; i++)
+			{
+				buffer_left[i] = tmp[i * 2] / 32767;
+				buffer_right[i] = tmp[i * 2 + 1] / 32767;
+			}
+		}
+		
+		this.play = function()
+		{
+			if (this.playing)
+			{
+				this.log("Play request, but already playing - ignoring request.");
+				return;
+			}
+			this.log("Play request, connecting audio node to output.");
+			this.ikeapolc = [];
+			this.ikeapolc_pos = 0;
+			this.current_row_number = 0;
+			this.playing = 1;
+			this.audio_node.connect(this.audio_context.destination);
 		}
 	}
 	
@@ -425,6 +478,7 @@ Synth = function()
 			}
 			// DEBUG END
 			_instruments[i].sample = _samples[_instruments[i].sample_id];
+			_instruments[i].sample_rate = this.sample_rate;
 		}
 		
 		for (i=0; i<song_count; i++)
@@ -468,13 +522,14 @@ Synth = function()
 				_patterns[j] = pattern;
 			}
 			
-			song.setParameters(song_bpm, song_speed, number_of_channels, _samples, _instruments, _patterns, this.SynthChannel);
+			song.setParameters(audio_context, song_bpm, song_speed, this.sample_rate, number_of_channels, _samples, _instruments, _patterns, this.SynthChannel);
 			song.extractPatterns();
 			
 			this.songs[i] = song;
 		}
 	}
 	
+/*
 	this.fillBuffer = function(buffer)
 	{
 		var i, tmp;
@@ -491,6 +546,7 @@ Synth = function()
 			}
 		}
 	}
+*/
 	
 	this.renderWaveFile = function()
 	{
@@ -545,7 +601,6 @@ Synth = function()
 	
 	this.play = function(song_id)
 	{
-		/* play the generated sound */
-		this.audio_objects[song_id].play();
+		this.songs[song_id].play();
 	}
 }
