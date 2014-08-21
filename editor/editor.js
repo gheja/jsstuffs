@@ -828,6 +828,33 @@ function callback_synth_sample_generator_block(block_id, data)
 	}
 }
 
+function update_instrument_window()
+{
+	var tab, blocks, sample_tab_id, sample_tab, obj, sample_data, message;
+	
+	tab = _tabs[_current_tab_index];
+	
+	blocks = tab.pe_settings.getBlocks();
+	
+	sample_tab_id = blocks[0].parameters[0].value;
+	
+	instrument = new Synth.SynthInstrument();
+	
+	if (_tabs[sample_tab_id] && _tabs[sample_tab_id].class == "sample")
+	{
+		sample_data = new SynthSampleGenerator(_tabs[sample_tab_id].pe.render(), 1);
+		sample = new Synth.SynthSample(sample_data);
+		
+		message = "Instrument ready.";
+	}
+	else
+	{
+		message = "Invalid sample selected.";
+	}
+	
+	return message;
+}
+
 function update_main_window()
 {
 	var buffer, tab, obj, tmp;
@@ -850,6 +877,11 @@ function update_main_window()
 			obj.setAfterBlockCallback(callback_synth_sample_generator_block.bind());
 			tmp = obj.render(buffer, 1);
 			_last_render_message += " | Final output: " + tmp.length + " samples, " + (tmp.length * 2) + " bytes, " + Math.round(tmp.length / 44100 * 1000) + " ms (44.1 kHz, 16 bit, mono).";
+		}
+		
+		if (tab.class == "instrument")
+		{
+			_last_render_message += " | " + update_instrument_window();
 		}
 	}
 }
