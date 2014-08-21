@@ -190,4 +190,76 @@ describe('Miscellaneous helpers', function() {
 			assert.equal(result, 4294967295);
 		});
 	});
+	describe('deep_copy_object()', function() {
+		it('should copy an integer', function () {
+			var input, output;
+			input = 1;
+			output = deep_copy_object(input);
+			assert.equal(input, output);
+		});
+		it('should copy an array...', function () {
+			var input, output;
+			input = [ 1, 2 ];
+			output = deep_copy_object(input);
+			
+			assert.equal(input[0], 1);
+			assert.equal(input[1], 2);
+			assert.equal(output[0], 1);
+			assert.equal(output[1], 2);
+		});
+		it('... and the result should be independent from the original', function () {
+			var input, output;
+			input = [ 1, 2 ];
+			output = deep_copy_object(input);
+			
+			output[0] = 3;
+			
+			assert.equal(input[0], 1);
+			assert.equal(input[1], 2);
+			assert.equal(output[0], 3);
+			assert.equal(output[1], 2);
+			assert.notEqual(input, output);
+		});
+		it('should copy an object...', function () {
+			var input, output;
+			input = { test1: 1, test2: 2, test3: function() { console.log('test'); } };
+			output = deep_copy_object(input);
+			
+			assert.equal(input.test1, 1);
+			assert.equal(input.test2, 2);
+			assert.equal(output.test1, 1);
+			assert.equal(output.test2, 2);
+		});
+		it('... and the result should be independent from the original', function () {
+			var input, output;
+			input = { test1: 1, test2: 2, test3: function() { console.log('test'); } };
+			output = deep_copy_object(input);
+			
+			output.test1 = 3;
+			
+			assert.equal(input.test1, 1);
+			assert.equal(input.test2, 2);
+			assert.equal(output.test1, 3);
+			assert.equal(output.test2, 2);
+			assert.notEqual(input, output);
+		});
+	});
+	describe('plural_or_not()', function() {
+		it('plural_or_not(0, "thing", "things") should return "0 things"', function () {
+			var result = plural_or_not(0, "thing", "things");
+			assert.equal(result, "0 things");
+		});
+		it('plural_or_not(1, "thing", "things") should return "1 thing"', function () {
+			var result = plural_or_not(1, "thing", "things");
+			assert.equal(result, "1 thing");
+		});
+		it('plural_or_not(2, "thing", "things") should return "2 things"', function () {
+			var result = plural_or_not(2, "thing", "things");
+			assert.equal(result, "2 things");
+		});
+		it('plural_or_not(-1, "thing", "things") should return "-1 things"', function () {
+			var result = plural_or_not(-1, "thing", "things");
+			assert.equal(result, "-1 things");
+		});
+	});
 });

@@ -1,0 +1,36 @@
+<html>
+	<head>
+		<title>Packed Editor</title>
+		<link href="editor.css" rel="stylesheet" type="text/css" />
+		<script type="text/javascript" src="../src/packed_editor/packed_editor.js"></script>
+		<script type="text/javascript" src="../src/lib/misc.js"></script>
+		<script type="text/javascript" src="../src/lib/arrays.js"></script>
+		<script type="text/javascript" src="../src/lib/almost_random.js"></script>
+		<script type="text/javascript" src="../src/synth/synth_sample_generator.js"></script>
+		<script type="text/javascript" src="editor.js"></script>
+	</head>
+	<body onload="init();">
+		<div id="tabs">
+		</div>
+		<div class="window">
+			<div class="main">
+				<canvas id="main_canvas"></canvas>
+				<div id="main_synth_keyboard"></div>
+			</div>
+			<div id="sidebar">
+			</div>
+		</div>
+		<div id="statusbar">
+			Initializing...
+		</div>
+		<div id="versionbar">
+			v0.0.0
+		</div>
+		<div id="popup_background" onclick="popup_hide();">
+			&nbsp;
+		</div>
+		<div id="popup" onclick="popup_hide();">
+			popup content
+		</div>
+	</body>
+</html>

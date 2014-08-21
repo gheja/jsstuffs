@@ -159,3 +159,33 @@ clamp_and_round_uint32 = function(value)
 	*/
 	return clamp(Math.round(value), 0, 4294967295);
 }
+
+/**
+  * Copies an object recursively - this is NOT a proper cloning technique! And
+  * also this is slow.
+  *
+  * @nosideeffects
+  * @param {Object} obj the object to be copied
+  * @returns {Object}
+  */
+deep_copy_object = function(obj)
+{
+	return JSON.parse(JSON.stringify(obj));
+}
+
+/**
+  * Returns a string formatted according to the given number, i.e. "1 sample" or
+  * "2 samples".
+  *
+  * Yes, it really annoyed me this much... :)
+  *
+  * @nosideeffects
+  * @param {number} number number of the things to be considered
+  * @param {string) string_one string to be appended if number == 1
+  * @param {string} string_other string to be appended if number != 1
+  * @returns {string}
+  */
+plural_or_not = function(number, string_one, string_other)
+{
+	return number + " " + (number == 1 ? string_one : string_other);
+}
