@@ -15,7 +15,7 @@ World = function()
 	// .   x   .   x   . - 2
 	// . x . x . x . x . - 1
 	
-	this.generate = function(seed)
+	this.generate_step1 = function(seed)
 	{
 		var x, y, step, max_elevation, rng;
 		
@@ -56,5 +56,10 @@ World = function()
 			step = Math.floor(step / 2);
 			max_elevation /= 2;
 		}
+	}
+	
+	this.generate = function(seed)
+	{
+		this.generate_step1(seed);
 	}
 }
