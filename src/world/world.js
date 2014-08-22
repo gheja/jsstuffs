@@ -2,8 +2,8 @@
 
 World = function()
 {
-	this.grid_width = 64; // must be multiples of two!
-	this.grid_height = 64; // must be multiples of two!
+	this.grid_width = 128; // must be multiples of two!
+	this.grid_height = 128; // must be multiples of two!
 	
 	// 2d array with X Y Z coordinates, must be ordered by the X and Y coordinates!
 	// this.grid[1][2] = [ 0.123, 0. 324, 0.123 ];
@@ -28,28 +28,28 @@ World = function()
 			
 			for (y=0; y<=this.grid_width; y++)
 			{
-				this.grid[x][y] = 0;
+				this.grid[x][y] = 0.5;
 			}
 		}
 		
-		step = 16;
-		max_elevation = 10;
+		step = this.grid_width;
+		max_elevation = 1;
 		
 		while (step > 0)
 		{
 			for (y=0; y<this.grid_height; y+=step)
 			{
-				for (x=step; x<this.grid_width; x+= step)
+				for (x=step; x<this.grid_width; x+= step * 2)
 				{
-					this.grid[x][y] = (this.grid[x - step][y] + this.grid[x + step][y]) / 2 + (rng.random() * max_elevation - max_elevation / 2);
+					this.grid[x][y] = (this.grid[x - step][y] + this.grid[x + step][y]) / 2 + (rng.random() - 0.5) * max_elevation;
 				}
 			}
 			
 			for (x=0; x<this.grid_width; x+=step)
 			{
-				for (y=step; y<this.grid_height; y+=step)
+				for (y=step; y<this.grid_height; y+=step * 2)
 				{
-					this.grid[x][y] = (this.grid[x][y - step] + this.grid[x][y + step]) / 2 + (rng.random() * max_elevation - max_elevation / 2);
+					this.grid[x][y] = (this.grid[x][y - step] + this.grid[x][y + step]) / 2 + (rng.random() - 0.5) * max_elevation;
 				}
 			}
 			
