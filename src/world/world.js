@@ -28,7 +28,7 @@ World = function()
 			
 			for (y=0; y<=this.grid_width; y++)
 			{
-				this.grid[x][y] = 0.5;
+				this.grid[x][y] = [ x, y, 0.5 ];
 			}
 		}
 		
@@ -41,7 +41,7 @@ World = function()
 			{
 				for (x=step; x<this.grid_width; x+= step * 2)
 				{
-					this.grid[x][y] = (this.grid[x - step][y] + this.grid[x + step][y]) / 2 + (rng.random() - 0.5) * max_elevation;
+					this.grid[x][y][2] = (this.grid[x - step][y][2] + this.grid[x + step][y][2]) / 2 + (rng.random() - 0.5) * max_elevation;
 				}
 			}
 			
@@ -49,7 +49,7 @@ World = function()
 			{
 				for (y=step; y<this.grid_height; y+=step * 2)
 				{
-					this.grid[x][y] = (this.grid[x][y - step] + this.grid[x][y + step]) / 2 + (rng.random() - 0.5) * max_elevation;
+					this.grid[x][y][2] = (this.grid[x][y - step][2] + this.grid[x][y + step][2]) / 2 + (rng.random() - 0.5) * max_elevation;
 				}
 			}
 			
@@ -81,7 +81,7 @@ World = function()
 					distance = Math.min(distance, distance_2d([x / this.grid_width, y / this.grid_height], points[i]));
 				}
 				
-				this.grid[x][y] = clamp(this.grid[x][y] - distance, 0, 1);
+				this.grid[x][y][2] = clamp(this.grid[x][y][2] - distance, 0, 1);
 			}
 		}
 	}
