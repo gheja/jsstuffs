@@ -1,47 +1,38 @@
-var _world;
-var _canvas;
+var _seed = 42;
 
-function update()
+function draw_step1(canvas_name)
 {
-	_world.generate(123);
-}
-
-function draw()
-{
-	var ctx = _canvas.getContext("2d");
+	var x, y, ctx, world, x_multiplier, y_multiplier, sea_level, world;
+	
+	world = new World();
+	world.generate(_seed);
+	
+	canvas = document.getElementById(canvas_name);
+	
+	ctx = canvas.getContext("2d");
 	
 	ctx.fillStyle = "#000000";
-	ctx.fillRect(0, 0, 640, 640);
+	ctx.fillRect(0, 0, canvas.width, canvas.height);
 	
-	// read pointer
-	for (x=0; x<_world.grid_width; x++)
+	x_multiplier = canvas.width / world.grid_width;
+	y_multiplier = canvas.height / world.grid_height;
+	
+	sea_level = 0.5;
+	
+	for (x=0; x<world.grid_width; x++)
 	{
-		for (y=0; y<_world.grid_width; y++)
+		for (y=0; y<world.grid_width; y++)
 		{
-			if (_world.grid[x][y] > 0)
-			{
-				ctx.fillStyle = "rgba(255, 255, 255, " + (_world.grid[x][y]) + ")";
-			}
-			else
-			{
-				ctx.fillStyle = "rgba(128, 255, 255, " + (_world.grid[x][y] * -1) + ")";
-			}
+			ctx.fillStyle = "rgba(255, 255, 255, " + (world.grid[x][y]) + ")";
 			
-			ctx.fillRect(x * 10, y * 10, 10, 10);
+			ctx.fillRect(x * x_multiplier, y * y_multiplier, x_multiplier, y_multiplier);
 		}
 	}
 }
 
 function init()
 {
-	_canvas = document.getElementById("canvas1");
-	_canvas.width = 640;
-	_canvas.height = 640;
-	
-	_world = new World();
-	
-	update();
-	draw();
+	draw_step1("canvas1");
 }
 
 window.onload = init;
