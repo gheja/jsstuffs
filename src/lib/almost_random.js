@@ -12,17 +12,11 @@
   * @class AlmostRandom
   * @param {number} seed (optional) initial seed
   */
-AlmostRandom = function()
+AlmostRandom = function(seed)
 {
 	/** @private {number} */ this.seed = 42;
 	
-	/**
-	  * Set the seed for a specified value
-	  *
-	  * @method setSeed
-	  * @param {number} seed the seed wanted
-	  */
-	this.setSeed = function(seed)
+	if (seed !== undefined)
 	{
 		this.seed = seed;
 	}
@@ -30,7 +24,7 @@ AlmostRandom = function()
 	/**
 	  * Returns a "random" float between 0.0 and 1.0.
 	  *
-	  * @method setSeed
+	  * @method random
 	  * @returns {number} the generated random number
 	  */
 	this.random = function()

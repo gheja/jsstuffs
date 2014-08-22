@@ -5,14 +5,9 @@ require('../src/lib/almost_random.js');
 describe('AlmostRandom', function() {
 	var obj = null;
 	
-	describe('<constructor>', function() {
-		it('should not throw an error', function () {
-			obj = new AlmostRandom();
-		});
-	});
 	describe('first test', function() {
-		it('setSeed(1337)', function () {
-			obj.setSeed(1337);
+		it('<constructor>(1337) should not throw an error', function () {
+			obj = new AlmostRandom(1337);
 		});
 		it('1st random() should return 0.4170927882593894', function () {
 			var result = obj.random();
@@ -28,8 +23,8 @@ describe('AlmostRandom', function() {
 		});
 	});
 	describe('second test', function() {
-		it('setSeed(42)', function () {
-			obj.setSeed(42);
+		it('<constructor>(42) should not throw an error', function () {
+			obj = new AlmostRandom(42);
 		});
 		it('1st random() should return 0.39723574809771184', function () {
 			var result = obj.random();

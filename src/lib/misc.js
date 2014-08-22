@@ -189,3 +189,77 @@ plural_or_not = function(number, string_one, string_other)
 {
 	return number + " " + (number == 1 ? string_one : string_other);
 }
+
+get_all_variations = function(recipe)
+{
+	var i, depth, item, lists, current_list, indexes, variations, finished;
+	
+	lists = [];
+	current_list = [];
+	indexes = [];
+	variations = [];
+	depth = 0;
+	item = '';
+	
+	for (i=0; i<recipe.length; i++)
+	{
+		if (recipe[i] == '(')
+		{
+			current_list = [];
+			item = '';
+		}
+		else if (recipe[i] == ')')
+		{
+			current_list.push(item);
+			lists.push(current_list);
+			indexes.push(0);
+		}
+		else if (recipe[i] == ',')
+		{
+			current_list.push(item);
+			item = '';
+		}
+		else
+		{
+			item += recipe[i];
+		}
+	}
+	
+	finished = 0;
+	while (!finished)
+	{
+		item = '';
+		for (i=0; i<lists.length; i++)
+		{
+			item += lists[i][indexes[i]];
+		}
+		variations.push(item);
+		
+		indexes[lists.length-1]++;
+		
+		for (i=lists.length-1; i>=0; i--)
+		{
+			if (indexes[i] == lists[i].length)
+			{
+				if (i == 0)
+				{
+					finished = 1;
+					break;
+				}
+				indexes[i-1]++;
+				indexes[i] = 0;
+			}
+		}
+	}
+	
+	return variations;
+}
+
+array_shuffle = function(array, seed)
+{
+	var prng;
+	
+	prng = new AlmostRandom(seed);
+	
+	array.sort(function(a, b) { return prng.random() - 0.5; } );
+}

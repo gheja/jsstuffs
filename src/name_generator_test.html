@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Name Generator demo</title>
+		<script src="lib/misc.js"></script>
+		<script src="lib/almost_random.js"></script>
+		<script src="lib/name_generator.js"></script>
+	</head>
+	<body>
+		<div id="names">
+		</div>
+		<script type="text/javascript">
+			// alert(get_comma_parentheses_list('(Z,K)(lo,ro,or,eer)(t,n,w)(ak,an,uk,ux,arks)');
+			var names = document.getElementById('names');
+			// var a = get_all_variations('(Z,K,W,B,N,En,Ew,An,Ar)(ub,or,er,eer,et,ak)(a,e,o)(r,t,n,w)(,ak,an,un,uk,ux,on,ik,arks,oot,as,ak,ax,ek,es,o,os,on,ok,ox)');
+			var a = get_all_variations('(Z,K,W,B)(ub,or,ree,er,eer,et,ak)(a,e,o)(r,t,n,w)(,ak,an,un,uk,ux,on,ik,arks,oot)(,as,ak,ax,ek,es,o,os,on,ok,ox)');
+			array_shuffle(a, 4948192);
+			names.innerHTML += a.length + " variations. First 100:<br/>";
+			for (i=0; i<100; i++)
+			{
+				names.innerHTML += a[i] + "<br/>";
+			}
+		</script>
+	</body>
+</html>
