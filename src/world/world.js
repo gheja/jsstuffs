@@ -58,8 +58,37 @@ World = function()
 		}
 	}
 	
+	this.generate_step2 = function(seed)
+	{
+		var x, y, i, points, distance, rng;
+		
+		rng = new AlmostRandom(seed);
+		
+		points = [];
+		for (i=0; i<5; i++)
+		{
+			points.push([ rng.random() * 0.2 + 0.4, rng.random() * 0.2 + 0.4 ]);
+		}
+		
+		// initialize the map with zeroes
+		for (x=0; x<=this.grid_width; x++)
+		{
+			for (y=0; y<=this.grid_width; y++)
+			{
+				distance = 1;
+				for (i=0; i<points.length; i++)
+				{
+					distance = Math.min(distance, distance_2d([x / this.grid_width, y / this.grid_height], points[i]));
+				}
+				
+				this.grid[x][y] = clamp(this.grid[x][y] - distance, 0, 1);
+			}
+		}
+	}
+	
 	this.generate = function(seed)
 	{
 		this.generate_step1(seed);
+		this.generate_step2(seed);
 	}
 }
