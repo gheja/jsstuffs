@@ -77,7 +77,7 @@ function draw_all()
 	_world.generate_step2(_seed);
 	draw_heightmap("canvas2", false);
 	
-	_world.generate_step3(_sea_level, _coast_x);
+	_world.generate_step3_quick(_sea_level, _coast_x);
 	draw_heightmap("canvas3", true);
 }
 

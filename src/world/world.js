@@ -162,10 +162,93 @@ World = function()
 		}
 	}
 	
+	this.generate_step3_quick = function(sea_level, coast_x)
+	{
+		// thanks @williamMalone
+		// http://www.williammalone.com/articles/html5-canvas-javascript-paint-bucket-tool/
+		
+		var that, x, y, queue, item, found_left, found_right;
+		
+		that = this;
+		
+		function test(x, y)
+		{
+			return that.grid[x][y][2] < sea_level && that.grid[x][y][3] == 2;
+		}
+		
+		queue = [ [ 0, 0 ] ];
+		
+		while (queue.length > 0)
+		{
+			item = queue.pop();
+			x = item[0];
+			y = item[1];
+			found_left = false;
+			found_right = false;
+			
+			while (y > 0 && test(x, y - 1))
+			{
+				y--;
+			}
+			
+			while (y < this.grid_height && test(x, y))
+			{
+				if (x - 1 > 0)
+				{
+					if (!found_left)
+					{
+						if (test(x - 1, y))
+						{
+							found_left = true;
+							queue.push([ x - 1, y ]);
+						}
+					}
+					else
+					{
+						if (!test(x - 1, y))
+						{
+							found_left = false;
+						}
+					}
+				}
+				
+				if (x + 1 < this.grid_width)
+				{
+					if (!found_right)
+					{
+						if (test(x + 1, y))
+						{
+							found_right = true;
+							queue.push([ x + 1, y ]);
+						}
+					}
+					else
+					{
+						if (!test(x + 1, y))
+						{
+							found_right = false;
+						}
+					}
+				}
+				
+				if (this.grid[x][y][2] < sea_level - coast_x)
+				{
+					this.grid[x][y][3] = 1;
+				}
+				else
+				{
+					this.grid[x][y][3] = 3;
+				}
+				
+				y++;
+			}
+		}
+	}
+	
 	this.generate = function(seed, sea_level, coast_x)
 	{
 		this.generate_step1(seed);
 		this.generate_step2(seed);
-		this.generate_step3(sea_level, coast_x);
+		this.generate_step3_quick(sea_level, coast_x);
 	}
 }
