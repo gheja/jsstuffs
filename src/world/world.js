@@ -75,7 +75,7 @@ World = function()
 		rng = new AlmostRandom(seed);
 		
 		points = [];
-		for (i=0; i<10; i++)
+		for (i=0; i<rng.random() * 10 + 3; i++)
 		{
 			points.push([ rng.random() * 0.1 + 0.45, rng.random() * 0.1 + 0.45 ]);
 		}
