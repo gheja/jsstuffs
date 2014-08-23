@@ -42,6 +42,7 @@ function draw_heightmap(canvas_name, land_types)
 			if (!land_types)
 			{
 				ctx.fillStyle = "rgba(255, 255, 255, " + (_world.grid[x][y][2]) + ")";
+				ctx.fillRect(x * x_multiplier, y * y_multiplier, x_multiplier, y_multiplier);
 			}
 			else
 			{
@@ -65,8 +66,22 @@ function draw_heightmap(canvas_name, land_types)
 						ctx.fillStyle = "rgba(" + rgb_interpolate(0, 192, 0, 64, 255, 32, f) + ", 1)";
 					break;
 				}
+				
+				ctx.fillRect(x * x_multiplier, y * y_multiplier, x_multiplier, y_multiplier);
+				
+				f = _world.grid[x][y][4] * 4;
+				
+				if (f < 0)
+				{
+					ctx.fillStyle = "rgba(0, 0, 0, " + clamp(f * -1, 0, 1) + ")";
+				}
+				else
+				{
+					ctx.fillStyle = "rgba(255, 255, 255, " + clamp(f, 0, 1) + ")";
+				}
+				
+				ctx.fillRect(x * x_multiplier, y * y_multiplier, x_multiplier, y_multiplier);
 			}
-			ctx.fillRect(x * x_multiplier, y * y_multiplier, x_multiplier, y_multiplier);
 		}
 	}
 }
@@ -83,6 +98,9 @@ function draw_all()
 	
 	_world.generate_step3_quick(_sea_level, _coast_x);
 	draw_heightmap("canvas3", true);
+	
+	_world.generate_step4();
+	draw_heightmap("canvas4", true);
 }
 
 function init()

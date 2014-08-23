@@ -5,8 +5,8 @@ World = function()
 	this.grid_width = 128; // must be multiples of two!
 	this.grid_height = 128; // must be multiples of two!
 	
-	// 2d array with X Y Z coordinates and land type, must be ordered by the X and Y coordinates!
-	// this.grid[1][2] = [ 0.123, 0. 324, 0.123, 1 ];
+	// 2d array with X Y Z coordinates, land type and lighting info, must be ordered by the X and Y coordinates!
+	// this.grid[1][2] = [ 0.123, 0. 324, 0.123, 1, 0.4 ];
 	this.grid = [];
 	
 	// 0 1 2 3 4 5 6 7 8
@@ -28,7 +28,7 @@ World = function()
 			
 			for (y=0; y<=this.grid_width; y++)
 			{
-				this.grid[x][y] = [ x, y, 0.5, 2 ];
+				this.grid[x][y] = [ x, y, 0.5, 2, 0 ];
 			}
 		}
 		
@@ -232,6 +232,37 @@ World = function()
 				}
 				
 				y++;
+			}
+		}
+	}
+	
+	this.generate_step4 = function()
+	{
+		var x, y, i, j, avg1, a, b, c, d;
+		
+		// these determines the direction of light
+		a = Math.floor(this.grid_width / 64);
+		b = Math.floor(this.grid_width / 16);
+		c = Math.floor(this.grid_height / 32);
+		d = Math.floor(this.grid_height / 32);
+		
+		for (x=a; x<this.grid_width-b; x++)
+		{
+			for (y=c; y<this.grid_height-d; y++)
+			{
+				avg1 = 0;
+				
+				for (i=-a; i<=b; i++)
+				{
+					for (j=-c; j<=d; j++)
+					{
+						avg1 += this.grid[x + i][y + j][2];
+					}
+				}
+				
+				avg1 = avg1 / ((a+b+1) * (c+d+1));
+				
+				this.grid[x][y][4] = this.grid[x][y][2] - avg1;
 			}
 		}
 	}
