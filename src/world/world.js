@@ -86,7 +86,7 @@ World = function()
 		}
 	}
 	
-	this.generate_step3 = function(sea_level, coast_x)
+	this.generate_step3 = function(sea_level)
 	{
 		// TODO: rewrite this as this is pretty slow...
 		
@@ -130,11 +130,6 @@ World = function()
 				continue;
 			}
 			// coast
-			else if (this.grid[item[0]][item[1]][2] > sea_level - coast_x)
-			{
-				this.grid[item[0]][item[1]][3] = 3;
-			}
-			// water
 			else
 			{
 				this.grid[item[0]][item[1]][3] = 1;
@@ -162,9 +157,9 @@ World = function()
 		}
 	}
 	
-	this.generate_step3_quick = function(sea_level, coast_x)
+	this.generate_step3_quick = function(sea_level)
 	{
-		// thanks @williamMalone
+		// thanks @williammalone
 		// http://www.williammalone.com/articles/html5-canvas-javascript-paint-bucket-tool/
 		
 		var that, x, y, queue, item, found_left, found_right;
@@ -231,13 +226,9 @@ World = function()
 					}
 				}
 				
-				if (this.grid[x][y][2] < sea_level - coast_x)
+				if (this.grid[x][y][2] < sea_level)
 				{
 					this.grid[x][y][3] = 1;
-				}
-				else
-				{
-					this.grid[x][y][3] = 3;
 				}
 				
 				y++;
