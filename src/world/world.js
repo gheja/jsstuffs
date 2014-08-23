@@ -65,9 +65,9 @@ World = function()
 		rng = new AlmostRandom(seed);
 		
 		points = [];
-		for (i=0; i<5; i++)
+		for (i=0; i<10; i++)
 		{
-			points.push([ rng.random() * 0.2 + 0.4, rng.random() * 0.2 + 0.4 ]);
+			points.push([ rng.random() * 0.1 + 0.45, rng.random() * 0.1 + 0.45 ]);
 		}
 		
 		// initialize the map with zeroes
