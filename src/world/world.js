@@ -5,8 +5,8 @@ World = function()
 	this.grid_width = 128; // must be multiples of two!
 	this.grid_height = 128; // must be multiples of two!
 	
-	// 2d array with X Y Z coordinates, must be ordered by the X and Y coordinates!
-	// this.grid[1][2] = [ 0.123, 0. 324, 0.123 ];
+	// 2d array with X Y Z coordinates and land type, must be ordered by the X and Y coordinates!
+	// this.grid[1][2] = [ 0.123, 0. 324, 0.123, 1 ];
 	this.grid = [];
 	
 	// 0 1 2 3 4 5 6 7 8
@@ -28,7 +28,7 @@ World = function()
 			
 			for (y=0; y<=this.grid_width; y++)
 			{
-				this.grid[x][y] = [ x, y, 0.5 ];
+				this.grid[x][y] = [ x, y, 0.5, 2 ];
 			}
 		}
 		
@@ -86,9 +86,86 @@ World = function()
 		}
 	}
 	
-	this.generate = function(seed)
+	this.generate_step3 = function(sea_level, coast_x)
+	{
+		// TODO: rewrite this as this is pretty slow...
+		
+		var x, y, i, queue, seen, sea_level, a;
+		
+		Queue = function (){
+			this.seen_list = [];
+			this.items = [];
+			
+			this.pushIfNotSeen = function(item)
+			{
+				var a;
+				
+				a = item[0] + "," + item[1];
+				
+				if (this.seen_list.indexOf(a) != -1)
+				{
+					return;
+				}
+				
+				this.items.push(item);
+				this.seen_list.push(a);
+			}
+		};
+		
+		queue = new Queue();
+		queue.pushIfNotSeen([ 0, 0 ]);
+		
+		seen = [];
+		
+		while (queue.items.length > 0)
+		{
+			a = Math.max(a, queue.items.length);
+			
+			item = queue.items.shift();
+			
+			// land
+			if (this.grid[item[0]][item[1]][2] > sea_level)
+			{
+				// return if reached the land, no neighbour seek needed
+				continue;
+			}
+			// coast
+			else if (this.grid[item[0]][item[1]][2] > sea_level - coast_x)
+			{
+				this.grid[item[0]][item[1]][3] = 3;
+			}
+			// water
+			else
+			{
+				this.grid[item[0]][item[1]][3] = 1;
+			}
+			
+			if (item[0] > 0)
+			{
+				queue.pushIfNotSeen([ item[0] - 1, item[1] ]);
+			}
+			
+			if (item[0] < this.grid_width - 1)
+			{
+				queue.pushIfNotSeen([ item[0] + 1, item[1] ]);
+			}
+			
+			if (item[1] > 0)
+			{
+				queue.pushIfNotSeen([ item[0], item[1] - 1]);
+			}
+			
+			if (item[1] < this.grid_height - 1)
+			{
+				queue.pushIfNotSeen([ item[0], item[1] + 1 ]);
+			}
+		}
+	}
+	
+	this.generate = function(seed, sea_level, coast_x)
 	{
 		this.generate_step1(seed);
 		this.generate_step2(seed);
+		this.generate_step3(sea_level, coast_x);
 	}
 }
