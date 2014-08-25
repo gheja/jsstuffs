@@ -64,6 +64,27 @@ World = function()
 			step = Math.floor(step / 2);
 			max_elevation /= 2;
 		}
+		
+		// normalization
+		min = 1.0;
+		max = 0.0;
+		
+		for (x=0; x<this.grid_width; x++)
+		{
+			for (y=0; y<this.grid_height; y++)
+			{
+				min = Math.min(min, this.grid[x][y][2]);
+				max = Math.max(max, this.grid[x][y][2]);
+			}
+		}
+		
+		for (x=0; x<this.grid_width; x++)
+		{
+			for (y=0; y<this.grid_height; y++)
+			{
+				this.grid[x][y][2] = (this.grid[x][y][2] - min) * (1 / (max - min));
+			}
+		}
 	}
 	
 	this.generate_step2 = function(seed)
