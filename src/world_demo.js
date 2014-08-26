@@ -1,6 +1,6 @@
 var _world = null;
-var _seed = 5896;
-// var _seed = Math.floor(Math.random() * 65535);
+// var _seed = 5896;
+var _seed = Math.floor(Math.random() * 65535);
 var _sea_level = 0.15;
 var _coast_x = 0.02;
 
@@ -112,11 +112,11 @@ function draw_heightmap(canvas_name, mode)
 						switch (_world.map[x][y][3])
 						{
 							case 1: // water
-								ctx.fillStyle = "rgb(0, 128, 0)";
+								ctx.fillStyle = "rgb(0, 64, 0)";
 							break;
 							
 							case 2: // land
-								ctx.fillStyle = "rgb(0, 230, 0)";
+								ctx.fillStyle = "rgb(0, 128, 0)";
 							break;
 						}
 					}
@@ -125,11 +125,11 @@ function draw_heightmap(canvas_name, mode)
 						switch (_world.map[x][y][3])
 							{
 							case 1: // water
-								ctx.fillStyle = "rgb(32, 0, 0)";
+								ctx.fillStyle = "rgb(0, 0, 0)";
 							break;
 							
 							case 2: // land
-								ctx.fillStyle = "rgb(128, 0, 0)";
+								ctx.fillStyle = "rgb(64, 0, 0)";
 							break;
 						}
 					}
@@ -138,6 +138,14 @@ function draw_heightmap(canvas_name, mode)
 				break;
 			}
 		}
+	}
+	
+	ctx.fillStyle = "#ffffff";
+	
+	for (x=0; x<_world.starting_points.length; x++)
+	{
+		p = _world.starting_points[x]
+		ctx.fillRect(p[0] * x_multiplier, p[1] * y_multiplier, x_multiplier, y_multiplier);
 	}
 }
 
@@ -158,6 +166,7 @@ function draw_all()
 	draw_heightmap("canvas4", 3);
 	
 	_world.generate_path_finder_data(_seed);
+	_world.generate_start_points(_seed);
 	draw_heightmap("canvas5", 4);
 }
 
