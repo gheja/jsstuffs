@@ -96,7 +96,7 @@ World = function()
 		rng = new AlmostRandom(seed);
 		
 		points = [];
-		for (i=0; i<rng.random() * 10 + 3; i++)
+		for (i=0; i<rng.random() * 5 + 5; i++)
 		{
 			points.push([ rng.random() * 0.1 + 0.45, rng.random() * 0.1 + 0.45 ]);
 		}
@@ -111,7 +111,10 @@ World = function()
 					distance = Math.min(distance, distance_2d([x / this.grid_width, y / this.grid_height], points[i]));
 				}
 				
-				this.grid[x][y][2] = clamp(this.grid[x][y][2] - distance, 0, 1);
+				distance = clamp(1 - distance * 2, 0, 1);
+				
+//				this.map[x][y][2] = distance;
+				this.map[x][y][2] = this.map[x][y][2] * distance;
 			}
 		}
 	}
