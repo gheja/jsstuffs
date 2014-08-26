@@ -11,7 +11,8 @@ World = function()
 	//   2.121,  // Y coordinate (float)
 	//   0.982,  // Z coordinate (float, 0.0-1.0)
 	//   1,      // point type (int, 1: water, 2: land)
-	//   0.4     // lighting info (float, 0.0: darkest, 1.0: brightest)
+	//   0.4,    // lighting info (float, 0.0: darkest, 1.0: brightest)
+	//   1       // path-finding info (0: unreachable, 1: reachable)
 	// ];
 	this.map = [];
 	
@@ -36,7 +37,7 @@ World = function()
 			
 			for (y=0; y<=this.map_size; y++)
 			{
-				this.map[x][y] = [ x, y, 0.5, 2, 0 ];
+				this.map[x][y] = [ x, y, 0.5, 2, 0, 0 ];
 			}
 		}
 		
@@ -313,10 +314,38 @@ World = function()
 		}
 	}
 	
+	this.generate_path_finder_data = function(seed)
+	{
+		var i, points_matched, p, a, rng;
+		
+		rng = new AlmostRandom(seed);
+		
+		// retry 30 times at most
+		for (i=0; i<30; i++)
+		{
+			p = [ Math.floor(rng.random() * this.map_size), Math.floor(rng.random() * this.map_size) ];
+			
+			a = deep_copy_object(this.map);
+			
+			// start a flood fill from a point, search for lands, set them as reachable
+			points_matched = this.floodFill(a, 3, 2, 2, 5, 1, [ p ]);
+			
+			// 25% of the map should be playable at least
+			if (points_matched / (this.map_size * this.map_size) > 0.25)
+			{
+				this.map = a;
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
 	this.generate = function(seed, sea_level, coast_x)
 	{
 		this.generate_step1(seed);
 		this.generate_step2(seed);
 		this.generate_step3_quick(sea_level, coast_x);
+		this.generate_path_finder_data(seed);
 	}
 }
