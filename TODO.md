@@ -1,0 +1,4 @@
+  - World
+    - [ ] add forests
+    - [ ] find player start points: should find the points far enoguh from each other, would be nice to calculate with travel distance - AI pathfinding between the points?
+    - [ ] add mines near the players
