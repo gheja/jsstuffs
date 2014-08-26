@@ -104,6 +104,38 @@ function draw_heightmap(canvas_name, mode)
 					
 					ctx.fillRect(x * x_multiplier, y * y_multiplier, x_multiplier, y_multiplier);
 				break;
+				
+				case 4: // path-finder reachability
+					
+					if (_world.map[x][y][5] == 1) // reachable
+					{
+						switch (_world.map[x][y][3])
+						{
+							case 1: // water
+								ctx.fillStyle = "rgb(0, 128, 0)";
+							break;
+							
+							case 2: // land
+								ctx.fillStyle = "rgb(0, 230, 0)";
+							break;
+						}
+					}
+					else
+					{
+						switch (_world.map[x][y][3])
+							{
+							case 1: // water
+								ctx.fillStyle = "rgb(32, 0, 0)";
+							break;
+							
+							case 2: // land
+								ctx.fillStyle = "rgb(128, 0, 0)";
+							break;
+						}
+					}
+					
+					ctx.fillRect(x * x_multiplier, y * y_multiplier, x_multiplier, y_multiplier);
+				break;
 			}
 		}
 	}
@@ -124,6 +156,9 @@ function draw_all()
 	
 	_world.generate_step4();
 	draw_heightmap("canvas4", 3);
+	
+	_world.generate_path_finder_data(_seed);
+	draw_heightmap("canvas5", 4);
 }
 
 function init()
