@@ -15,6 +15,7 @@ World = function()
 	//   1       // path-finding info (0: unreachable, 1: reachable)
 	// ];
 	this.map = [];
+	this.starting_points = [];
 	
 	this.generate_step1 = function(seed)
 	{
@@ -341,11 +342,61 @@ World = function()
 		return false;
 	}
 	
+	this.generate_start_points = function(seed)
+	{
+		var i, candidates, best_min_sum, min_sum, min, best_id, p, a, rng, success;
+		
+		rng = new AlmostRandom(seed);
+		
+		success = false;
+		
+		for (i=0; i < 200 && success == false; i++)
+		{
+			candidates = [];
+			
+			// make sure that no one is near the middle of the map
+			candidates.push([ this.map_size / 2, this.map_size / 2 ]);
+			
+			for (j=0; j<100; j++)
+			{
+				// find a point on the reachable surface
+				do
+				{
+					p = [ Math.floor(rng.random()* this.map_size), Math.floor(rng.random() * this.map_size) ];
+				}
+				while (this.map[p[0]][p[1]][5] != 1);
+				
+				min = 1000;
+				for (k=0; k<candidates.length; k++)
+				{
+					min = Math.min(min, distance_2d(candidates[k], p));
+				}
+				
+				if (min > 32)
+				{
+					candidates.push(p);
+					
+					if (candidates.length == 5)
+					{
+						success = true;
+						break;
+					}
+				}
+			}
+		}
+		
+		// remove the first item
+		candidates.shift();
+		
+		this.starting_points = candidates;
+	}
+	
 	this.generate = function(seed, sea_level, coast_x)
 	{
 		this.generate_step1(seed);
 		this.generate_step2(seed);
 		this.generate_step3_quick(sea_level, coast_x);
 		this.generate_path_finder_data(seed);
+		this.generate_start_points(seed);
 	}
 }
