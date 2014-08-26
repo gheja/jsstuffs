@@ -192,21 +192,22 @@ World = function()
 		}
 	}
 	
-	this.generate_step3_quick = function(sea_level)
+	this.floodFill = function(map, search_index, search_min, search_max, set_index, set_value, start_points)
 	{
 		// thanks @williammalone
 		// http://www.williammalone.com/articles/html5-canvas-javascript-paint-bucket-tool/
 		
-		var that, x, y, queue, item, found_left, found_right;
+		var x, y, queue, item, found_left, found_right, size;
 		
-		that = this;
+		// width and height must be identical!
+		size = map[0].length;
 		
 		function test(x, y)
 		{
-			return that.map[x][y][2] < sea_level && that.map[x][y][3] == 2;
+			return map[x][y][search_index] >= search_min && map[x][y][search_index] <= search_max && map[x][y][set_index] != set_value;
 		}
 		
-		queue = [ [ 0, 0 ] ];
+		queue = start_points;
 		
 		while (queue.length > 0)
 		{
@@ -221,7 +222,7 @@ World = function()
 				y--;
 			}
 			
-			while (y < this.map_size && test(x, y))
+			while (y < size && test(x, y))
 			{
 				if (x - 1 > 0)
 				{
@@ -242,7 +243,7 @@ World = function()
 					}
 				}
 				
-				if (x + 1 < this.map_size)
+				if (x + 1 < size)
 				{
 					if (!found_right)
 					{
@@ -261,14 +262,17 @@ World = function()
 					}
 				}
 				
-				if (this.map[x][y][2] < sea_level)
-				{
-					this.map[x][y][3] = 1;
-				}
+				map[x][y][set_index] = set_value;
 				
 				y++;
 			}
 		}
+	}
+	
+	this.generate_step3_quick = function(sea_level)
+	{
+		// start a flood fill from point [ 0, 0 ], search for heights between 0 and sea_level, set them as water
+		this.floodFill(this.map, 2, 0.0, sea_level, 3, 1, [ [ 0, 0 ] ]);
 	}
 	
 	this.generate_step4 = function()
