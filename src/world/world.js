@@ -197,7 +197,7 @@ World = function()
 		// thanks @williammalone
 		// http://www.williammalone.com/articles/html5-canvas-javascript-paint-bucket-tool/
 		
-		var x, y, queue, item, found_left, found_right, size;
+		var x, y, queue, item, found_left, found_right, size, match_count;
 		
 		// width and height must be identical!
 		size = map[0].length;
@@ -208,6 +208,8 @@ World = function()
 		}
 		
 		queue = start_points;
+		
+		match_count = 0;
 		
 		while (queue.length > 0)
 		{
@@ -263,10 +265,13 @@ World = function()
 				}
 				
 				map[x][y][set_index] = set_value;
+				match_count++;
 				
 				y++;
 			}
 		}
+		
+		return match_count;
 	}
 	
 	this.generate_step3_quick = function(sea_level)
