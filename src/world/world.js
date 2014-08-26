@@ -2,18 +2,18 @@
 
 World = function()
 {
-	this.grid_width = 128; // must be multiples of two!
-	this.grid_height = 128; // must be multiples of two!
+	/* grid width and height, must be multiples of two */
+	this.map_size = 128;
 	
 	// 2d array with X Y Z coordinates, land type and lighting info, must be ordered by the X and Y coordinates!
-	// this.grid[1][2] = [
+	// this.map[1][2] = [
 	//   1.097,  // X coordinate (float)
 	//   2.121,  // Y coordinate (float)
 	//   0.982,  // Z coordinate (float, 0.0-1.0)
 	//   1,      // point type (int, 1: water, 2: land)
 	//   0.4     // lighting info (float, 0.0: darkest, 1.0: brightest)
 	// ];
-	this.grid = [];
+	this.map = [];
 	
 	this.generate_step1 = function(seed)
 	{
@@ -30,34 +30,34 @@ World = function()
 		rng = new AlmostRandom(seed);
 		
 		// initialize the grid with default values
-		for (x=0; x<=this.grid_width; x++)
+		for (x=0; x<=this.map_size; x++)
 		{
-			this.grid[x] = [];
+			this.map[x] = [];
 			
-			for (y=0; y<=this.grid_width; y++)
+			for (y=0; y<=this.map_size; y++)
 			{
-				this.grid[x][y] = [ x, y, 0.5, 2, 0 ];
+				this.map[x][y] = [ x, y, 0.5, 2, 0 ];
 			}
 		}
 		
-		step = this.grid_width;
+		step = this.map_size;
 		max_elevation = 1;
 		
 		while (step > 0)
 		{
-			for (y=0; y<this.grid_height; y+=step)
+			for (y=0; y<this.map_size; y+=step)
 			{
-				for (x=step; x<this.grid_width; x+= step * 2)
+				for (x=step; x<this.map_size; x+= step * 2)
 				{
-					this.grid[x][y][2] = (this.grid[x - step][y][2] + this.grid[x + step][y][2]) / 2 + (rng.random() - 0.5) * max_elevation;
+					this.map[x][y][2] = (this.map[x - step][y][2] + this.map[x + step][y][2]) / 2 + (rng.random() - 0.5) * max_elevation;
 				}
 			}
 			
-			for (x=0; x<this.grid_width; x+=step)
+			for (x=0; x<this.map_size; x+=step)
 			{
-				for (y=step; y<this.grid_height; y+=step * 2)
+				for (y=step; y<this.map_size; y+=step * 2)
 				{
-					this.grid[x][y][2] = (this.grid[x][y - step][2] + this.grid[x][y + step][2]) / 2 + (rng.random() - 0.5) * max_elevation;
+					this.map[x][y][2] = (this.map[x][y - step][2] + this.map[x][y + step][2]) / 2 + (rng.random() - 0.5) * max_elevation;
 				}
 			}
 			
@@ -69,20 +69,20 @@ World = function()
 		min = 1.0;
 		max = 0.0;
 		
-		for (x=0; x<this.grid_width; x++)
+		for (x=0; x<this.map_size; x++)
 		{
-			for (y=0; y<this.grid_height; y++)
+			for (y=0; y<this.map_size; y++)
 			{
-				min = Math.min(min, this.grid[x][y][2]);
-				max = Math.max(max, this.grid[x][y][2]);
+				min = Math.min(min, this.map[x][y][2]);
+				max = Math.max(max, this.map[x][y][2]);
 			}
 		}
 		
-		for (x=0; x<this.grid_width; x++)
+		for (x=0; x<this.map_size; x++)
 		{
-			for (y=0; y<this.grid_height; y++)
+			for (y=0; y<this.map_size; y++)
 			{
-				this.grid[x][y][2] = (this.grid[x][y][2] - min) * (1 / (max - min));
+				this.map[x][y][2] = (this.map[x][y][2] - min) * (1 / (max - min));
 			}
 		}
 	}
@@ -101,14 +101,14 @@ World = function()
 			points.push([ rng.random() * 0.1 + 0.45, rng.random() * 0.1 + 0.45 ]);
 		}
 		
-		for (x=0; x<=this.grid_width; x++)
+		for (x=0; x<=this.map_size; x++)
 		{
-			for (y=0; y<=this.grid_width; y++)
+			for (y=0; y<=this.map_size; y++)
 			{
 				distance = 1;
 				for (i=0; i<points.length; i++)
 				{
-					distance = Math.min(distance, distance_2d([x / this.grid_width, y / this.grid_height], points[i]));
+					distance = Math.min(distance, distance_2d([x / this.map_size, y / this.map_size], points[i]));
 				}
 				
 				distance = clamp(1 - distance * 2, 0, 1);
@@ -159,7 +159,7 @@ World = function()
 			item = queue.items.shift();
 			
 			// land
-			if (this.grid[item[0]][item[1]][2] > sea_level)
+			if (this.map[item[0]][item[1]][2] > sea_level)
 			{
 				// return if reached the land, no neighbour seek needed
 				continue;
@@ -167,7 +167,7 @@ World = function()
 			// coast
 			else
 			{
-				this.grid[item[0]][item[1]][3] = 1;
+				this.map[item[0]][item[1]][3] = 1;
 			}
 			
 			if (item[0] > 0)
@@ -175,7 +175,7 @@ World = function()
 				queue.pushIfNotSeen([ item[0] - 1, item[1] ]);
 			}
 			
-			if (item[0] < this.grid_width - 1)
+			if (item[0] < this.map_size - 1)
 			{
 				queue.pushIfNotSeen([ item[0] + 1, item[1] ]);
 			}
@@ -185,7 +185,7 @@ World = function()
 				queue.pushIfNotSeen([ item[0], item[1] - 1]);
 			}
 			
-			if (item[1] < this.grid_height - 1)
+			if (item[1] < this.map_size - 1)
 			{
 				queue.pushIfNotSeen([ item[0], item[1] + 1 ]);
 			}
@@ -203,7 +203,7 @@ World = function()
 		
 		function test(x, y)
 		{
-			return that.grid[x][y][2] < sea_level && that.grid[x][y][3] == 2;
+			return that.map[x][y][2] < sea_level && that.map[x][y][3] == 2;
 		}
 		
 		queue = [ [ 0, 0 ] ];
@@ -221,7 +221,7 @@ World = function()
 				y--;
 			}
 			
-			while (y < this.grid_height && test(x, y))
+			while (y < this.map_size && test(x, y))
 			{
 				if (x - 1 > 0)
 				{
@@ -242,7 +242,7 @@ World = function()
 					}
 				}
 				
-				if (x + 1 < this.grid_width)
+				if (x + 1 < this.map_size)
 				{
 					if (!found_right)
 					{
@@ -261,9 +261,9 @@ World = function()
 					}
 				}
 				
-				if (this.grid[x][y][2] < sea_level)
+				if (this.map[x][y][2] < sea_level)
 				{
-					this.grid[x][y][3] = 1;
+					this.map[x][y][3] = 1;
 				}
 				
 				y++;
@@ -278,14 +278,14 @@ World = function()
 		var x, y, i, j, avg1, a, b, c, d;
 		
 		// these determines the direction of light
-		a = Math.floor(this.grid_width / 64);
-		b = Math.floor(this.grid_width / 16);
-		c = Math.floor(this.grid_height / 32);
-		d = Math.floor(this.grid_height / 32);
+		a = Math.floor(this.map_size / 64);
+		b = Math.floor(this.map_size / 16);
+		c = Math.floor(this.map_size / 32);
+		d = Math.floor(this.map_size / 32);
 		
-		for (x=a; x<this.grid_width-b; x++)
+		for (x=a; x<this.map_size-b; x++)
 		{
-			for (y=c; y<this.grid_height-d; y++)
+			for (y=c; y<this.map_size-d; y++)
 			{
 				avg1 = 0;
 				
@@ -293,13 +293,13 @@ World = function()
 				{
 					for (j=-c; j<=d; j++)
 					{
-						avg1 += this.grid[x + i][y + j][2];
+						avg1 += this.map[x + i][y + j][2];
 					}
 				}
 				
 				avg1 = avg1 / ((a+b+1) * (c+d+1));
 				
-				this.grid[x][y][4] = this.grid[x][y][2] - avg1;
+				this.map[x][y][4] = this.map[x][y][2] - avg1;
 			}
 		}
 	}

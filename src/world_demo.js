@@ -1,8 +1,8 @@
 var _world = null;
-// var _seed = 5891;
-var _seed = Math.floor(Math.random() * 65535);
-var _sea_level = 0.20;
-var _coast_x = 0.03;
+var _seed = 5896;
+// var _seed = Math.floor(Math.random() * 65535);
+var _sea_level = 0.15;
+var _coast_x = 0.02;
 
 function interpolate(a, b, f)
 {
@@ -30,42 +30,39 @@ function draw_heightmap(canvas_name, mode)
 	ctx.fillStyle = "#000000";
 	ctx.fillRect(0, 0, canvas.width, canvas.height);
 	
-	x_multiplier = canvas.width / _world.grid_width;
-	y_multiplier = canvas.height / _world.grid_height;
+	x_multiplier = canvas.width / _world.map_size;
+	y_multiplier = canvas.height / _world.map_size;
 	
-	sea_level = 0.25;
-	coast_x = 0.075;
-	
-	for (x=0; x<_world.grid_width; x++)
+	for (x=0; x<_world.map_size; x++)
 	{
-		for (y=0; y<_world.grid_width; y++)
+		for (y=0; y<_world.map_size; y++)
 		{
 			switch (mode)
 			{
 				case 1: // simple heightmap
-					ctx.fillStyle = "rgba(255, 255, 255, " + (_world.grid[x][y][2]) + ")";
+					ctx.fillStyle = "rgba(255, 255, 255, " + (_world.map[x][y][2]) + ")";
 					
 					ctx.fillRect(x * x_multiplier, y * y_multiplier, x_multiplier, y_multiplier);
 				break;
 				
 				case 2: // categorized heightmap
-					switch (_world.grid[x][y][3])
+					switch (_world.map[x][y][3])
 					{
 						case 1: // water
-							if (_world.grid[x][y][2] > sea_level - coast_x)
+							if (_world.map[x][y][2] > _sea_level - _coast_x)
 							{
-								f = normalize(_world.grid[x][y][2], sea_level - coast_x, sea_level);
+								f = normalize(_world.map[x][y][2], _sea_level - _coast_x, _sea_level);
 								ctx.fillStyle = "rgba(" + rgb_interpolate(64, 64, 0, 255, 255, 0, f) + ", 1)";
 							}
 							else
 							{
-								f = normalize(_world.grid[x][y][2], 0, sea_level - coast_x);
+								f = normalize(_world.map[x][y][2], 0, _sea_level - _coast_x);
 								ctx.fillStyle = "rgba(" + rgb_interpolate(0, 32, 64, 0, 128, 255, f) + ", 1)";
 							}
 						break;
 						
 						case 2: // land
-							f = normalize(_world.grid[x][y][2], sea_level, 1);
+							f = normalize(_world.map[x][y][2], _sea_level, 1);
 							ctx.fillStyle = "rgba(" + rgb_interpolate(0, 64, 0, 0, 255, 0, f) + ", 1)";
 						break;
 					}
@@ -74,10 +71,10 @@ function draw_heightmap(canvas_name, mode)
 				break;
 				
 				case 3: // shadowed heightmap
-					switch (_world.grid[x][y][3])
+					switch (_world.map[x][y][3])
 					{
 						case 1: // water
-							if (_world.grid[x][y][2] > sea_level - coast_x)
+							if (_world.map[x][y][2] > _sea_level - _coast_x)
 							{
 								ctx.fillStyle = "rgba(220, 200, 60, 1)";
 							}
@@ -94,7 +91,7 @@ function draw_heightmap(canvas_name, mode)
 					
 					ctx.fillRect(x * x_multiplier, y * y_multiplier, x_multiplier, y_multiplier);
 					
-					f = _world.grid[x][y][4] * 4;
+					f = _world.map[x][y][4] * 4;
 					
 					if (f < 0)
 					{
