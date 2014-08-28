@@ -69,6 +69,28 @@ function draw_pf(canvas_name, mode)
 		ctx.fillStyle = "#0c0";
 		ctx.fillRect(p[1] * 16 - 1, p[2] * 16 - 1, 3, 3);
 	}
+	
+	ctx.beginPath();
+	ctx.strokeStyle = "rgba(255, 255, 255, 0.5)";
+	ctx.lineWidth = 3;
+	for (x=0; x<_pf.links.length; x++)
+	{
+		for (i=0; i<_pf.squares.length; i++)
+		{
+			if (_pf.squares[i][0] == _pf.links[x][0])
+			{
+				p = _pf.squares[i];
+			}
+			else if (_pf.squares[i][0] == _pf.links[x][1])
+			{
+				q = _pf.squares[i];
+			}
+		}
+		
+		ctx.moveTo(p[1] * 16, p[2] * 16);
+		ctx.lineTo(q[1] * 16, q[2] * 16);
+	}
+	ctx.stroke();
 }
 
 function init()
@@ -84,6 +106,9 @@ function init()
 	
 	profiler.startInterval("generateData()");
 	_pf.generateData(_pixels);
+	
+	profiler.startInterval("generateRoute()");
+	_pf.generateRoute(0.1, 0.3, 12, 14);
 	
 	profiler.startInterval("drawing");
 	draw_pf("canvas1");

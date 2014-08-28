@@ -1,7 +1,10 @@
+// this is just a stub, it is not working
+
 PathFinderSquares = function()
 {
-	// squares is an array of [ id, x, y, size/2, final, top_neighbour_id, right_neighbour_id, bottom_neighbour_id, left_neighbour_id ]
+	// squares is an array of [ id, x, y, size/2, final ]
 	this.squares = [];
+	this.links = [];
 	
 	this.generateData = function(pixels)
 	{
@@ -53,9 +56,63 @@ PathFinderSquares = function()
 			return 3;
 		}
 		
-		var i, tmp, finished, squares, size, id, a, b, c, d, s;
+		function removeLinkTo(a)
+		{
+			var new_links, i;
+			
+			new_links = [];
+			
+			for (i=0; i<links.length; i++)
+			{
+				if (links[i][0] != a && links[i][1] != a)
+				{
+					new_links.push(links[i]);
+				}
+			}
+			
+			links = new_links;
+		}
+		
+		function copyLinks(a, b)
+		{
+			var new_links, i;
+			
+			for (i=0; i<links.length; i++)
+			{
+				if (links[i][0] == a)
+				{
+					addLink(links[i][1], b);
+				}
+				else if (links[i][1] == a)
+				{
+					addLink(links[i][0], b);
+				}
+			}
+		}
+		
+		function addLink(a, b)
+		{
+			var tmp;
+			
+			if (a == -1 || b == -1)
+			{
+				return;
+			}
+			
+			if (a > b)
+			{
+				tmp = b;
+				b = a;
+				a = tmp;
+			}
+			
+			links.push([ a, b ]);
+		}
+		
+		var i, tmp, finished, squares, links, size, id, a, b, c, d, s;
 		
 		squares = [];
+		links = [];
 		size = pixels.length;
 		id = 0;
 		
@@ -77,15 +134,29 @@ PathFinderSquares = function()
 					{
 							// has both reachable and unreachable pixels - divide it!
 							tmp = s[3] / 2;
-							a = [ id + 1, s[1] - tmp, s[2] - tmp, tmp, 0,   s[5], id + 2, id + 3,   s[8] ];
-							b = [ id + 2, s[1] + tmp, s[2] - tmp, tmp, 0,   s[5],   s[6], id + 4, id + 1 ];
-							c = [ id + 3, s[1] - tmp, s[2] + tmp, tmp, 0, id + 1, id + 4,   s[7],   s[8] ];
-							d = [ id + 4, s[1] + tmp, s[2] + tmp, tmp, 0, id + 2,   s[6],   s[7], id + 3 ];
+							a = [ id + 1, s[1] - tmp, s[2] - tmp, tmp, 0 ];
+							b = [ id + 2, s[1] + tmp, s[2] - tmp, tmp, 0 ];
+							c = [ id + 3, s[1] - tmp, s[2] + tmp, tmp, 0 ];
+							d = [ id + 4, s[1] + tmp, s[2] + tmp, tmp, 0 ];
+							
+							copyLinks(s[0], id + 1);
+							copyLinks(s[0], id + 2);
+							copyLinks(s[0], id + 3);
+							copyLinks(s[0], id + 4);
+							
+							addLink(id + 1, id + 2);
+							addLink(id + 1, id + 3);
+							addLink(id + 2, id + 4);
+							addLink(id + 3, id + 4);
+							
+							removeLinkTo(s[0]);
+							
 							squares.splice(i, 1);
 							squares.push(a);
 							squares.push(b);
 							squares.push(c);
 							squares.push(d);
+							
 							finished = false;
 							id += 4;
 							break;
@@ -108,6 +179,7 @@ PathFinderSquares = function()
 		while (!finished);
 		
 		this.squares = squares;
+		this.links = links;
 	}
 	
 	this.generateRoute = function(p_start, p_dest)
