@@ -109,4 +109,30 @@ PathFinderSquares = function()
 		
 		this.squares = squares;
 	}
+	
+	this.generateRoute = function(p_start, p_dest)
+	{
+		var squares, square_id_start, square_id_dest;
+		
+		squares = this.squares;
+		
+		function getSquareIdByCoordinates(p)
+		{
+			var i;
+			
+			for (i=0; i<squares.length; i++)
+			{
+				if (squares[i][1] - squares[i][3] >= p[0] && squares[i][1] + squares[i][3] < p[0] && squares[i][2] - squares[i][3] >= p[1] && squares[i][2] + squares[i][3] < p[1])
+				{
+					return i;
+				}
+			}
+			
+			// outside reachable area? what?!
+			return null;
+		}
+		
+		square_id_start = getSquareIdByCoordinates(p_start);
+		square_id_dest = getSquareIdByCoordinates(p_dest);
+	}
 }
