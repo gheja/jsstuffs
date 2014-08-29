@@ -1,3 +1,6 @@
 [submodule "3rdparty/jDataView"]
 	path = 3rdparty/jDataView
 	url = https://github.com/jDataView/jDataView.git
+[submodule "3rdparty/lightgl"]
+	path = 3rdparty/lightgl
+	url = https://github.com/gheja/lightgl.js.git
