@@ -1,9 +1,19 @@
 var _gl1 = null;
 var _vertex_shaders = [
-	"attribute vec3 aVertexPosition; void main(void) { gl_Position = vec4(aVertexPosition, 1.0); }"
+	"attribute vec3 aVertexPosition;\n" +
+	"attribute vec4 aVertexColor;\n" +
+	"varying vec4 vColor;\n" +
+	"void main(void) {\n" +
+	"	gl_Position = vec4(aVertexPosition, 1.0);\n" +
+	"	vColor = aVertexColor;\n" +
+	"}"
 ];
 var _fragment_shaders = [
-	"void main(void) { gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0); }"
+	"precision mediump float;\n" +
+	"varying vec4 vColor;\n" +
+	"void main(void) {\n" +
+	"	gl_FragColor = vColor;\n" +
+	"}\n"
 ];
 
 function init()

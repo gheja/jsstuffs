@@ -42,7 +42,7 @@ DisplayWebgl = function(parameters)
 		return s;
 	}
 	
-	this.createObject = function(vertex_positions)
+	this.createObject = function(vertex_positions, vertex_colors)
 	{
 		var position_buffer, color_buffer;
 		
@@ -52,8 +52,15 @@ DisplayWebgl = function(parameters)
 		position_buffer.itemSize = 3;
 		position_buffer.numItems = vertex_positions.length / 3;
 		
+		color_buffer = this.gl.createBuffer();
+		this.gl.bindBuffer(this.gl.ARRAY_BUFFER, color_buffer);
+		this.gl.bufferData(this.gl.ARRAY_BUFFER, new Float32Array(vertex_colors), this.gl.STATIC_DRAW);
+		color_buffer.itemSize = 4;
+		color_buffer.numItems = vertex_colors.length / 4;
+		
 		return {
 			positions: position_buffer,
+			colors: color_buffer,
 			shader_program: this.default_shader_program
 		}
 	}
@@ -71,8 +78,14 @@ DisplayWebgl = function(parameters)
 			o.shader_program.p = this.gl.getAttribLocation(o.shader_program, "aVertexPosition");
 			this.gl.enableVertexAttribArray(o.shader_program.p);
 			
+			o.shader_program.vertexColorAttribute = this.gl.getAttribLocation(o.shader_program, "aVertexColor");
+			this.gl.enableVertexAttribArray(o.shader_program.vertexColorAttribute);
+			
 			this.gl.bindBuffer(this.gl.ARRAY_BUFFER, o.positions);
 			this.gl.vertexAttribPointer(o.shader_program.p, o.positions.itemSize, this.gl.FLOAT, false, 0, 0);
+			
+			this.gl.bindBuffer(this.gl.ARRAY_BUFFER, o.colors);
+			this.gl.vertexAttribPointer(o.shader_program.vertexColorAttribute, o.colors.itemSize, this.gl.FLOAT, false, 0, 0);
 			
 			this.gl.drawArrays(this.gl.TRIANGLES, 0, o.positions.numItems);
 		}
@@ -100,5 +113,10 @@ DisplayWebgl = function(parameters)
 		 0.0,  1.0,  0.0,
 		-1.0, -1.0,  0.0,
 		-0.5, -1.0,  0.0
+	],
+	[
+		0.0, 0.6, 0.0, 1.0,
+		0.0, 0.5, 0.8, 1.0,
+		0.5, 1.0, 1.0, 1.0
 	]));
 }
