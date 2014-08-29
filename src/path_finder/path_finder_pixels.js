@@ -129,6 +129,15 @@ PathFinderPixels = function()
 		return null;
 	}
 	
+	/**
+	  * We optimize the path by reducing the number of waypoints based on
+	  * the visibility of them - we search for the farthest point that can be
+	  * reached in a straight line.  We start with the first one and check if we
+	  * can reach the last point (i.e. no unreachable pixels are in the way of
+	  * the straight line of sight), if it cannot be reached we check for the
+	  * previous. If a point can be reached then that's the farthest one and we
+	  * add it to a new path, go there, and start the procedure again.
+	  */
 	this.optimizePath = function(path)
 	{
 		var new_path, that, i, last;
