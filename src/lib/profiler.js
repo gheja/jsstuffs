@@ -62,24 +62,39 @@ Profiler = function()
 		return s;
 	}
 	
-	this.dump = function()
+	this.getString = function()
 	{
-		var i;
+		var i, s;
 		
-		console.log("***");
+		s = "";
 		
 		for (i=0; i<this.intervals.length; i++)
 		{
 			a = this.intervals[i];
-			console.log(this.padString(a[0], 6) + "ms " + this.padString("+" + (a[1] - a[0]), 7) + "ms " + this.padString(Math.floor(100 * (a[1] - a[0]) / this.total_run_time) + "%", 5) + ": " + a[2]);
+			s += this.padString(a[0], 6) + "ms " + this.padString("+" + (a[1] - a[0]), 7) + "ms " + this.padString(Math.floor(100 * (a[1] - a[0]) / this.total_run_time) + "%", 5) + ": " + a[2] + "\n";
 		}
 		
-		console.log(this.padString(this.total_run_time, 6) + "ms (finished)");
+		s += this.padString(this.total_run_time, 6) + "ms (finished)\n";
 		
 		for (i=0; i<this.events.length; i++)
 		{
 			a = this.events[i];
-			console.log(a[0] + " " + a[1]);
+			s += a[0] + " " + a[1] + "\n";
+		}
+		
+		return s;
+	}
+	
+	this.dump = function()
+	{
+		var i, tmp;
+		
+		tmp = this.getString().split("\n");
+		
+		console.log("***");
+		for (i=0; i<tmp.length; i++)
+		{
+			console.log(tmp[i]);
 		}
 	}
 }
