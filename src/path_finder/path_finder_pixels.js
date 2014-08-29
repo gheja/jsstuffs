@@ -125,11 +125,11 @@ PathFinderPixels = function()
 			
 			if (++steps == step_limit)
 			{
-				return null;
+				return [];
 			}
 		}
 		
-		return null;
+		return [];
 	}
 	
 	/**
@@ -174,12 +174,17 @@ PathFinderPixels = function()
 		
 		var j;
 		
+		if (path.length == 0)
+		{
+			return path;
+		}
+		
 		new_path = [];
 		j = 0;
 		
 		new_path.push(path[0]);
 		
-		while (j != path.length - 1)
+		while (j < path.length - 1)
 		{
 			for (i=path.length - 1; i>j; i--)
 			{
@@ -191,8 +196,6 @@ PathFinderPixels = function()
 				}
 			}
 		}
-		
-		new_path.push(path[path.length - 1]);
 		
 		return new_path;
 	}
