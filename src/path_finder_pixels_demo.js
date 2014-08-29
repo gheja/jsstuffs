@@ -1,6 +1,7 @@
 var _pf = null;
 var _path = null;
 var _path2 = null;
+var _p_start = [ 0.3, 0.7 ];
 var _p_dest = [ 6, 14 ];
 var _refresh_in_progress = false;
 
@@ -44,7 +45,7 @@ function draw_pf(canvas_name, mode)
 	
 	ctx = canvas.getContext("2d");
 	
-	ctx.fillStyle = "#222222";
+	ctx.fillStyle = "#111";
 	ctx.fillRect(0, 0, canvas.width, canvas.height);
 	
 	for (x=0; x<_pixels.length; x++)
@@ -81,7 +82,7 @@ function draw_pf(canvas_name, mode)
 		}
 	}
 	
-	if (_path != null)
+	if (_path.length > 0)
 	{
 		ctx.beginPath();
 		ctx.strokeStyle = "rgba(0, 255, 0, 0.25)";
@@ -98,7 +99,7 @@ function draw_pf(canvas_name, mode)
 		ctx.stroke();
 	}
 	
-	if (_path2 != null)
+	if (_path2.length > 0)
 	{
 		ctx.beginPath();
 		ctx.strokeStyle = "rgba(255, 255, 0, 0.5)";
@@ -140,14 +141,12 @@ function refresh()
 	profiler.startInterval("generateRoute()");
 	//_path = _pf.generateRoute([ 0.1, 0.3 ], [ 8, 8 ]);
 	//_path = _pf.generateRoute([ 0.1, 0.3 ], [ 8, 9 ]);
-	_path = _pf.generateRoute([ 0.1, 0.3 ], _p_dest, 1000);
+	_path = _pf.generateRoute(_p_start, _p_dest, 1000);
 	
 	if (_path)
 	{
 		profiler.startInterval("optimizePath()");
 		_path2 = _pf.optimizePath(_path);
-		_path2 = _pf.optimizePath(_path2);
-		_path2 = _pf.optimizePath(_path2);
 	}
 	else
 	{
@@ -158,7 +157,16 @@ function refresh()
 	draw_pf("canvas1");
 	
 	profiler.finish();
-	profiler.dump();
+	
+	var s;
+	s = "";
+	s += "Path finding finished.\n";
+	s += "  waypoints before optimization: " + _path.length + "\n";
+	s += "  final waypoints:" + _path2.length + "\n";
+	s += "\n";
+	s += "Profiler output:\n";
+	s += profiler.getString();
+	document.getElementById("messagebox1").innerHTML = s;
 	
 	_refresh_in_progress = false;
 }

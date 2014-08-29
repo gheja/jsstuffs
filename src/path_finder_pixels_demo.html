@@ -20,11 +20,33 @@
 			{
 				padding: 0 20px;
 			}
+			canvas
+			{
+				float: left;
+				width: 400px;
+				height: 400px;
+			}
+			.messagebox
+			{
+				width: 550px;
+				height: 392px;
+				float: left;
+				background: #111;
+				padding: 4px;
+				margin: 0 0 0 2px;
+			}
+			.clearer
+			{
+				float: none;
+				clear: both;
+			}
 		</style>
 	</head>
 	<body>
 		<h1>Path-finder demo (pixel based)</h1>
 		
-		<canvas id="canvas1" width=960 height=400></canvas>
+		<canvas id="canvas1" width=400 height=400></canvas>
+		<pre id="messagebox1" class="messagebox">Status</pre>
+		<br class="clearer" />
 	</body>
 </html>
