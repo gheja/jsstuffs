@@ -1,5 +1,6 @@
 var _pf = null;
 var _path = null;
+var _path2 = null;
 
 /*
 var _pixels = [
@@ -78,14 +79,31 @@ function draw_pf(canvas_name, mode)
 	if (_path != null)
 	{
 		ctx.beginPath();
-		ctx.strokeStyle = "rgba(0, 255, 0, 0.5)";
+		ctx.strokeStyle = "rgba(0, 255, 0, 0.25)";
 		ctx.lineWidth = 3;
 		ctx.moveTo(_path[0].x * 16 + 8, _path[0].y * 16 + 8);
 		for (x=0; x<_path.length; x++)
 		{
 			p = _path[x];
 			
-			ctx.fillStyle = "#fff";
+			ctx.fillStyle = "rgba(0, 255, 0, 0.5)";
+			ctx.fillRect(p.x * 16 + 6, p.y * 16 + 6, 5, 5);
+			ctx.lineTo(p.x * 16 + 8, p.y * 16 + 8);
+		}
+		ctx.stroke();
+	}
+	
+	if (_path != null)
+	{
+		ctx.beginPath();
+		ctx.strokeStyle = "rgba(255, 255, 0, 0.5)";
+		ctx.lineWidth = 3;
+		ctx.moveTo(_path2[0].x * 16 + 8, _path2[0].y * 16 + 8);
+		for (x=0; x<_path2.length; x++)
+		{
+			p = _path2[x];
+			
+			ctx.fillStyle = "#ff0";
 			ctx.fillRect(p.x * 16 + 6, p.y * 16 + 6, 5, 5);
 			ctx.lineTo(p.x * 16 + 8, p.y * 16 + 8);
 		}
@@ -111,6 +129,9 @@ function init()
 	//_path = _pf.generateRoute([ 0.1, 0.3 ], [ 8, 8 ]);
 	//_path = _pf.generateRoute([ 0.1, 0.3 ], [ 8, 9 ]);
 	_path = _pf.generateRoute([ 0.1, 0.3 ], [ 6, 14 ]);
+	
+	profiler.startInterval("optimizePath()");
+	_path2 = _pf.optimizePath(_path);
 	
 	profiler.startInterval("drawing");
 	draw_pf("canvas1");
