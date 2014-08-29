@@ -160,19 +160,26 @@ PathFinderPixels = function()
 			return true;
 		}
 		
-		new_path = [];
-		last = path[0];
+		var j;
 		
-		for (i=0; i<path.length - 1; i++)
+		new_path = [];
+		j = 0;
+		
+		new_path.push(path[0]);
+		
+		while (j != path.length - 1)
 		{
-			if (!isReachable(last, path[i + 1]))
+			for (i=path.length - 1; i>j; i--)
 			{
-				new_path.push(last);
-				last = path[i];
+				if (isReachable(path[j], path[i]))
+				{
+					new_path.push(path[i]);
+					j = i;
+					break;
+				}
 			}
 		}
 		
-		new_path.push(last);
 		new_path.push(path[path.length - 1]);
 		
 		return new_path;
