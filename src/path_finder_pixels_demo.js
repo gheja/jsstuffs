@@ -80,7 +80,7 @@ function draw_pf(canvas_name, mode)
 		ctx.beginPath();
 		ctx.strokeStyle = "rgba(0, 255, 0, 0.5)";
 		ctx.lineWidth = 3;
-		ctx.moveTo(_path[0].x, _path[0].y);
+		ctx.moveTo(_path[0].x * 16 + 8, _path[0].y * 16 + 8);
 		for (x=0; x<_path.length; x++)
 		{
 			p = _path[x];
