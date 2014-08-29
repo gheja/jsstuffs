@@ -5,6 +5,21 @@ var _p_start = [ 0.3, 0.7 ];
 var _p_dest = [ 6, 14 ];
 var _refresh_in_progress = false;
 
+function fix_mouse_event(e)
+{
+	var p;
+	
+	if (!e.offsetX)
+	{
+		// Firefox, really?...
+		p = $(e.currentTarget).position();
+		e.offsetX = e.pageX - p.left;
+		e.offsetY = e.pageY - p.top;
+	}
+	
+	return e;
+}
+
 /*
 var _pixels = [
 	[ 1, 1, 1, 1, 1, 1, 1, 1 ],
@@ -204,8 +219,10 @@ function handle_mouse_move(e)
 {
 	var x, y;
 	
-	x = Math.min(16, Math.max(0, Math.round((e.clientX - e.originalTarget.offsetLeft - 8) / 16)));
-	y = Math.min(16, Math.max(0, Math.round((e.clientY - e.originalTarget.offsetTop - 8) / 16)));
+	e = fix_mouse_event(e);
+	
+	x = Math.min(16, Math.max(0, Math.round((e.offsetX - 8) / 16)));
+	y = Math.min(16, Math.max(0, Math.round((e.offsetY - 8) / 16)));
 	
 	_p_dest = [ x, y ];
 	
