@@ -121,6 +121,11 @@ function refresh()
 {
 	var i, squares;
 	
+	function getDistance(p1, p2)
+	{
+		return Math.sqrt(Math.pow(p1.x - p2.x, 2) + Math.pow(p1.y - p2.y, 2));
+	}
+	
 	if (_refresh_in_progress)
 	{
 		return;
@@ -158,11 +163,35 @@ function refresh()
 	
 	profiler.finish();
 	
-	var s;
+	// some debug output
+	var dist_line, dist1, dist2, s;
+	
+	dist_line = getDistance({ x: _p_start[0], y: _p_start[1] }, { x: _p_dest[0], y: _p_dest[1] });
+	
+	if (_path.length > 0)
+	{
+		dist1 = getDistance({ x: _p_start[0], y: _p_start[1] }, _path[0]);
+		for (i=1; i<_path.length; i++)
+		{
+			dist1 += getDistance(_path[i-1], _path[i]);
+		}
+		
+		dist2 = getDistance({ x: _p_start[0], y: _p_start[1] }, _path2[0]);
+		for (i=1; i<_path2.length; i++)
+		{
+			dist2 += getDistance(_path2[i-1], _path2[i]);
+		}
+	}
+	
 	s = "";
 	s += "Path finding finished.\n";
-	s += "  waypoints before optimization: " + _path.length + "\n";
-	s += "  final waypoints:" + _path2.length + "\n";
+	s += "  distance in a straight line: " + dist_line + "\n";
+	s += "  path before optimization:\n";
+	s += "    waypoints: " + _path.length + "\n";
+	s += "    length:    " + dist1 + "\n";
+	s += "  path after optimization:\n";
+	s += "    waypoints: " + _path2.length + "\n";
+	s += "    length:    " + dist2 + "\n";
 	s += "\n";
 	s += "Profiler output:\n";
 	s += profiler.getString();
