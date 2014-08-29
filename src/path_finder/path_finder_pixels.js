@@ -87,6 +87,7 @@ PathFinderPixels = function()
 		queue.push(tmp);
 		
 		steps = 0;
+		var best_id = 0;
 		
 		while (queue.length > 0)
 		{
@@ -96,9 +97,11 @@ PathFinderPixels = function()
 				if (queue[i].distance < best.distance && queue[i].status == 1)
 				{
 					best = queue[i];
+					best_id = i;
 				}
 			}
 			
+			queue.splice(best_id, 1);
 			current = best;
 			current.status = 2;
 			
