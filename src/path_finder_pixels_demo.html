@@ -8,45 +8,19 @@
 		<script src="./path_finder/path_finder_pixels.js"></script>
 		<!-- <script src="./world/world.js"></script> -->
 		<script src="./path_finder_pixels_demo.js"></script>
-		<style type="text/css">
-			html
-			{
-				padding: 0;
-				margin: 0;
-				background: #222;
-				color: #fff;
-			}
-			body
-			{
-				padding: 0 20px;
-			}
-			canvas
-			{
-				float: left;
-				width: 400px;
-				height: 400px;
-			}
-			.messagebox
-			{
-				width: 550px;
-				height: 392px;
-				float: left;
-				background: #111;
-				padding: 4px;
-				margin: 0 0 0 2px;
-			}
-			.clearer
-			{
-				float: none;
-				clear: both;
-			}
-		</style>
+		 <link rel="stylesheet" type="text/css" href="demo.css" />
 	</head>
 	<body>
-		<h1>Path-finder demo (pixel based)</h1>
-		
-		<canvas id="canvas1" width=400 height=400></canvas>
-		<pre id="messagebox1" class="messagebox">Status</pre>
-		<br class="clearer" />
+		<div id="container">
+			<h1>Path-finder demo (pixel based)</h1>
+			
+			<canvas id="canvas1" width=400 height=400 class="square"></canvas>
+			<pre id="messagebox1" class="messagebox">Status</pre>
+			<br class="clearer" />
+			
+			<div id="footer">
+				This demo page is a part of <a href="https://github.com/gheja/jsstuffs">jsstuffs</a>.
+			</div>
+		</div>
 	</body>
 </html>
