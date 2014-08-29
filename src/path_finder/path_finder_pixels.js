@@ -128,4 +128,53 @@ PathFinderPixels = function()
 		
 		return null;
 	}
+	
+	this.optimizePath = function(path)
+	{
+		var new_path, that, i, last;
+		
+		that = this;
+		
+		function isReachable(p1, p2)
+		{
+			var dx, dy, steps, i;
+			
+			dx = p2.x - p1.x;
+			dy = p2.y - p1.y;
+			
+			steps = Math.max(dx, dy) * 5;
+			dx /= steps;
+			dy /= steps;
+			
+			for (i=0; i<steps; i++)
+			{
+				x = Math.round(p1.x + dx * i);
+				y = Math.round(p1.y + dy * i);
+				
+				if (that.pixels[x][y] != 1)
+				{
+					return false;
+				}
+			}
+			
+			return true;
+		}
+		
+		new_path = [];
+		last = path[0];
+		
+		for (i=0; i<path.length - 1; i++)
+		{
+			if (!isReachable(last, path[i + 1]))
+			{
+				new_path.push(last);
+				last = path[i];
+			}
+		}
+		
+		new_path.push(last);
+		new_path.push(path[path.length - 1]);
+		
+		return new_path;
+	}
 }
