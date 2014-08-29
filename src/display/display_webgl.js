@@ -39,6 +39,14 @@ DisplayWebgl = function(parameters)
 			return null;
 		}
 		
+		this.gl.useProgram(s);
+		
+		s.vertexPositionAttribute = this.gl.getAttribLocation(s, "aVertexPosition");
+		this.gl.enableVertexAttribArray(s.vertexPositionAttribute);
+		
+		s.vertexColorAttribute = this.gl.getAttribLocation(s, "aVertexColor");
+		this.gl.enableVertexAttribArray(s.vertexColorAttribute);
+		
 		return s;
 	}
 	
@@ -74,12 +82,6 @@ DisplayWebgl = function(parameters)
 			o = this.objects[i];
 			
 			this.gl.useProgram(o.shader_program);
-			
-			o.shader_program.vertexPositionAttribute = this.gl.getAttribLocation(o.shader_program, "aVertexPosition");
-			this.gl.enableVertexAttribArray(o.shader_program.vertexPositionAttribute);
-			
-			o.shader_program.vertexColorAttribute = this.gl.getAttribLocation(o.shader_program, "aVertexColor");
-			this.gl.enableVertexAttribArray(o.shader_program.vertexColorAttribute);
 			
 			this.gl.bindBuffer(this.gl.ARRAY_BUFFER, o.positions);
 			this.gl.vertexAttribPointer(o.shader_program.vertexPositionAttribute, o.positions.itemSize, this.gl.FLOAT, false, 0, 0);
