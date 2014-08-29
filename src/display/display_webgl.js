@@ -75,14 +75,14 @@ DisplayWebgl = function(parameters)
 			
 			this.gl.useProgram(o.shader_program);
 			
-			o.shader_program.p = this.gl.getAttribLocation(o.shader_program, "aVertexPosition");
-			this.gl.enableVertexAttribArray(o.shader_program.p);
+			o.shader_program.vertexPositionAttribute = this.gl.getAttribLocation(o.shader_program, "aVertexPosition");
+			this.gl.enableVertexAttribArray(o.shader_program.vertexPositionAttribute);
 			
 			o.shader_program.vertexColorAttribute = this.gl.getAttribLocation(o.shader_program, "aVertexColor");
 			this.gl.enableVertexAttribArray(o.shader_program.vertexColorAttribute);
 			
 			this.gl.bindBuffer(this.gl.ARRAY_BUFFER, o.positions);
-			this.gl.vertexAttribPointer(o.shader_program.p, o.positions.itemSize, this.gl.FLOAT, false, 0, 0);
+			this.gl.vertexAttribPointer(o.shader_program.vertexPositionAttribute, o.positions.itemSize, this.gl.FLOAT, false, 0, 0);
 			
 			this.gl.bindBuffer(this.gl.ARRAY_BUFFER, o.colors);
 			this.gl.vertexAttribPointer(o.shader_program.vertexColorAttribute, o.colors.itemSize, this.gl.FLOAT, false, 0, 0);
