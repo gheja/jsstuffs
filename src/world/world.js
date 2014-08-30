@@ -17,7 +17,7 @@ World = function()
 	this.map = [];
 	this.starting_points = [];
 	
-	this.generate_step1 = function(seed)
+	this.genGenerateHeightmap = function(seed)
 	{
 		// heightmap generation using random midpoint displacement
 		
@@ -89,7 +89,7 @@ World = function()
 		}
 	}
 	
-	this.generate_step2 = function(seed)
+	this.genFixHeightmap = function(seed)
 	{
 		// heightmap correction
 		
@@ -120,7 +120,7 @@ World = function()
 		}
 	}
 	
-	this.floodFill = function(map, search_index, search_min, search_max, set_index, set_value, start_points)
+	this._floodFill = function(map, search_index, search_min, search_max, set_index, set_value, start_points)
 	{
 		// thanks @williammalone
 		// http://www.williammalone.com/articles/html5-canvas-javascript-paint-bucket-tool/
@@ -202,13 +202,13 @@ World = function()
 		return match_count;
 	}
 	
-	this.generate_step3_quick = function(sea_level)
+	this.genFloodFill = function(sea_level)
 	{
 		// start a flood fill from point [ 0, 0 ], search for heights between 0 and sea_level, set them as water
-		this.floodFill(this.map, 2, 0.0, sea_level, 3, 1, [ [ 0, 0 ] ]);
+		this._floodFill(this.map, 2, 0.0, sea_level, 3, 1, [ [ 0, 0 ] ]);
 	}
 	
-	this.generate_step4 = function()
+	this.genGenerateLightmap = function()
 	{
 		// fake lighting calculation
 		
@@ -241,7 +241,7 @@ World = function()
 		}
 	}
 	
-	this.generate_path_finder_data = function(seed)
+	this.genGeneratePathFinderData = function(seed)
 	{
 		var i, points_matched, p, a, rng;
 		
@@ -255,7 +255,7 @@ World = function()
 			a = deep_copy_object(this.map);
 			
 			// start a flood fill from a point, search for lands, set them as reachable
-			points_matched = this.floodFill(a, 3, 2, 2, 5, 1, [ p ]);
+			points_matched = this._floodFill(a, 3, 2, 2, 5, 1, [ p ]);
 			
 			// 25% of the map should be playable at least
 			if (points_matched / (this.map_size * this.map_size) > 0.25)
@@ -268,7 +268,7 @@ World = function()
 		return false;
 	}
 	
-	this.generate_start_points = function(seed)
+	this.genGenerateStartingPoints = function(seed)
 	{
 		var i, candidates, best_min_sum, min_sum, min, best_id, p, a, rng, success;
 		
@@ -319,10 +319,12 @@ World = function()
 	
 	this.generate = function(seed, sea_level, coast_x)
 	{
-		this.generate_step1(seed);
-		this.generate_step2(seed);
-		this.generate_step3_quick(sea_level, coast_x);
-		this.generate_path_finder_data(seed);
-		this.generate_start_points(seed);
+		// the order matters!
+		this.genGenerateHeightmap(seed);
+		this.genFixHeightmap(seed);
+		this.genFloodFill(sea_level);
+		this.genGeneratePathFinderData(seed);
+		this.genGenerateStartingPoints(seed);
+		this.genGenerateLightmap();
 	}
 }

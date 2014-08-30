@@ -153,20 +153,20 @@ function draw_all()
 {
 	_world = new World();
 	
-	_world.generate_step1(_seed);
+	_world.genGenerateHeightmap(_seed);
 	draw_heightmap("canvas1", 1);
 	
-	_world.generate_step2(_seed);
+	_world.genFixHeightmap(_seed);
 	draw_heightmap("canvas2", 1);
 	
-	_world.generate_step3_quick(_sea_level, _coast_x);
+	_world.genFloodFill(_sea_level);
 	draw_heightmap("canvas3", 2);
 	
-	_world.generate_step4();
+	_world.genGenerateLightmap();
 	draw_heightmap("canvas4", 3);
 	
-	_world.generate_path_finder_data(_seed);
-	_world.generate_start_points(_seed);
+	_world.genGeneratePathFinderData(_seed);
+	_world.genGenerateStartingPoints(_seed);
 	draw_heightmap("canvas5", 4);
 }
 
