@@ -60,7 +60,8 @@ canvas.square
 
 canvas.full
 {
-	float: left;
+	float: none;
+	clear: both;
 	width: 960px;
 	height: 400px;
 }
