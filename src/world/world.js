@@ -317,9 +317,11 @@ World = function()
 		this.starting_points = candidates;
 	}
 	
-	this.generate = function(seed, sea_level, coast_x)
+	this.generate = function(seed, sea_level, coast_x, map_size)
 	{
 		var rng;
+		
+		this.map_size = map_size
 		
 		rng = new AlmostRandom(seed);
 		
