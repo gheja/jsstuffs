@@ -22,7 +22,8 @@ function init()
 	_gl1 = new DisplayWebgl({
 		canvas_name: "canvas1",
 		vertex_shaders: _vertex_shaders,
-		fragment_shaders: _fragment_shaders
+		fragment_shaders: _fragment_shaders,
+		clear_color: [ 0.1, 0.2, 0.3 ]
 	});
 	
 	_gl1.storeObject(_gl1.createObject([

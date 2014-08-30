@@ -136,7 +136,7 @@ DisplayWebgl = function(parameters)
 	this.canvas = document.getElementById(parameters.canvas_name);
 	
 	this.gl = this.canvas.getContext("experimental-webgl");
-	this.gl.clearColor(0.0, 0.05, 0.07, 1.0);
+	this.gl.clearColor(parameters.clear_color[0], parameters.clear_color[1], parameters.clear_color[2], 1.0);
 	this.gl.enable(this.gl.DEPTH_TEST);
 	
 	this.default_shader_program = this.createShaderProgram(parameters.vertex_shaders[0], parameters.fragment_shaders[0]);
