@@ -263,3 +263,8 @@ array_shuffle = function(array, seed)
 	
 	array.sort(function(a, b) { return prng.random() - 0.5; } );
 }
+
+distance_2d = function(p1, p2)
+{
+	return Math.sqrt(Math.pow(p1[0] - p2[0], 2) + Math.pow(p1[1] - p2[1], 2));
+}
