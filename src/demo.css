@@ -2,14 +2,16 @@ html
 {
 	padding: 0;
 	margin: 0;
-	background: #222;
+	/* background image from: https://play.google.com/store/apps/details?id=larry.zou.colorfullife */
+	background: #222 url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAUCAIAAABj86gYAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH3ggeFSsLnxn56AAAAYBJREFUOMuVlVFywzAIRAPiIrn/FSXUjzfdYuS4E314EgsWWBZs7/f79Xv23ma2985M/R5jmBm3ay13d3fZzzndfe/Ne7xe5XhDz0zQK9DDMbMxhrtn5lpLUJcA+r/Wykwzi4iWyPNx9zGGEOpVkAWJkw7M8Hx9c8YYwlH1AbNkAYmE/BeuhccFkMykN+7uay0lLjucz+cph/OKMBEBYw59ZtayXmtR2UlrM5hzoouTMTOL0xNrBEq90FrFSgVoofKu/indaIXjDHQVolSIfxWxDOAdOV1UVHOHQVKoDVc1MmgdlkubtftRgtamVDKVHOp7+nE7mHErZ5hlns/pb0VTFrI5Lf15Muecn7RIwzITUX5KIh6WjAYFlApRJ1+d/y6A6o2IugGZAIV/JvAvQNsQ1Y3fYwxNVpP8w/649EBpzjlbVA5sCL3uFT4hVNYmP7jjFRAyvZXduVQ0/AqMynF3Amg96QPysIUaNLzhpbZVobsQlZpMb7dYUyr2TRoayR9uoarzvA7ppgAAAABJRU5ErkJggg==);
 	color: #fff;
 	font-family: "Trebuchet MS", Arial, sans-serif;
 }
 
 body
 {
-	padding: 0 20px;
+	padding: 0;
+	margin: 0;
 }
 
 .container,
@@ -17,8 +19,13 @@ body
 {
 	width: 960px;
 	overflow: hidden;
-	padding: 0;
-	margin: 0 auto;
+	padding: 0 16px;
+	margin: 0 auto 40px auto;
+	background: rgba(34, 34, 34, 1);
+	border-right: 1px solid #1b1b1b;
+	border-bottom: 1px solid #1b1b1b;
+	border-left: 1px solid #1b1b1b;
+	box-shadow: 0px 0px 3px #1b1b1b;
 }
 
 a,
@@ -36,10 +43,10 @@ a:hover
 
 #footer
 {
-	margin: 20px 0 100px 0;
-	padding: 10px 0 0 0;
-	border-top: 1px dashed #000;
-	color: #000;
+	margin: 20px 0 0 0;
+	padding: 10px 0 10px 0;
+	border-top: 2px dashed #1b1b1b;
+	color: #111;
 	text-align: center;
 	font-size: 9pt;
 }
