@@ -328,14 +328,14 @@ World = function()
 		while (1)
 		{
 			// the order matters!
-			this.genGenerateHeightmap(rng.randomUint32());
-			this.genFixHeightmap(rng.randomUint32());
+			this.genGenerateHeightmap(rng.randomUInt32());
+			this.genFixHeightmap(rng.randomUInt32());
 			this.genFloodFill(sea_level);
-			if (!this.genGeneratePathFinderData(rng.randomUint32()))
+			if (!this.genGeneratePathFinderData(rng.randomUInt32()))
 			{
 				continue;
 			}
-			this.genGenerateStartingPoints(rng.randomUint32());
+			this.genGenerateStartingPoints(rng.randomUInt32());
 			this.genGenerateLightmap();
 			
 			break;
