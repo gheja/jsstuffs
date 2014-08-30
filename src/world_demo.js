@@ -151,23 +151,35 @@ function draw_heightmap(canvas_name, mode)
 
 function draw_all()
 {
+	var rng;
+	
 	_world = new World();
 	
-	_world.genGenerateHeightmap(_seed);
-	draw_heightmap("canvas1", 1);
+	rng = new AlmostRandom(_seed);
 	
-	_world.genFixHeightmap(_seed);
-	draw_heightmap("canvas2", 1);
-	
-	_world.genFloodFill(_sea_level);
-	draw_heightmap("canvas3", 2);
-	
-	_world.genGenerateLightmap();
-	draw_heightmap("canvas4", 3);
-	
-	_world.genGeneratePathFinderData(_seed);
-	_world.genGenerateStartingPoints(_seed);
-	draw_heightmap("canvas5", 4);
+	while (1)
+	{
+		_world.genGenerateHeightmap(rng.randomUInt32());
+		draw_heightmap("canvas1", 1);
+		
+		_world.genFixHeightmap(rng.randomUInt32());
+		draw_heightmap("canvas2", 1);
+		
+		_world.genFloodFill(_sea_level);
+		draw_heightmap("canvas3", 2);
+		
+		_world.genGenerateLightmap();
+		draw_heightmap("canvas4", 3);
+		
+		if (!_world.genGeneratePathFinderData(rng.randomUInt32()))
+		{
+			continue;
+		}
+		_world.genGenerateStartingPoints(rng.randomUInt32());
+		draw_heightmap("canvas5", 4);
+		
+		break;
+	}
 }
 
 function init()
