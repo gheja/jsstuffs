@@ -126,6 +126,8 @@ DisplayWebgl = function(parameters)
 		
 		projection = Matrix.perspective(45, 16/9, 0.1, 1000);
 		view = Matrix.lookAt(this.camera.position.x, this.camera.position.y, this.camera.position.z, this.camera.target.x, this.camera.target.y, this.camera.target.z, 0, 1, 0);
+		// correction to have the x-y plane the ground
+		view = Matrix.multiply(view, new Matrix(1, 0, 0, 0,  0, 0, 1, 0,  0, 1, 0, 0,  0, 0, 0, 1));
 		model = Matrix.identity();
 		
 		this.renderObjects(view, projection);
