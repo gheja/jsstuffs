@@ -2,9 +2,10 @@ var _gl1 = null;
 var _vertex_shaders = [
 	"attribute vec3 aVertexPosition;\n" +
 	"attribute vec4 aVertexColor;\n" +
+	"uniform mat4 aModelViewProjectionMatrix;\n" +
 	"varying vec4 vColor;\n" +
 	"void main(void) {\n" +
-	"	gl_Position = vec4(aVertexPosition, 1.0);\n" +
+	"	gl_Position = aModelViewProjectionMatrix * vec4(aVertexPosition, 1.0);\n" +
 	"	vColor = aVertexColor;\n" +
 	"}"
 ];
@@ -24,6 +25,11 @@ function init()
 		fragment_shaders: _fragment_shaders
 	});
 	
+	window.setInterval(render, 1000 / 60);
+}
+
+function render()
+{
 	_gl1.drawScene();
 }
 

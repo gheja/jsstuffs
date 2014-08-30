@@ -1,7 +1,10 @@
 // thx http://graphics.cs.wisc.edu/Courses/Games11/WebGLTest/first.htm
+// thx https://github.com/evanw/lightgl.js
 
 DisplayWebgl = function(parameters)
 {
+	this.a = 0;
+	
 	this.canvas = null;
 	this.gl = null;
 	this.objects = [];
@@ -47,6 +50,8 @@ DisplayWebgl = function(parameters)
 		s.vertexColorAttribute = this.gl.getAttribLocation(s, "aVertexColor");
 		this.gl.enableVertexAttribArray(s.vertexColorAttribute);
 		
+		s.modelViewProjectionMatrix = this.gl.getUniformLocation(s, "aModelViewProjectionMatrix");
+		
 		return s;
 	}
 	
@@ -73,13 +78,23 @@ DisplayWebgl = function(parameters)
 		}
 	}
 	
-	this.renderObjects = function()
+	this.renderObjects = function(view, projection)
 	{
-		var i, o;
+		var i, o, model, mvp;
 		
 		for (i=0; i<this.objects.length; i++)
 		{
 			o = this.objects[i];
+			
+			model = Matrix.identity();
+			
+			mvp = Matrix.identity();
+			mvp = Matrix.multiply(model, mvp);
+			mvp = Matrix.multiply(view, mvp);
+			mvp = Matrix.multiply(projection, mvp);
+			
+			// TODO: alter the matrix to be transposed by default
+			mvp = Matrix.transpose(mvp);
 			
 			this.gl.useProgram(o.shader_program);
 			
@@ -89,15 +104,26 @@ DisplayWebgl = function(parameters)
 			this.gl.bindBuffer(this.gl.ARRAY_BUFFER, o.colors);
 			this.gl.vertexAttribPointer(o.shader_program.vertexColorAttribute, o.colors.itemSize, this.gl.FLOAT, false, 0, 0);
 			
+			this.gl.uniformMatrix4fv(o.shader_program.modelViewProjectionMatrix, false, mvp.m);
+			
 			this.gl.drawArrays(this.gl.TRIANGLES, 0, o.positions.numItems);
 		}
 	}
 	
+	
 	this.drawScene = function()
 	{
+		var projection, view, model, mvp;
+		
+		this.a += 0.5;
+		
 		this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
 		
-		this.renderObjects();
+		projection = Matrix.perspective(45, 16/9, 0.1, 1000);
+		view = Matrix.lookAt(Math.sin(this.a / 30) * 5, Math.sin(this.a / 75 - 2) * 5 + 6, Math.cos(this.a / 30) * 5, 0, 0, 0, 0, 1, 0);
+		model = Matrix.identity();
+		
+		this.renderObjects(view, projection);
 	}
 	
 	// initialization
@@ -105,18 +131,31 @@ DisplayWebgl = function(parameters)
 	this.canvas = document.getElementById(parameters.canvas_name);
 	
 	this.gl = this.canvas.getContext("experimental-webgl");
-	this.gl.clearColor(0.0, 0.0, 0.0, 1.0);
+	this.gl.clearColor(0.0, 0.05, 0.07, 1.0);
 	this.gl.enable(this.gl.DEPTH_TEST);
 	
 	this.default_shader_program = this.createShaderProgram(parameters.vertex_shaders[0], parameters.fragment_shaders[0]);
 	
 	// test data
 	this.objects.push(this.createObject([
-		 0.0,  1.0,  0.0,
-		-1.0, -1.0,  0.0,
-		-0.5, -1.0,  0.0
+		0, 1, 0, -1, 0, -1,  1, 0, -1,
+		0, 1, 0,  1, 0, -1,  1, 0,  1,
+		0, 1, 0,  1, 0,  1, -1, 0,  1,
+		0, 1, 0, -1, 0,  1, -1, 0, -1
 	],
 	[
+		0.0, 0.6, 0.0, 1.0,
+		0.0, 0.5, 0.8, 1.0,
+		0.5, 1.0, 1.0, 1.0,
+		
+		0.0, 0.6, 0.0, 1.0,
+		0.0, 0.5, 0.8, 1.0,
+		0.5, 1.0, 1.0, 1.0,
+		
+		0.0, 0.6, 0.0, 1.0,
+		0.0, 0.5, 0.8, 1.0,
+		0.5, 1.0, 1.0, 1.0,
+		
 		0.0, 0.6, 0.0, 1.0,
 		0.0, 0.5, 0.8, 1.0,
 		0.5, 1.0, 1.0, 1.0
