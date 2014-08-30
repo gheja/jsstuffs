@@ -6,6 +6,11 @@
 		<script src="./lib/almost_random.js"></script>
 		<script src="./world/world.js"></script>
 		<script src="./world_demo.js"></script>
+		
+		<script src="../3rdparty/lightgl/src/vector.js"></script>
+		<script src="../3rdparty/lightgl/src/matrix.js"></script>
+		<script src="./display/display_webgl.js"></script>
+		
 		 <link rel="stylesheet" type="text/css" href="demo.css" />
 	</head>
 	<body>
@@ -26,6 +31,13 @@
 			
 			<h2>Step 5: path-finder data</h2>
 			<canvas id="canvas5" width=512 height=512></canvas>
+			
+			<h2>WebGL render</h2>
+			<p>
+				Combined with the DisplayWebgl module:
+			</p>
+			
+			<canvas id="canvas6" width=960 height=540></canvas>
 			
 			<div id="footer">
 				This demo page is a part of <a href="https://github.com/gheja/jsstuffs">jsstuffs</a>.
