@@ -3,11 +3,13 @@
 
 DisplayWebgl = function(parameters)
 {
-	this.a = 0;
-	
 	this.canvas = null;
 	this.gl = null;
 	this.objects = [];
+	this.camera = {
+		position: { x: 0, y: -1, z: -2 },
+		target: { x: 0, y: 0, z: 0 }
+	};
 	
 	this.createShader = function(text, is_fragment_shader)
 	{
@@ -120,15 +122,18 @@ DisplayWebgl = function(parameters)
 	{
 		var projection, view, model, mvp;
 		
-		this.a += 0.5;
-		
 		this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
 		
 		projection = Matrix.perspective(45, 16/9, 0.1, 1000);
-		view = Matrix.lookAt(Math.sin(this.a / 30) * 5, Math.sin(this.a / 75 - 2) * 5 + 6, Math.cos(this.a / 30) * 5, 0, 0, 0, 0, 1, 0);
+		view = Matrix.lookAt(this.camera.position.x, this.camera.position.y, this.camera.position.z, this.camera.target.x, this.camera.target.y, this.camera.target.z, 0, 1, 0);
 		model = Matrix.identity();
 		
 		this.renderObjects(view, projection);
+	}
+	
+	this.getCamera = function()
+	{
+		return this.camera;
 	}
 	
 	// initialization
