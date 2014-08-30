@@ -319,12 +319,24 @@ World = function()
 	
 	this.generate = function(seed, sea_level, coast_x)
 	{
-		// the order matters!
-		this.genGenerateHeightmap(seed);
-		this.genFixHeightmap(seed);
-		this.genFloodFill(sea_level);
-		this.genGeneratePathFinderData(seed);
-		this.genGenerateStartingPoints(seed);
-		this.genGenerateLightmap();
+		var rng;
+		
+		rng = new AlmostRandom(seed);
+		
+		while (1)
+		{
+			// the order matters!
+			this.genGenerateHeightmap(rng.randomUint32());
+			this.genFixHeightmap(rng.randomUint32());
+			this.genFloodFill(sea_level);
+			if (!this.genGeneratePathFinderData(rng.randomUint32()))
+			{
+				continue;
+			}
+			this.genGenerateStartingPoints(rng.randomUint32());
+			this.genGenerateLightmap();
+			
+			break;
+		}
 	}
 }
