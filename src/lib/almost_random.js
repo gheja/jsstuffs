@@ -35,4 +35,14 @@ AlmostRandom = function(seed)
 		// really.
 		return (this.seed % 73727) / 73727;
 	}
+	
+	this.randomInteger = function(min, max)
+	{
+		return (this.random() * (max - min) + min) | 0;
+	}
+	
+	this.randomUInt32 = function(min, max)
+	{
+		return this.randomInteger(0, 65535);
+	}
 }
