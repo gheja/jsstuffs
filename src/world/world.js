@@ -115,7 +115,6 @@ World = function()
 				
 				distance = clamp(1 - distance * 2, 0, 1);
 				
-//				this.map[x][y][2] = distance;
 				this.map[x][y][2] = this.map[x][y][2] * distance;
 			}
 		}
