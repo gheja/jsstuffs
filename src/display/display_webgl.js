@@ -78,6 +78,11 @@ DisplayWebgl = function(parameters)
 		}
 	}
 	
+	this.storeObject = function(obj)
+	{
+		this.objects.push(obj);
+	}
+	
 	this.renderObjects = function(view, projection)
 	{
 		var i, o, model, mvp;
@@ -135,29 +140,4 @@ DisplayWebgl = function(parameters)
 	this.gl.enable(this.gl.DEPTH_TEST);
 	
 	this.default_shader_program = this.createShaderProgram(parameters.vertex_shaders[0], parameters.fragment_shaders[0]);
-	
-	// test data
-	this.objects.push(this.createObject([
-		0, 1, 0, -1, 0, -1,  1, 0, -1,
-		0, 1, 0,  1, 0, -1,  1, 0,  1,
-		0, 1, 0,  1, 0,  1, -1, 0,  1,
-		0, 1, 0, -1, 0,  1, -1, 0, -1
-	],
-	[
-		0.0, 0.6, 0.0, 1.0,
-		0.0, 0.5, 0.8, 1.0,
-		0.5, 1.0, 1.0, 1.0,
-		
-		0.0, 0.6, 0.0, 1.0,
-		0.0, 0.5, 0.8, 1.0,
-		0.5, 1.0, 1.0, 1.0,
-		
-		0.0, 0.6, 0.0, 1.0,
-		0.0, 0.5, 0.8, 1.0,
-		0.5, 1.0, 1.0, 1.0,
-		
-		0.0, 0.6, 0.0, 1.0,
-		0.0, 0.5, 0.8, 1.0,
-		0.5, 1.0, 1.0, 1.0
-	]));
 }
