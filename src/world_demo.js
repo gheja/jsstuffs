@@ -3,6 +3,7 @@ var _world = null;
 var _seed = Math.floor(Math.random() * 65535);
 var _sea_level = 0.15;
 var _coast_x = 0.02;
+var _land_height = 40;
 
 function interpolate(a, b, f)
 {
@@ -176,6 +177,7 @@ function draw_all()
 			continue;
 		}
 		_world.genGenerateStartingPoints(rng.randomUInt32());
+		_world.genFinalize(rng.randomUInt32(), _land_height);
 		draw_heightmap("canvas5", 4);
 		
 		break;

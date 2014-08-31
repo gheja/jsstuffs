@@ -317,7 +317,27 @@ World = function()
 		this.starting_points = candidates;
 	}
 	
-	this.generate = function(seed, sea_level, coast_x, map_size)
+	this.genFinalize = function(seed, max_height)
+	{
+		var x,y, rng;
+		
+		rng = new AlmostRandom(seed);
+		
+		for (x=0; x<this.map_size; x++)
+		{
+			for (y=0; y<this.map_size; y++)
+			{
+				// make the terrain look a bit fuzzy
+				this.map[x][y][0] += rng.random() * 0.5 - 0.25;
+				this.map[x][y][1] += rng.random() * 0.5 - 0.25;
+				
+				// and give some height
+				this.map[x][y][2] *= max_height;
+			}
+		}
+	}
+	
+	this.generate = function(seed, sea_level, coast_x, map_size, max_height)
 	{
 		var rng;
 		
@@ -337,6 +357,7 @@ World = function()
 			}
 			this.genGenerateStartingPoints(rng.randomUInt32());
 			this.genGenerateLightmap();
+			this.genFinalize(rng.randomUInt32(), max_height);
 			
 			break;
 		}
