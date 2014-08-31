@@ -99,9 +99,9 @@ DisplayWebgl = function(parameters)
 			n[1] /= l;
 			n[2] /= l;
 			normals.push(
-				n[0], n[2], n[1],
-				n[0], n[2], n[1],
-				n[0], n[2], n[1]
+				n[0], n[1], n[2],
+				n[0], n[1], n[2],
+				n[0], n[1], n[2]
 			);
 		}
 		
@@ -156,8 +156,8 @@ DisplayWebgl = function(parameters)
 				mvp = Matrix.multiply(projection, mvp);
 				
 				normal = Matrix.identity();
-				// normal = Matrix.multiply(model, normal);
-				// normal = Matrix.multiply(view, normal);
+				normal = Matrix.multiply(model, normal);
+				normal = Matrix.multiply(view, normal);
 				normal = Matrix.inverse(normal);
 				
 				// TODO: alter the matrix to be transposed by default
@@ -226,7 +226,7 @@ DisplayWebgl = function(parameters)
 			gl_Position = aModelViewProjectionMatrix * vec4(aVertexPosition, 1.0); \
 			vec3 ambientColor = vec3(1.0, 1.0, 1.0); \
 			vec3 lightColor = vec3(1.0, 1.0, 1.0); \
-			vec3 lightDirection = vec3(1, 1, 1); \
+			vec3 lightDirection = vec3(-1, -1, -1); \
 			vec4 transformedNormal = aNormalMatrix * vec4(aVertexNormal, 1.0); \
 			float lightValue = max(dot(transformedNormal.xyz, lightDirection), 0.0); \
 			vColor = aVertexColor * vec4(ambientColor * 0.4 + lightColor * lightValue * 0.6, 1.0); \
