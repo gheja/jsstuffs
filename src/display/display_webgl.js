@@ -23,7 +23,7 @@ DisplayWebgl = function(parameters)
 		
 		if (!this.gl.getShaderParameter(shader, this.gl.COMPILE_STATUS))
 		{
-			console.log("WebGL compileShader() failed");
+			console.log("WebGL compileShader() failed: " + this.gl.getShaderInfoLog(shader));
 			return null;
 		}
 		
