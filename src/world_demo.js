@@ -3,7 +3,10 @@ var _world = null;
 var _seed = Math.floor(Math.random() * 65535);
 var _sea_level = 0.15;
 var _coast_x = 0.02;
-var _land_height = 40;
+var _land_height = 20;
+var _gl1 = null;
+var _a = 0;
+var _camera = null;
 
 function interpolate(a, b, f)
 {
@@ -13,6 +16,11 @@ function interpolate(a, b, f)
 function rgb_interpolate(r1, g1, b1, r2, g2, b2, f)
 {
 	return Math.floor(interpolate(r1, r2, f)) + "," + Math.floor(interpolate(g1, g2, f)) + "," + Math.floor(interpolate(b1, b2, f));
+}
+
+function rgb_interpolate_array(r1, g1, b1, r2, g2, b2, f)
+{
+	return [ interpolate(r1, r2, f), interpolate(g1, g2, f), interpolate(b1, b2, f), 1.0 ];
 }
 
 function normalize(a, b, c)
@@ -184,9 +192,138 @@ function draw_all()
 	}
 }
 
+
+
+function webgl_run()
+{
+	var x, y, p1, p2, p3, p4, b, c, d, f;
+	
+	b = [];
+	c = [];
+	
+	for (x = 0; x<_world.map_size - 1; x++)
+	{
+		for (y=0; y<_world.map_size - 1; y++)
+		{
+			p1 = _world.map[x][y];
+			p2 = _world.map[x][y+1];
+			p3 = _world.map[x+1][y];
+			p4 = _world.map[x+1][y+1];
+			
+			b.push(
+				p1[0], p1[2], p1[1],
+				p2[0], p2[2], p2[1],
+				p3[0], p3[2], p3[1],
+				p3[0], p3[2], p3[1],
+				p2[0], p2[2], p2[1],
+				p4[0], p4[2], p4[1]
+			);
+			
+			f = clamp(_world.map[x][y][4] * 5, -1, 1) * 0.5 + 0.5;
+			
+			switch (_world.map[x][y][3])
+			{
+				case 1: // water/coast
+					if (_world.map[x][y][2] / _land_height > _sea_level - _coast_x)
+					{
+						// coast
+						d = rgb_interpolate_array(0/255, 40/255, 0/255, 40/255, 190/255, 0/255, f);
+						d = rgb_interpolate_array(d[0], d[1], d[2], 215/255, 215/255, 100/255, clamp(normalize(_world.map[x][y][2] / _land_height, _sea_level, _sea_level - _coast_x) * 2, 0, 1));
+					}
+					else
+					{
+						// water
+						d = rgb_interpolate_array(10/255, 60/255, 180/255, 192/255, 192/255, 160/255, f * clamp(normalize(_world.map[x][y][2] / _land_height, (_sea_level - _coast_x) * 0.66, _sea_level - _coast_x) * 0.7, 0, 1));
+					}
+				break;
+				
+				case 2: // land
+						d = rgb_interpolate_array(10/255/4, 40/255, 0/255, 40/255, 190/255, 0/255, f);
+				break;
+			}
+/*
+			// reachability
+			switch (_world.map[x][y][5])
+			{
+				case 0: // water/coast
+						d = rgb_interpolate(16/255, 16/255, 16/255, 192/255, 192/255, 192/255, f);
+				break;
+				
+				case 1: // land
+						d = rgb_interpolate(0/255, 64/255, 0/255, 0/255, 255/255, 0/255, f);
+				break;
+			}
+*/
+			c.push(d[0], d[1], d[2], d[3]);
+			c.push(d[0], d[1], d[2], d[3]);
+			c.push(d[0], d[1], d[2], d[3]);
+			
+//			d[0]*= 0.9;
+//			d[1]*= 0.9;
+//			d[2]*= 0.9;
+			
+			c.push(d[0], d[1], d[2], d[3]);
+			c.push(d[0], d[1], d[2], d[3]);
+			c.push(d[0], d[1], d[2], d[3]);
+		}
+	}
+	
+	_gl1.storeObject(_gl1.createObject(b, c));
+}
+
+function webgl_render()
+{
+	_a += 0.5;
+	
+	_camera.position.x = Math.sin(_a / 100) * _world.map_size * 0.75 + _world.map_size / 2
+	_camera.position.y = _land_height * 1.5;
+	_camera.position.z = Math.cos(_a / 100) * _world.map_size * 0.75 + _world.map_size / 2;
+	
+	_gl1.drawScene();
+}
+
+function webgl_init()
+{
+	var _vertex_shaders = [
+		"attribute vec3 aVertexPosition;\n" +
+		"attribute vec4 aVertexColor;\n" +
+		"uniform mat4 aModelViewProjectionMatrix;\n" +
+		"varying vec4 vColor;\n" +
+		"void main(void) {\n" +
+		"	gl_Position = aModelViewProjectionMatrix * vec4(aVertexPosition, 1.0);\n" +
+		"	vColor = aVertexColor;\n" +
+		"}"
+	];
+	var _fragment_shaders = [
+		"precision mediump float;\n" +
+		"varying vec4 vColor;\n" +
+		"void main(void) {\n" +
+		"	gl_FragColor = vColor;\n" +
+		"}\n"
+	];
+	
+	_gl1 = new DisplayWebgl({
+		canvas_name: "canvas6",
+		vertex_shaders: _vertex_shaders,
+		fragment_shaders: _fragment_shaders,
+		clear_color: [ 10/255, 60/255, 180/255 ]
+	});
+	
+	_camera = _gl1.getCamera();
+	_camera.target.x = _world.map_size / 2;
+	_camera.target.y = -_world.map_size / 16;
+	_camera.target.z = _world.map_size / 2;
+	
+	window.setInterval(webgl_render, 1000 / 60);
+}
+
+
+
 function init()
 {
 	draw_all();
+	webgl_init();
+	webgl_run();
 }
 
 window.onload = init;
