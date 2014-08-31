@@ -164,5 +164,18 @@ DisplayWebgl = function(parameters)
 	this.gl.clearColor(parameters.clear_color[0], parameters.clear_color[1], parameters.clear_color[2], 1.0);
 	this.gl.enable(this.gl.DEPTH_TEST);
 	
-	this.default_shader_program = this.createShaderProgram(parameters.vertex_shaders[0], parameters.fragment_shaders[0]);
+	this.default_shader_program = this.createShaderProgram("\
+	attribute vec3 aVertexPosition; \
+	attribute vec4 aVertexColor; \
+	uniform mat4 aModelViewProjectionMatrix; \
+	varying vec4 vColor; \
+	void main(void) { \
+		gl_Position = aModelViewProjectionMatrix * vec4(aVertexPosition, 1.0); \
+		vColor = aVertexColor; \
+	}", "\
+	precision mediump float; \
+	varying vec4 vColor; \
+	void main(void) { \
+		gl_FragColor = vColor; \
+	}");
 }
