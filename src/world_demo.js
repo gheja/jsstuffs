@@ -212,12 +212,12 @@ function webgl_run()
 			p4 = _world.map[x+1][y+1];
 			
 			b.push(
-				p1[0], p1[2], p1[1],
-				p2[0], p2[2], p2[1],
-				p3[0], p3[2], p3[1],
-				p3[0], p3[2], p3[1],
-				p2[0], p2[2], p2[1],
-				p4[0], p4[2], p4[1]
+				p1[0], p1[1], p1[2],
+				p2[0], p2[1], p2[2],
+				p3[0], p3[1], p3[2],
+				p3[0], p3[1], p3[2],
+				p2[0], p2[1], p2[2],
+				p4[0], p4[1], p4[2]
 			);
 			
 			f = clamp(_world.map[x][y][4] * 5, -1, 1) * 0.5 + 0.5;
@@ -280,8 +280,8 @@ function webgl_render()
 	_a += 0.5;
 	
 	_camera.position.x = Math.sin(_a / 100) * _world.map_size * 0.75 + _world.map_size / 2
-	_camera.position.y = _land_height * 1.5;
-	_camera.position.z = Math.cos(_a / 100) * _world.map_size * 0.75 + _world.map_size / 2;
+	_camera.position.y = Math.cos(_a / 100) * _world.map_size * 0.75 + _world.map_size / 2;
+	_camera.position.z = _land_height * 1.5;
 	
 	_gl1.drawScene();
 }
@@ -315,8 +315,8 @@ function webgl_init()
 	
 	_camera = _gl1.getCamera();
 	_camera.target.x = _world.map_size / 2;
-	_camera.target.y = -_world.map_size / 16;
-	_camera.target.z = _world.map_size / 2;
+	_camera.target.y = _world.map_size / 2;
+	_camera.target.z = -_world.map_size / 16;
 	
 	window.setInterval(webgl_render, 1000 / 60);
 }
