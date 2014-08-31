@@ -7,6 +7,7 @@ var _land_height = 20;
 var _gl1 = null;
 var _a = 0;
 var _camera = null;
+var _objects = [];
 
 function interpolate(a, b, f)
 {
@@ -196,7 +197,7 @@ function draw_all()
 
 function webgl_run()
 {
-	var x, y, p1, p2, p3, p4, b, c, d, f;
+	var x, y, p1, p2, p3, p4, b, c, d, f, id;
 	
 	b = [];
 	c = [];
@@ -267,8 +268,11 @@ function webgl_run()
 			c.push(d[0], d[1], d[2], d[3]);
 		}
 	}
+	id = _gl1.createBody(b, c);
 	
-	_gl1.storeObject(_gl1.createObject(b, c));
+	_objects.push({ position: { x: 0, y: 0, z: 0 }, visible: true, bodies: [ { display_body_id: id, bone_length: 0, rotation: { rot_a: 0, rot_b: 0, rot_c: 0 } } ] });
+	
+	_gl1.setRenderableObjects(_objects);
 }
 
 function webgl_render()
