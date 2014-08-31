@@ -255,17 +255,15 @@ function webgl_run()
 				break;
 			}
 */
-			c.push(d[0], d[1], d[2], d[3]);
-			c.push(d[0], d[1], d[2], d[3]);
-			c.push(d[0], d[1], d[2], d[3]);
-			
-//			d[0]*= 0.9;
-//			d[1]*= 0.9;
-//			d[2]*= 0.9;
-			
-			c.push(d[0], d[1], d[2], d[3]);
-			c.push(d[0], d[1], d[2], d[3]);
-			c.push(d[0], d[1], d[2], d[3]);
+			c.push(
+				d[0], d[1], d[2], d[3],
+				d[0], d[1], d[2], d[3],
+				d[0], d[1], d[2], d[3],
+				
+				d[0], d[1], d[2], d[3],
+				d[0], d[1], d[2], d[3],
+				d[0], d[1], d[2], d[3]
+			);
 		}
 	}
 	id = _gl1.createBody(b, c);
@@ -288,28 +286,8 @@ function webgl_render()
 
 function webgl_init()
 {
-	var _vertex_shaders = [
-		"attribute vec3 aVertexPosition;\n" +
-		"attribute vec4 aVertexColor;\n" +
-		"uniform mat4 aModelViewProjectionMatrix;\n" +
-		"varying vec4 vColor;\n" +
-		"void main(void) {\n" +
-		"	gl_Position = aModelViewProjectionMatrix * vec4(aVertexPosition, 1.0);\n" +
-		"	vColor = aVertexColor;\n" +
-		"}"
-	];
-	var _fragment_shaders = [
-		"precision mediump float;\n" +
-		"varying vec4 vColor;\n" +
-		"void main(void) {\n" +
-		"	gl_FragColor = vColor;\n" +
-		"}\n"
-	];
-	
 	_gl1 = new DisplayWebgl({
 		canvas_name: "canvas6",
-		vertex_shaders: _vertex_shaders,
-		fragment_shaders: _fragment_shaders,
 		clear_color: [ 10/255, 60/255, 180/255 ]
 	});
 	
