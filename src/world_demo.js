@@ -207,8 +207,8 @@ function webgl_run()
 		for (y=0; y<_world.map_size - 1; y++)
 		{
 			p1 = _world.map[x][y];
-			p2 = _world.map[x][y+1];
-			p3 = _world.map[x+1][y];
+			p2 = _world.map[x+1][y];
+			p3 = _world.map[x][y+1];
 			p4 = _world.map[x+1][y+1];
 			
 			b.push(
