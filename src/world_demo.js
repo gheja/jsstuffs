@@ -268,7 +268,7 @@ function webgl_run()
 	}
 	id = _gl1.createBody(b, c);
 	
-	_objects.push({ position: { x: 0, y: 0, z: 0 }, visible: true, bodies: [ { display_body_id: id, bone_length: 0, rotation: { rot_a: 0, rot_b: 0, rot_c: 0 } } ] });
+	_objects.push({ position: { x: 0, y: 0, z: 0, rot_x: 0, rot_y: 0, rot_z: 0 }, visible: true, bodies: [ { display_body_id: id, bone_length: 0, rotation: { rot_a: 0, rot_b: 0, rot_c: 0 } } ] });
 	
 	_gl1.setRenderableObjects(_objects);
 }
@@ -277,7 +277,7 @@ function webgl_render()
 {
 	_a += 0.5;
 	
-	_camera.position.x = Math.sin(_a / 100) * _world.map_size * 0.75 + _world.map_size / 2
+	_camera.position.x = Math.sin(_a / 100) * _world.map_size * 0.75 + _world.map_size / 2;
 	_camera.position.y = Math.cos(_a / 100) * _world.map_size * 0.75 + _world.map_size / 2;
 	_camera.position.z = _land_height * 1.5;
 	
