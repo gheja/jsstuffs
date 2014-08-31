@@ -149,6 +149,10 @@ DisplayWebgl = function(parameters)
 				o = this.bodies[objects[i].bodies[0].display_body_id];
 				
 				model = Matrix.identity();
+				model = Matrix.multiply(model, Matrix.translate(objects[i].position.x, objects[i].position.z, objects[i].position.y));
+				model = Matrix.multiply(model, Matrix.rotate(objects[i].position.rot_x, 1, 0, 0));
+				model = Matrix.multiply(model, Matrix.rotate(objects[i].position.rot_y, 0, 0, 1));
+				model = Matrix.multiply(model, Matrix.rotate(objects[i].position.rot_z, 0, 1, 0));
 				
 				mvp = Matrix.identity();
 				mvp = Matrix.multiply(model, mvp);
