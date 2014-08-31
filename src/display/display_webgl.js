@@ -5,11 +5,12 @@ DisplayWebgl = function(parameters)
 {
 	this.canvas = null;
 	this.gl = null;
-	this.objects = [];
+	this.bodies = [];
 	this.camera = {
 		position: { x: 0, y: -1, z: -2 },
 		target: { x: 0, y: 0, z: 0 }
 	};
+	this.objects_to_render = [];
 	
 	this.createShader = function(text, is_fragment_shader)
 	{
@@ -57,7 +58,7 @@ DisplayWebgl = function(parameters)
 		return s;
 	}
 	
-	this.createObject = function(vertex_positions, vertex_colors)
+	this.createBody = function(vertex_positions, vertex_colors)
 	{
 		var position_buffer, color_buffer;
 		
@@ -73,50 +74,59 @@ DisplayWebgl = function(parameters)
 		color_buffer.itemSize = 4;
 		color_buffer.numItems = vertex_colors.length / 4;
 		
-		return {
+		this.bodies.push({
 			positions: position_buffer,
 			colors: color_buffer,
 			shader_program: this.default_shader_program
-		}
+		});
+		
+		return this.bodies.length - 1;
 	}
 	
-	this.storeObject = function(obj)
-	{
-		this.objects.push(obj);
-	}
-	
-	this.renderObjects = function(view, projection)
+	this.renderObjects = function(view, projection, objects)
 	{
 		var i, o, model, mvp;
 		
-		for (i=0; i<this.objects.length; i++)
+		for (i=0; i<objects.length; i++)
 		{
-			o = this.objects[i];
-			
-			model = Matrix.identity();
-			
-			mvp = Matrix.identity();
-			mvp = Matrix.multiply(model, mvp);
-			mvp = Matrix.multiply(view, mvp);
-			mvp = Matrix.multiply(projection, mvp);
-			
-			// TODO: alter the matrix to be transposed by default
-			mvp = Matrix.transpose(mvp);
-			
-			this.gl.useProgram(o.shader_program);
-			
-			this.gl.bindBuffer(this.gl.ARRAY_BUFFER, o.positions);
-			this.gl.vertexAttribPointer(o.shader_program.vertexPositionAttribute, o.positions.itemSize, this.gl.FLOAT, false, 0, 0);
-			
-			this.gl.bindBuffer(this.gl.ARRAY_BUFFER, o.colors);
-			this.gl.vertexAttribPointer(o.shader_program.vertexColorAttribute, o.colors.itemSize, this.gl.FLOAT, false, 0, 0);
-			
-			this.gl.uniformMatrix4fv(o.shader_program.modelViewProjectionMatrix, false, mvp.m);
-			
-			this.gl.drawArrays(this.gl.TRIANGLES, 0, o.positions.numItems);
+			for (j=0; j<objects.length; j++)
+			{
+				if (!objects[i].visible)
+				{
+					continue;
+				}
+				
+				o = this.bodies[objects[i].bodies[0].display_body_id];
+				
+				model = Matrix.identity();
+				
+				mvp = Matrix.identity();
+				mvp = Matrix.multiply(model, mvp);
+				mvp = Matrix.multiply(view, mvp);
+				mvp = Matrix.multiply(projection, mvp);
+				
+				// TODO: alter the matrix to be transposed by default
+				mvp = Matrix.transpose(mvp);
+				
+				this.gl.useProgram(o.shader_program);
+				
+				this.gl.bindBuffer(this.gl.ARRAY_BUFFER, o.positions);
+				this.gl.vertexAttribPointer(o.shader_program.vertexPositionAttribute, o.positions.itemSize, this.gl.FLOAT, false, 0, 0);
+				
+				this.gl.bindBuffer(this.gl.ARRAY_BUFFER, o.colors);
+				this.gl.vertexAttribPointer(o.shader_program.vertexColorAttribute, o.colors.itemSize, this.gl.FLOAT, false, 0, 0);
+				
+				this.gl.uniformMatrix4fv(o.shader_program.modelViewProjectionMatrix, false, mvp.m);
+				
+				this.gl.drawArrays(this.gl.TRIANGLES, 0, o.positions.numItems);
+			}
 		}
 	}
 	
+	this.setRenderableObjects = function(objects)
+	{
+		this.objects_to_render = objects;
+	}
 	
 	this.drawScene = function()
 	{
@@ -128,7 +138,7 @@ DisplayWebgl = function(parameters)
 		view = Matrix.lookAt(this.camera.position.x, this.camera.position.y, this.camera.position.z, this.camera.target.x, this.camera.target.y, this.camera.target.z, 0, 1, 0);
 		model = Matrix.identity();
 		
-		this.renderObjects(view, projection);
+		this.renderObjects(view, projection, this.objects_to_render);
 	}
 	
 	this.getCamera = function()

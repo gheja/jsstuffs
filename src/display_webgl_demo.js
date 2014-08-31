@@ -18,9 +18,12 @@ var _fragment_shaders = [
 	"	gl_FragColor = vColor;\n" +
 	"}\n"
 ];
+var _objects = [];
 
 function init()
 {
+	var id;
+	
 	_gl1 = new DisplayWebgl({
 		canvas_name: "canvas1",
 		vertex_shaders: _vertex_shaders,
@@ -30,7 +33,7 @@ function init()
 	
 	_camera = _gl1.getCamera();
 	
-	_gl1.storeObject(_gl1.createObject([
+	id = _gl1.createBody([
 		0, 1, 0, -1, 0, -1,  1, 0, -1,
 		0, 1, 0,  1, 0, -1,  1, 0,  1,
 		0, 1, 0,  1, 0,  1, -1, 0,  1,
@@ -52,7 +55,11 @@ function init()
 		0.0, 0.6, 0.0, 1.0,
 		0.0, 0.5, 0.8, 1.0,
 		0.5, 1.0, 1.0, 1.0
-	]));
+	]);
+	
+	_objects.push({ position: { x: 0, y: 0, z: 0 }, visible: true, bodies: [ { display_body_id: id, bone_length: 0, rotation: { rot_a: 0, rot_b: 0, rot_c: 0 } } ] });
+	
+	_gl1.setRenderableObjects(_objects);
 	
 	window.setInterval(render, 1000 / 60);
 }
