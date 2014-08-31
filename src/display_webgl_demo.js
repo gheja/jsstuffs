@@ -34,10 +34,10 @@ function init()
 	_camera = _gl1.getCamera();
 	
 	id = _gl1.createBody([
-		0, 1, 0, -1, 0, -1,  1, 0, -1,
-		0, 1, 0,  1, 0, -1,  1, 0,  1,
-		0, 1, 0,  1, 0,  1, -1, 0,  1,
-		0, 1, 0, -1, 0,  1, -1, 0, -1
+		0, 0, 1,  -1, -1, 0,   1, -1, 0,
+		0, 0, 1,   1, -1, 0,   1,  1, 0,
+		0, 0, 1,   1,  1, 0,  -1,  1, 0,
+		0, 0, 1,  -1,  1, 0,  -1, -1, 0
 	],
 	[
 		0.0, 0.6, 0.0, 1.0,
@@ -69,8 +69,8 @@ function render()
 	_a += 0.5;
 	
 	_camera.position.x = Math.sin(_a / 30) * 5;
-	_camera.position.y = Math.sin(_a / 75 - 2) * 5 + 6;
-	_camera.position.z = Math.cos(_a / 30) * 5;
+	_camera.position.y = Math.cos(_a / 30) * 5;
+	_camera.position.z = Math.sin(_a / 75 - 2) * 5 + 6;
 	
 	_gl1.drawScene();
 }

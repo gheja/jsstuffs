@@ -60,13 +60,21 @@ DisplayWebgl = function(parameters)
 	
 	this.createBody = function(vertex_positions, vertex_colors)
 	{
-		var position_buffer, color_buffer;
+		var position_buffer, color_buffer, translated_vertex_positions, i;
+		
+		// vertex Y and Z coordinates are swapped before rendering
+		// this way the XY plane becomes the ground
+		translated_vertex_positions = [];
+		for (i=0; i<vertex_positions.length; i+=3)
+		{
+			translated_vertex_positions.push(vertex_positions[i], vertex_positions[i+2], vertex_positions[i+1]);
+		}
 		
 		position_buffer = this.gl.createBuffer();
 		this.gl.bindBuffer(this.gl.ARRAY_BUFFER, position_buffer);
-		this.gl.bufferData(this.gl.ARRAY_BUFFER, new Float32Array(vertex_positions), this.gl.STATIC_DRAW);
+		this.gl.bufferData(this.gl.ARRAY_BUFFER, new Float32Array(translated_vertex_positions), this.gl.STATIC_DRAW);
 		position_buffer.itemSize = 3;
-		position_buffer.numItems = vertex_positions.length / 3;
+		position_buffer.numItems = translated_vertex_positions.length / 3;
 		
 		color_buffer = this.gl.createBuffer();
 		this.gl.bindBuffer(this.gl.ARRAY_BUFFER, color_buffer);
@@ -134,8 +142,10 @@ DisplayWebgl = function(parameters)
 		
 		this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
 		
+		// camera Y and Z coordinates are swapped before rendering
+		// this way the XY plane becomes the ground
 		projection = Matrix.perspective(45, 16/9, 0.1, 1000);
-		view = Matrix.lookAt(this.camera.position.x, this.camera.position.y, this.camera.position.z, this.camera.target.x, this.camera.target.y, this.camera.target.z, 0, 1, 0);
+		view = Matrix.lookAt(this.camera.position.x, this.camera.position.z, this.camera.position.y, this.camera.target.x, this.camera.target.z, this.camera.target.y, 0, 1, 0);
 		model = Matrix.identity();
 		
 		this.renderObjects(view, projection, this.objects_to_render);
