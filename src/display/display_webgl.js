@@ -99,9 +99,9 @@ DisplayWebgl = function(parameters)
 			n[1] /= l;
 			n[2] /= l;
 			normals.push(
-				n[0], n[2], n[1],
-				n[0], n[2], n[1],
-				n[0], n[2], n[1]
+				n[0], n[1], n[2],
+				n[0], n[1], n[2],
+				n[0], n[1], n[2]
 			);
 		}
 		
@@ -149,6 +149,10 @@ DisplayWebgl = function(parameters)
 				o = this.bodies[objects[i].bodies[0].display_body_id];
 				
 				model = Matrix.identity();
+				model = Matrix.multiply(model, Matrix.translate(objects[i].position.x, objects[i].position.z, objects[i].position.y));
+				model = Matrix.multiply(model, Matrix.rotate(objects[i].position.rot_x, 1, 0, 0));
+				model = Matrix.multiply(model, Matrix.rotate(objects[i].position.rot_y, 0, 0, 1));
+				model = Matrix.multiply(model, Matrix.rotate(objects[i].position.rot_z, 0, 1, 0));
 				
 				mvp = Matrix.identity();
 				mvp = Matrix.multiply(model, mvp);
@@ -156,8 +160,8 @@ DisplayWebgl = function(parameters)
 				mvp = Matrix.multiply(projection, mvp);
 				
 				normal = Matrix.identity();
-				// normal = Matrix.multiply(model, normal);
-				// normal = Matrix.multiply(view, normal);
+				normal = Matrix.multiply(model, normal);
+				normal = Matrix.multiply(view, normal);
 				normal = Matrix.inverse(normal);
 				
 				// TODO: alter the matrix to be transposed by default
@@ -226,7 +230,7 @@ DisplayWebgl = function(parameters)
 			gl_Position = aModelViewProjectionMatrix * vec4(aVertexPosition, 1.0); \
 			vec3 ambientColor = vec3(1.0, 1.0, 1.0); \
 			vec3 lightColor = vec3(1.0, 1.0, 1.0); \
-			vec3 lightDirection = vec3(1, 1, 1); \
+			vec3 lightDirection = vec3(-1, -1, -1); \
 			vec4 transformedNormal = aNormalMatrix * vec4(aVertexNormal, 1.0); \
 			float lightValue = max(dot(transformedNormal.xyz, lightDirection), 0.0); \
 			vColor = aVertexColor * vec4(ambientColor * 0.4 + lightColor * lightValue * 0.6, 1.0); \
