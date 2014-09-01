@@ -186,7 +186,7 @@ function draw_all()
 			continue;
 		}
 		_world.genGenerateStartingPoints(rng.randomUInt32());
-		_world.genFinalize(rng.randomUInt32(), _land_height);
+		_world.genFinalize(rng.randomUInt32(), _land_height * _world.map_size / 128);
 		draw_heightmap("canvas5", 4);
 		
 		break;
