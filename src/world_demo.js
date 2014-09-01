@@ -197,7 +197,7 @@ function draw_all()
 
 function webgl_run()
 {
-	var x, y, p1, p2, p3, p4, b, c, d, f, id;
+	var x, y, p1, p2, p3, p4, b, c, d, f, g, id;
 	
 	b = [];
 	c = [];
@@ -234,7 +234,9 @@ function webgl_run()
 					else
 					{
 						// water
-						d = rgb_interpolate_array(10/255, 60/255, 180/255, 192/255, 192/255, 160/255, f * clamp(normalize(_world.map[x][y][2] / _land_height, (_sea_level - _coast_x) * 0.66, _sea_level - _coast_x) * 0.7, 0, 1));
+						g = normalize(_world.map[x][y][2] / _land_height, (_sea_level - _coast_x) * 0.5, _sea_level - _coast_x);
+						d = rgb_interpolate_array(10/255, 60/255, 180/255, 192/255, 192/255, 160/255, f * clamp(g * 0.7, 0, 1));
+						d[3] = clamp(g, 0, 1);
 					}
 				break;
 				
