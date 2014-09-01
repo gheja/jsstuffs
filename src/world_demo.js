@@ -228,20 +228,20 @@ function webgl_run()
 					if (_world.map[x][y][2] / _land_height > _sea_level - _coast_x)
 					{
 						// coast
-						d = rgb_interpolate_array(0/255, 40/255, 0/255, 40/255, 190/255, 0/255, f);
-						d = rgb_interpolate_array(d[0], d[1], d[2], 215/255, 215/255, 100/255, clamp(normalize(_world.map[x][y][2] / _land_height, _sea_level, _sea_level - _coast_x) * 2, 0, 1));
+						d = rgb_interpolate_array(0.0, 0.15, 0, 0.15, 0.75, 0, f);
+						d = rgb_interpolate_array(d[0], d[1], d[2], 0.84, 0.84, 0.4, clamp(normalize(_world.map[x][y][2] / _land_height, _sea_level, _sea_level - _coast_x) * 2, 0, 1));
 					}
 					else
 					{
 						// water
 						g = normalize(_world.map[x][y][2] / _land_height, (_sea_level - _coast_x) * 0.5, _sea_level - _coast_x);
-						d = rgb_interpolate_array(10/255, 60/255, 180/255, 192/255, 192/255, 160/255, f * clamp(g * 0.7, 0, 1));
+						d = rgb_interpolate_array(0.0, 0.24, 0.70, 0.75, 0.75, 0.63, f * clamp(g * 0.7, 0, 1));
 						d[3] = clamp(g, 0, 1);
 					}
 				break;
 				
 				case 2: // land
-						d = rgb_interpolate_array(10/255/4, 40/255, 0/255, 40/255, 190/255, 0/255, f);
+						d = rgb_interpolate_array(0.0, 0.15, 0.0, 0.15, 0.75, 0.0, f);
 				break;
 			}
 /*
@@ -290,7 +290,7 @@ function webgl_init()
 {
 	_gl1 = new DisplayWebgl({
 		canvas_name: "canvas6",
-		clear_color: [ 10/255, 60/255, 180/255 ]
+		clear_color: [ 0.0, 0.24, 0.70 ]
 	});
 	
 	_camera = _gl1.getCamera();
