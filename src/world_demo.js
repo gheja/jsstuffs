@@ -303,11 +303,30 @@ function webgl_init()
 
 
 
+function player_pointers_init()
+{
+	var pointerFactory = new WorldObjectPointer(_gl1.createBody.bind(_gl1));
+	var obj;
+	
+	for (i=0; i<_world.starting_points.length; i++)
+	{
+		obj = pointerFactory.getNewInstance();
+		obj.position.x = _world.starting_points[i][0];
+		obj.position.y = _world.starting_points[i][1];
+		obj.position.z = _world.getHeightAt(_world.starting_points[i][0], _world.starting_points[i][1]) + 0.5;
+		_objects.push(obj);
+	}
+}
+
+
+
 function init()
 {
 	draw_all();
 	webgl_init();
 	webgl_run();
+	
+	player_pointers_init();
 }
 
 window.onload = init;
