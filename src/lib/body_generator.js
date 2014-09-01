@@ -103,19 +103,29 @@ BodyGenerator = function(n)
 		
 		bodies = [];
 		
-		// TODO: process the recipe, don't just pretend
-		this.clear(8);
-		this.close(0.5);
-		this.makeSlice(0.6, 1.0);
-		this.makeSlice(1.0, 1.0);
-		this.makeSlice(1.6, 0.4);
-		this.makeSlice(1.6, 0.3);
-		this.makeSlice(1.2, 0.2);
-		this.makeSlice(0.5, 0.1);
-		this.close();
-		
-		id = body_register_function(this.triangles, this.colors);
-		bodies.push(new Body(-1, id, 8));
+		a = new ArbitaryArray(recipe);
+		while (!a.eof())
+		{
+			switch (a.readOne())
+			{
+				case 1:
+					this.clear(a.readOne());
+				break;
+				
+				case 2:
+					this.makeSlice(a.readOne() / 10, a.readOne() / 10);
+				break;
+				
+				case 3:
+					this.close(a.readOne() / 10);
+				break;
+				
+				case 4:
+					id = body_register_function(this.triangles, this.colors);
+					bodies.push(new Body(a.readOne() - 1, id, 8));
+				break;
+			}
+		}
 		
 		return bodies;
 	}
