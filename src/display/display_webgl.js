@@ -58,6 +58,7 @@ DisplayWebgl = function(parameters)
 		
 		s.modelViewProjectionMatrix = this.gl.getUniformLocation(s, "aModelViewProjectionMatrix");
 		s.normalMatrix = this.gl.getUniformLocation(s, "aNormalMatrix");
+		s.clearColor = this.gl.getUniformLocation(s, "aClearColor");
 		
 		return s;
 	}
@@ -180,6 +181,7 @@ DisplayWebgl = function(parameters)
 				
 				this.gl.uniformMatrix4fv(o.shader_program.modelViewProjectionMatrix, false, mvp.m);
 				this.gl.uniformMatrix4fv(o.shader_program.normalMatrix, false, normal.m);
+				this.gl.uniform3fv(o.shader_program.clearColor, this.parameters.clear_color);
 				
 				this.gl.drawArrays(this.gl.TRIANGLES, 0, o.positions.numItems);
 			}
@@ -225,6 +227,7 @@ DisplayWebgl = function(parameters)
 		attribute vec4 aVertexColor; \
 		uniform mat4 aModelViewProjectionMatrix; \
 		uniform mat4 aNormalMatrix; \
+		uniform vec3 aClearColor; \
 		varying vec4 vColor; \
 		void main(void) { \
 			gl_Position = aModelViewProjectionMatrix * vec4(aVertexPosition, 1.0); \
@@ -233,7 +236,9 @@ DisplayWebgl = function(parameters)
 			vec3 lightDirection = vec3(-1, -1, -1); \
 			vec4 transformedNormal = aNormalMatrix * vec4(aVertexNormal, 1.0); \
 			float lightValue = max(dot(transformedNormal.xyz, lightDirection), 0.0); \
+			float alpha = aVertexColor.a; \
 			vColor = aVertexColor * vec4(ambientColor * 0.4 + lightColor * lightValue * 0.6, 1.0); \
+			vColor = vec4(vColor.xyz * alpha + aClearColor * (1.0 - alpha), 1.0); \
 		}", " \
 		precision mediump float; \
 		varying vec4 vColor; \
