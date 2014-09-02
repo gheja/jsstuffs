@@ -2,10 +2,12 @@ var _a = 0;
 var _gl1 = null;
 var _camera = null;
 var _objects = [];
-var _objBasePointer = null;
+var _object_factory = null;
 var _obj1 = null;
 var _obj2 = null;
 var _obj3 = null;
+
+/** @const */ var _POINTER_ID = 1;
 
 function webgl_render()
 {
@@ -50,15 +52,18 @@ function webgl_bind_objects()
 
 function objects_init()
 {
-	_objBasePointer = new WorldObjectPointer(_gl1.createBody.bind(_gl1));
+	_object_factory = new ObjectFactory([ _POINTER_ID ], [ WorldObjectPointer ], _gl1.createBody.bind(_gl1));
+}
+
+function objects_create()
+{
+	_obj1 = _object_factory.getNewClassInstance(_POINTER_ID);
 	
-	_obj1 = _objBasePointer.getNewInstance();
-	
-	_obj2 = _objBasePointer.getNewInstance();
+	_obj2 = _object_factory.getNewClassInstance(_POINTER_ID);
 	_obj2.position.x = 5;
 	_obj2.position.y = 0;
 	
-	_obj3 = _objBasePointer.getNewInstance();
+	_obj3 = _object_factory.getNewClassInstance(_POINTER_ID);
 	_obj3.position.x = 10;
 	_obj3.position.y = 0;
 	
@@ -69,6 +74,7 @@ function init()
 {
 	webgl_init();
 	objects_init();
+	objects_create();
 	webgl_bind_objects();
 	webgl_render();
 }
