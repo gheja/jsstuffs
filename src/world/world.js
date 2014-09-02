@@ -362,4 +362,11 @@ World = function()
 			break;
 		}
 	}
+	
+	this.getHeightAt = function(x, y)
+	{
+		// TODO: interpolate
+		
+		return this.map[Math.round(x)][Math.round(y)][2];
+	}
 }
