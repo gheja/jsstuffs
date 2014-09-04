@@ -268,3 +268,30 @@ distance_2d = function(p1, p2)
 {
 	return Math.sqrt(Math.pow(p1[0] - p2[0], 2) + Math.pow(p1[1] - p2[1], 2));
 }
+
+canvas_2d_extend = function(ctx)
+{
+	ctx.drawText = function(x, y, string, color, large, bold, center, shadow)
+	{
+		if (shadow)
+		{
+			this.drawText(x, y + 2, string, "rgba(0, 0, 0, 0.25)", large, bold, center, 0);
+		}
+		this.fillStyle = color;
+		this.font = (bold ? "bold " : "") + (large ? "22" : "18") + "px Verdana";
+		this.textAlign = center ? "center" : "left";
+		this.fillText(string, x, y);
+	}
+	
+	ctx.drawBox = function(x, y, width, height, color)
+	{
+		this.fillStyle = color;
+		this.fillRect(x, y, width, height);
+	}
+	
+	ctx.drawBackgroundBox = function(x, y, width, height)
+	{
+		this.drawBox(x, y, width, height, "rgba(0,0,0,0.25)");
+	}
+	
+}
