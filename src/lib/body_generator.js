@@ -6,6 +6,7 @@ BodyGenerator = function(n)
 	this.triangles = [];
 	this.colors = [];
 	this.slice_points = [];
+	this.color = [ 0.7, 0.7, 0.7 ];
 	
 	this.clear = function()
 	{
@@ -16,6 +17,7 @@ BodyGenerator = function(n)
 		this.side_count = n;
 		this.triangles = [];
 		this.colors = [];
+		this.color = [ 0.7, 0.7, 0.7 ];
 	}
 	
 	this.regularPolygon = function(side_count, sides_to_draw)
@@ -46,7 +48,7 @@ BodyGenerator = function(n)
 	
 	this.makeSlice = function(radius, distance)
 	{
-		var i, j, a, b, p, new_points;
+		var i, j, a, b, c, p, new_points;
 		
 		new_points = [];
 		
@@ -60,6 +62,7 @@ BodyGenerator = function(n)
 		{
 			a = this.last_points;
 			b = new_points;
+			c = this.color;
 			
 			for (i=0; i<a.length; i++)
 			{
@@ -76,13 +79,13 @@ BodyGenerator = function(n)
 				);
 				
 				this.colors.push(
-					0.7, 0.7, 0.7, 1,
-					0.7, 0.7, 0.7, 1,
-					0.7, 0.7, 0.7, 1,
+					c[0], c[1], c[2], 1.0,
+					c[0], c[1], c[2], 1.0,
+					c[0], c[1], c[2], 1.0,
 					
-					0.8, 0.8, 0.8, 1,
-					0.8, 0.8, 0.8, 1,
-					0.8, 0.8, 0.8, 1
+					c[0], c[1], c[2], 1.0,
+					c[0], c[1], c[2], 1.0,
+					c[0], c[1], c[2], 1.0
 				);
 			}
 		}
@@ -139,6 +142,14 @@ BodyGenerator = function(n)
 				case 4:
 					id = body_register_function(this.triangles, this.colors);
 					bodies.push(new Body(a.readOne() - 1, id, 8));
+				break;
+				
+				case 14:
+					this.color = [ 0.7, 0.7, 0.7 ];
+				break;
+				
+				case 15:
+					this.color = [ 0.1, 0.2, 0.8 ];
 				break;
 			}
 		}
