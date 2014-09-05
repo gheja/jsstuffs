@@ -8,6 +8,16 @@
 		<script type="text/javascript" src="../src/lib/almost_random.js"></script>
 		<script type="text/javascript" src="../src/synth/synth_sample_generator.js"></script>
 		<script type="text/javascript" src="editor.js"></script>
+		
+		<script src="../3rdparty/lightgl/src/vector.js"></script>
+		<script src="../3rdparty/lightgl/src/matrix.js"></script>
+		<script src="../src/display/display_webgl.js"></script>
+		<script src="../src/lib/position.js"></script>
+		<script src="../src/lib/rotation.js"></script>
+		<script src="../src/lib/object_factory.js"></script>
+		<script src="../src/lib/body.js"></script>
+		<script src="../src/lib/body_generator.js"></script>
+		<script src="../src/world/world_object.js"></script>
 	</head>
 	<body onload="init();">
 		<div id="tabs">
@@ -15,6 +25,7 @@
 		<div class="window">
 			<div class="main">
 				<canvas id="main_canvas"></canvas>
+				<canvas id="main_glcanvas" width=960 height=560></canvas>
 				<div id="main_synth_keyboard"></div>
 			</div>
 			<div id="sidebar">
