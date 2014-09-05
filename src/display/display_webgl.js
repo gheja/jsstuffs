@@ -63,6 +63,12 @@ DisplayWebgl = function(parameters)
 		return s;
 	}
 	
+	this.clearBodies = function()
+	{
+		// TODO: free all the allocated video memory, too
+		this.bodies = [];
+	}
+	
 	this.createBody = function(vertex_positions, vertex_colors)
 	{
 		var i, j, u, v, n, l, translated_vertex_positions, normals, position_buffer,  normal_buffer, color_buffer;
