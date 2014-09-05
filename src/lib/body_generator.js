@@ -5,8 +5,9 @@ BodyGenerator = function(n)
 	this.side_count = n;
 	this.triangles = [];
 	this.colors = [];
+	this.slice_points = [];
 	
-	this.clear = function(n)
+	this.clear = function()
 	{
 		this.position.x = 0;
 		this.position.y = 0;
@@ -15,6 +16,20 @@ BodyGenerator = function(n)
 		this.side_count = n;
 		this.triangles = [];
 		this.colors = [];
+	}
+	
+	this.regularPolygon = function(side_count, sides_to_draw)
+	{
+		var i;
+		
+		this.slice_points = [];
+		for (i=0; i<sides_to_draw; i++)
+		{
+			this.slice_points.push([
+					Math.cos(2 * Math.PI * (i / side_count)),
+					Math.sin(2 * Math.PI * (i / side_count))
+			]);
+		}
 	}
 	
 	this.moveBy = function(x, y, z)
@@ -31,17 +46,14 @@ BodyGenerator = function(n)
 	
 	this.makeSlice = function(radius, distance)
 	{
-		var i, j, a, b, new_points;
+		var i, j, a, b, p, new_points;
 		
 		new_points = [];
 		
-		for (i=0; i<this.side_count; i++)
+		for (i=0; i<this.slice_points.length; i++)
 		{
-			new_points.push([
-					Math.cos(2 * Math.PI * (i / this.side_count)) * radius,
-					Math.sin(2 * Math.PI * (i / this.side_count)) * radius,
-					this.position.z
-			]);
+			p = this.slice_points[i];
+			new_points.push([ p[0] * radius, p[1] * radius, this.position.z ]);
 		}
 		
 		if (this.last_points.length > 0)
@@ -49,9 +61,9 @@ BodyGenerator = function(n)
 			a = this.last_points;
 			b = new_points;
 			
-			for (i=0; i<this.side_count; i++)
+			for (i=0; i<a.length; i++)
 			{
-				j = (i + 1) % this.side_count;
+				j = (i + 1) % a.length;
 				
 				this.triangles.push(
 					a[j][0], a[j][1], a[j][2],
@@ -109,7 +121,11 @@ BodyGenerator = function(n)
 			switch (a.readOne())
 			{
 				case 1:
-					this.clear(a.readOne());
+					this.clear();
+				break;
+				
+				case 5:
+					this.regularPolygon(a.readOne(), a.readOne());
 				break;
 				
 				case 2:

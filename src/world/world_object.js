@@ -32,7 +32,8 @@ WorldObjectPointer = function(body_register_function)
 */
 
 	WorldObject.call(this, [
-		1,8,
+		1,
+		5,8,8,
 		3,5,
 		2,6,10,
 		2,10,10,
