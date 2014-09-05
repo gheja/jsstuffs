@@ -140,14 +140,14 @@ DisplayWebgl = function(parameters)
 		
 		for (i=0; i<objects.length; i++)
 		{
-			for (j=0; j<objects.length; j++)
+			if (!objects[i].visible)
 			{
-				if (!objects[i].visible)
-				{
-					continue;
-				}
-				
-				o = this.bodies[objects[i].bodies[0].display_body_id];
+				continue;
+			}
+			
+			for (j=0; j<objects[i].bodies.length; j++)
+			{
+				o = this.bodies[objects[i].bodies[j].display_body_id];
 				
 				model = Matrix.identity();
 				model = Matrix.multiply(model, Matrix.translate(objects[i].position.x, objects[i].position.z, objects[i].position.y));
