@@ -13,6 +13,12 @@ var _last_render_message = "";
 var _canvas = null;
 var _canvas_y_position = 0;
 
+var _glcanvas = null;
+var _gl1 = null;
+var _glcamera = null;
+var _gltimeout = null;
+var _globjects = [ ];
+
 var _synth_keyboard = null;
 
 function redraw_tabs()
@@ -392,18 +398,292 @@ function tab_create_skeletal_animation()
 
 function tab_create_model()
 {
-	var pe = new PackedEditor(
+	var pe, pe_settings;
+	
+	pe_settings = new PackedEditor(
 	[
 		{
-			title: "Dummy",
-			block_identifier: 0x00,
-			parameters: [],
+			title: "View settings",
+			block_identifier: 0,
+			parameters:
+			[
+				{
+					title: "Rotation X",
+					unit: "",
+					value: 0,
+					min: 0,
+					max: 359
+				},
+				{
+					title: "Rotation Y",
+					unit: "",
+					value: 0,
+					min: 0,
+					max: 359
+				},
+				{
+					title: "Rotation Z",
+					unit: "",
+					value: 0,
+					min: 0,
+					max: 359
+				},
+				{
+					title: "Zoom",
+					unit: "",
+					value: 10,
+					min: 0,
+					max: 1000,
+					display_multiplier: 1/10
+				}
+			]
+		},
+	]);
+	pe_settings.addBlock(0, 0);
+	
+	pe = new PackedEditor(
+	[
+		{
+			title: "Move",
+			block_identifier: 21,
+			parameters:
+			[
+				{
+					title: "Distance X",
+					unit: "",
+					value: 10,
+					min: 1,
+					max: 64,
+					display_multiplier: 1/10
+				},
+				{
+					title: "Distance Y",
+					unit: "",
+					value: 10,
+					min: 1,
+					max: 64,
+					display_multiplier: 1/10
+				},
+				{
+					title: "Distance Z",
+					unit: "",
+					value: 10,
+					min: 1,
+					max: 64,
+					display_multiplier: 1/10
+				}
+			]
+		},
+		{
+			title: "Rotate",
+			block_identifier: 22,
+			parameters:
+			[
+				{
+					title: "Distance X",
+					unit: "",
+					value: 10,
+					min: 1,
+					max: 64,
+					display_multiplier: 1/10
+				},
+				{
+					title: "Distance Y",
+					unit: "",
+					value: 10,
+					min: 1,
+					max: 64,
+					display_multiplier: 1/10
+				},
+				{
+					title: "Distance Z",
+					unit: "",
+					value: 10,
+					min: 1,
+					max: 64,
+					display_multiplier: 1/10
+				}
+			]
+		},
+		{
+			title: "Path: regular polygon",
+			block_identifier: 5,
+			parameters:
+			[
+				{
+					title: "Total sides",
+					unit: "",
+					value: 3,
+					min: 3,
+					max: 64
+				},
+				{
+					title: "Displayed sides",
+					unit: "",
+					value: 3,
+					min: 3,
+					max: 64
+				}
+			]
+		},
+		{
+			title: "Path: add slice",
+			block_identifier: 2,
+			parameters:
+			[
+				{
+					title: "Radius",
+					unit: "",
+					value: 10,
+					min: 1,
+					max: 64,
+					display_multiplier: 1/10
+				},
+				{
+					title: "Z advance",
+					unit: "",
+					value: 10,
+					min: 1,
+					max: 64,
+					display_multiplier: 1/10
+				}
+			]
+		},
+		{
+			title: "Path: move",
+			block_identifier: 11,
+			parameters:
+			[
+				{
+					title: "Distance X",
+					unit: "",
+					value: 10,
+					min: 1,
+					max: 64,
+					display_multiplier: 1/10
+				},
+				{
+					title: "Distance Y",
+					unit: "",
+					value: 10,
+					min: 1,
+					max: 64,
+					display_multiplier: 1/10
+				},
+				{
+					title: "Distance Z",
+					unit: "",
+					value: 10,
+					min: 1,
+					max: 64,
+					display_multiplier: 1/10
+				}
+			]
+		},
+		{
+			title: "Path: rotate",
+			block_identifier: 12,
+			parameters:
+			[
+				{
+					title: "Distance X",
+					unit: "",
+					value: 10,
+					min: 1,
+					max: 64,
+					display_multiplier: 1/10
+				},
+				{
+					title: "Distance Y",
+					unit: "",
+					value: 10,
+					min: 1,
+					max: 64,
+					display_multiplier: 1/10
+				},
+				{
+					title: "Distance Z",
+					unit: "",
+					value: 10,
+					min: 1,
+					max: 64,
+					display_multiplier: 1/10
+				}
+			]
+		},
+		{
+			title: "Path: scale",
+			block_identifier: 13,
+			parameters:
+			[
+				{
+					title: "Distance X",
+					unit: "",
+					value: 10,
+					min: 1,
+					max: 64,
+					display_multiplier: 1/10
+				},
+				{
+					title: "Distance Y",
+					unit: "",
+					value: 10,
+					min: 1,
+					max: 64,
+					display_multiplier: 1/10
+				},
+				{
+					title: "Distance Z",
+					unit: "",
+					value: 10,
+					min: 1,
+					max: 64,
+					display_multiplier: 1/10
+				}
+			]
+		},
+		{
+			title: "Path: close",
+			block_identifier: 3,
+			parameters:
+			[
+				{
+					title: "Z advance",
+					unit: "",
+					value: 0,
+					min: 0,
+					max: 64,
+					display_multiplier: 1/10
+				}
+			]
+		},
+		{
+			title: "Color: base",
+			block_identifier: 14,
+			parameters:
+			[
+			]
+		},
+		{
+			title: "Color: player",
+			block_identifier: 15,
+			parameters:
+			[
+			]
+		},
+		{
+			title: "Finish",
+			block_identifier: 4,
+			parameters:
+			[
+			]
 		},
 	]);
 	
 	pe.setTitle("#" + (_tabs.length + 1));
 	
 	_tabs.push({
+		pe_settings: pe_settings,
 		pe: pe,
 		class: "model",
 		show_block_indexes: 0
@@ -671,6 +951,51 @@ function canvas_clear()
 	_canvas_y_position = 0;
 }
 
+function glcanvas_init()
+{
+	_gl1 = new DisplayWebgl({
+		canvas_name: "main_glcanvas",
+		clear_color: [ 10/255, 60/255, 180/255 ]
+	});
+	
+	_glcamera = _gl1.getCamera();
+	_glcamera.position.y = 10;
+	_gl1.setRenderableObjects(_globjects);
+}
+
+function glcanvas_update()
+{
+	var parameters, object_prototype, objects, generator;
+	
+	parameters = _tabs[_current_tab_index].pe_settings.getBlocks()[0].parameters;
+	
+	_glcamera.position.x = Math.cos(Math.PI * 2 * parameters[2].value / 360) * parameters[3].value;
+	_glcamera.position.y = Math.sin(Math.PI * 2 * parameters[2].value / 360) * parameters[3].value;
+	_glcamera.position.z = 4;
+	
+	a = _tabs[_current_tab_index].pe.render();
+	
+	_gl1.clearBodies();
+	
+	object_prototype = new WorldObject(a.getAsUint8Array(), _gl1.createBody.bind(_gl1));
+	
+	// we passed this as a pointer! shoud not overwrite it...
+	_globjects.splice(0, _globjects.length);
+	_globjects[0] = object_prototype.getNewInstance();
+}
+
+function glcanvas_show()
+{
+	_glcanvas.style.display = "block";
+	_gltimeout = window.setInterval(_gl1.drawScene.bind(_gl1), 1000 / 60);
+}
+
+function glcanvas_hide()
+{
+	_glcanvas.style.display = "none";
+	window.clearTimeout(_gltimeout);
+}
+
 function synth_keyboard_init()
 {
 	var keys, key, i, html, left, left_corr;
@@ -851,6 +1176,10 @@ function update_main_window()
 			tmp = obj.render(buffer, 1);
 			_last_render_message += " | Final output: " + tmp.length + " samples, " + (tmp.length * 2) + " bytes, " + Math.round(tmp.length / 44100 * 1000) + " ms (44.1 kHz, 16 bit, mono).";
 		}
+		else if (tab.class == "model")
+		{
+			glcanvas_update();
+		}
 	}
 }
 
@@ -887,6 +1216,7 @@ function select_tab(i, popup_menu_if_selected)
 	_current_tab_index = i;
 	
 	canvas_hide();
+	glcanvas_hide();
 	synth_keyboard_hide();
 	
 	if (_current_tab_index == -1)
@@ -897,6 +1227,10 @@ function select_tab(i, popup_menu_if_selected)
 	if (_tabs[_current_tab_index].class == "sample")
 	{
 		canvas_show();
+	}
+	else if (_tabs[_current_tab_index].class == "model")
+	{
+		glcanvas_show();
 	}
 	else if (_tabs[_current_tab_index].class == "instrument")
 	{
@@ -1141,8 +1475,10 @@ function init()
 	window.onkeyup = handle_key_up;
 	
 	_canvas = document.getElementById("main_canvas");
+	_glcanvas = document.getElementById("main_glcanvas");
 	_synth_keyboard = document.getElementById("main_synth_keyboard");
 	
+	glcanvas_init();
 	synth_keyboard_init();
 	
 	update_all();

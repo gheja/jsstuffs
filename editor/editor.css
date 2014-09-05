@@ -336,6 +336,13 @@ li.block.collapsed .details
 	display: none;
 }
 
+#main_glcanvas
+{
+	display: none;
+	width: 960px;
+	height: 560px;
+}
+
 
 #main_synth_keyboard
 {

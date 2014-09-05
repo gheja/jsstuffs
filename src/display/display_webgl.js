@@ -63,6 +63,12 @@ DisplayWebgl = function(parameters)
 		return s;
 	}
 	
+	this.clearBodies = function()
+	{
+		// TODO: free all the allocated video memory, too
+		this.bodies = [];
+	}
+	
 	this.createBody = function(vertex_positions, vertex_colors)
 	{
 		var i, j, u, v, n, l, translated_vertex_positions, normals, position_buffer,  normal_buffer, color_buffer;
@@ -140,14 +146,14 @@ DisplayWebgl = function(parameters)
 		
 		for (i=0; i<objects.length; i++)
 		{
-			for (j=0; j<objects.length; j++)
+			if (!objects[i].visible)
 			{
-				if (!objects[i].visible)
-				{
-					continue;
-				}
-				
-				o = this.bodies[objects[i].bodies[0].display_body_id];
+				continue;
+			}
+			
+			for (j=0; j<objects[i].bodies.length; j++)
+			{
+				o = this.bodies[objects[i].bodies[j].display_body_id];
 				
 				model = Matrix.identity();
 				model = Matrix.multiply(model, Matrix.translate(objects[i].position.x, objects[i].position.z, objects[i].position.y));
