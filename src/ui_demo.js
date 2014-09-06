@@ -29,6 +29,8 @@ VeryImportantCanvas = function(canvas_name)
 		}
 		
 		this.ctx.fillRect(this.x, this.y, this.w, this.h);
+		
+		_ui.redraw();
 	}
 }
 
@@ -43,7 +45,7 @@ function ui_refresh()
 		[ "P", "Patrol", 1 ]
 	]);
 	
-	_ui.redraw(1, 2, 3);
+	_ui.setResources(1, 2, 3);
 }
 
 
