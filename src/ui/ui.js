@@ -2,6 +2,7 @@ UI = function(canvas_name)
 {
 	this.colors = [ "rgba(0, 0, 0, 0.25)", "#fff", "#ff0", "#0c0", "#22c" ];
 	this.menu_items = [];
+	this.resources = [ 0, 0, 0 ];
 	
 	this.canvas = document.getElementById(canvas_name);
 	this.ctx = this.canvas.getContext("2d");
@@ -18,7 +19,12 @@ UI = function(canvas_name)
 		this.menu_items = items;
 	}
 	
-	this.redraw = function(resource_text1, resource_text2, resource_text3)
+	this.setResources = function(resource_text1, resource_text2, resource_text3)
+	{
+		this.resources = [ resource_text1, resource_text2, resource_text3 ];
+	}
+	
+	this.redraw = function()
 	{
 		var i, w, h, l, item;
 		
@@ -41,8 +47,8 @@ UI = function(canvas_name)
 		
 		this.ctx.drawBackgroundBox(w - 304, 0, 320, 26);
 		
-		this.ctx.drawText(w - 300, 20, resource_text1, this.colors[2], 0, 0, 0, 1);
-		this.ctx.drawText(w - 200, 20, resource_text2, this.colors[3], 0, 0, 0, 1);
-		this.ctx.drawText(w - 100, 20, resource_text3, this.colors[1], 0, 0, 0, 1);
+		this.ctx.drawText(w - 300, 20, this.resources[0], this.colors[2], 0, 0, 0, 1);
+		this.ctx.drawText(w - 200, 20, this.resources[1], this.colors[3], 0, 0, 0, 1);
+		this.ctx.drawText(w - 100, 20, this.resources[2], this.colors[1], 0, 0, 0, 1);
 	}
 }
