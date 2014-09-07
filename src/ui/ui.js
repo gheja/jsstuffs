@@ -174,8 +174,25 @@ UI = function(canvas_name)
 		}
 	}
 	
+	this.onKeyDown = function(event)
+	{
+		var key;
+		key = event.which ? event.which : event.keyCode;
+		this.input.keys_pressed[key] = true;
+		this.event_callback(this.EVENT_KEY_PRESS, key);
+	}
+	
+	this.onKeyUp = function(event)
+	{
+		var key;
+		key = event.which ? event.which : event.keyCode;
+		this.input.keys_pressed[key] = false;
+	}
+	
 	this.canvas.addEventListener("mousemove", this.onMouseMove.bind(this), false);
 	this.canvas.addEventListener("mousedown", this.onMouseDown.bind(this), false);
 	this.canvas.addEventListener("mouseup", this.onMouseUp.bind(this), false);
 	this.canvas.addEventListener("contextmenu", this.onContextMenu.bind(this), false);
+	window.addEventListener("keydown", this.onKeyDown.bind(this), false);
+	window.addEventListener("keyup", this.onKeyUp.bind(this), false);
 }
