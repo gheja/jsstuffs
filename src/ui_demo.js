@@ -91,7 +91,7 @@ function ui_refresh()
 		[ "P", "Patrol", 1 ]
 	]);
 	
-	_ui.setResources(1, 2, 3);
+	_ui.setResources(172121, 235667, '48/79');
 }
 
 
