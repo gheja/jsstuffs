@@ -14,6 +14,9 @@ VeryImportantCanvas = function(canvas_name)
 	this.last_right_click = { x: -10, y: -10 };
 	this.selection =  { start: { x: -10, y: -10 }, end: { x: -10, y: -10 } };
 	
+	this.progress = 0;
+	this.status = 1;
+	
 	// init
 	var i;
 	
@@ -59,6 +62,19 @@ VeryImportantCanvas = function(canvas_name)
 		this.ctx.rect(this.selection.start.x, this.selection.start.y, this.selection.end.x - this.selection.start.x, this.selection.end.y - this.selection.start.y);
 		this.ctx.stroke();
 		
+		if (this.status == 1)
+		{
+			_ui.setProgress(this.progress / 100, "Loading", true);
+			this.progress++;
+			if (this.progress == 100)
+			{
+				this.status = 2;
+			}
+		}
+		else if (this.status == 2)
+		{
+			_ui.setProgress(1, "Ready", true, true);
+		}
 		_ui.redraw();
 	}
 	
