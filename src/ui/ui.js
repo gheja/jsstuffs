@@ -156,6 +156,14 @@ UI = function(canvas_name)
 		this.event_callback = callback;
 	}
 	
+	this.callCallback = function(forced, p1, p2, p3)
+	{
+		if (forced || !this.overlay)
+		{
+			this.event_callback(p1, p2, p3);
+		}
+	}
+	
 	this.onMouseMove = function(event)
 	{
 		var a, x, y, moved;
@@ -169,7 +177,7 @@ UI = function(canvas_name)
 		this.input.mouse_position.y = y;
 		this.input.mouse_moved = moved;
 		
-		this.event_callback(this.EVENT_MOUSE_MOVE, this.glizeCoordinates(this.input.mouse_position));
+		this.callCallback(false, this.EVENT_MOUSE_MOVE, this.glizeCoordinates(this.input.mouse_position));
 		
 		event.preventDefault();
 	}
@@ -209,7 +217,7 @@ UI = function(canvas_name)
 		if (event.which == 3 || event.button == 2)
 		{
 			// no dragging with right button
-			this.event_callback(this.EVENT_MOUSE_CLICK_RIGHT, this.glizeCoordinates(this.input.mouse_position));
+			this.callCallback(false, this.EVENT_MOUSE_CLICK_RIGHT, this.glizeCoordinates(this.input.mouse_position));
 			this.input.mouse_right_down_position.x = -1;
 			this.input.mouse_right_down_position.y = -1;
 		}
@@ -217,11 +225,11 @@ UI = function(canvas_name)
 		{
 			if (this.input.mouse_moved)
 			{
-				this.event_callback(this.EVENT_MOUSE_DRAG_LEFT, this.glizeCoordinates(this.input.mouse_left_down_position), this.glizeCoordinates(this.input.mouse_position));
+				this.callCallback(false, this.EVENT_MOUSE_DRAG_LEFT, this.glizeCoordinates(this.input.mouse_left_down_position), this.glizeCoordinates(this.input.mouse_position));
 			}
 			else
 			{
-				this.event_callback(this.EVENT_MOUSE_CLICK_LEFT, this.glizeCoordinates(this.input.mouse_position));
+				this.callCallback(false, this.EVENT_MOUSE_CLICK_LEFT, this.glizeCoordinates(this.input.mouse_position));
 			}
 			this.input.mouse_left_down_position.x = -1;
 			this.input.mouse_left_down_position.y = -1;
@@ -244,7 +252,7 @@ UI = function(canvas_name)
 		var key;
 		key = event.which ? event.which : event.keyCode;
 		this.input.keys_pressed[key] = true;
-		this.event_callback(this.EVENT_KEY_PRESS, key);
+		this.callCallback(false, this.EVENT_KEY_PRESS, key);
 	}
 	
 	this.onKeyUp = function(event)
