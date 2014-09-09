@@ -82,7 +82,7 @@ UI = function(canvas_name)
 			this.ctx.drawText(w - 120 + 4, h - (l - i) * 32 + 24, item[1], item[2] ? this.colors[1] : this.colors[0], 1, 0, 0, 1);
 		}
 		
-		this.ctx.drawBackgroundBox(w - 304, 0, 320, 26);
+		this.ctx.drawBackgroundBox(w - 304, 2, 302, 26);
 		
 		this.ctx.drawText(w - 300, 20, this.resources[0], this.colors[2], 0, 0, 0, 1);
 		this.ctx.drawText(w - 200, 20, this.resources[1], this.colors[3], 0, 0, 0, 1);
