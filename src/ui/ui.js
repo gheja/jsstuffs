@@ -7,6 +7,7 @@ UI = function(canvas_name)
 	
 	this.colors = [ "rgba(0, 0, 0, 0.25)", "#fff", "#ff0", "#0c0", "#22c" ];
 	this.menu_items = [];
+	this.menu_above_overlay = false;
 	this.resources = [ 0, 0, 0 ];
 	
 	this.canvas = document.getElementById(canvas_name);
@@ -26,10 +27,11 @@ UI = function(canvas_name)
 		this.colors[id] = color;
 	}
 	
-	this.setMenuItems = function(items)
+	this.setMenuItems = function(items, above_overlay)
 	{
 		this.dirty = true;
 		this.menu_items = items;
+		this.menu_above_overlay = above_overlay;
 	}
 	
 	this.setResources = function(resource_text1, resource_text2, resource_text3)
@@ -72,10 +74,46 @@ UI = function(canvas_name)
 		
 		if (this.overlay)
 		{
+			// draw overlay
 			this.ctx.fillStyle = "rgba(0,0,0,0.75)";
 			this.ctx.fillRect(0, 0, w, h);
 		}
+		else
+		{
+			// draw the selection
+			if (this.input.mouse_left_down_position.x != -1 && this.input.mouse_moved)
+			{
+				this.ctx.beginPath();
+				this.ctx.fillStyle = "rgba(255,255,255,0.3)";
+				this.ctx.strokeStyle = "rgba(255,255,255,0.8)";
+				this.ctx.rect(this.input.mouse_left_down_position.x-0.5, this.input.mouse_left_down_position.y-0.5, this.input.mouse_position.x - this.input.mouse_left_down_position.x, this.input.mouse_position.y - this.input.mouse_left_down_position.y);
+				this.ctx.fill();
+				this.ctx.stroke();
+			}
+			
+			// draw resources
+			this.ctx.drawBackgroundBox(w - 304, 2, 302, 26);
+			this.ctx.drawText(w - 300, 20, this.resources[0], this.colors[2], 0, 0, 0, 1);
+			this.ctx.drawText(w - 200, 20, this.resources[1], this.colors[3], 0, 0, 0, 1);
+			this.ctx.drawText(w - 100, 20, this.resources[2], this.colors[1], 0, 0, 0, 1);
+		}
 		
+		// draw menu
+		if (this.menu_above_overlay || !this.overlay)
+		{
+			for (i=0; i<l; i++)
+			{
+				item = this.menu_items[i];
+				
+				this.ctx.drawBackgroundBox(w - 150, h - (l - i) * 32, 148, 30);
+				this.ctx.drawBox(w - 150, h - (l - i) * 32, 30, 30, item[2] ? this.colors[4] : this.colors[0]);
+				
+				this.ctx.drawText(w - 150 + 15, h - (l - i) * 32 + 24, item[0], item[2] ? this.colors[1] : this.colors[0], 1, 1, 1, 0);
+				this.ctx.drawText(w - 120 + 4, h - (l - i) * 32 + 24, item[1], item[2] ? this.colors[1] : this.colors[0], 1, 0, 0, 1);
+			}
+		}
+		
+		// draw progress bar
 		if (this.progress_show)
 		{
 			this.ctx.beginPath();
@@ -100,34 +138,6 @@ UI = function(canvas_name)
 				this.ctx.fillText("\u25BA", w/2 + 3, h/2 + 12);
 			}
 		}
-		
-		// draw the selection
-		if (this.input.mouse_left_down_position.x != -1 && this.input.mouse_moved)
-		{
-			this.ctx.beginPath();
-			this.ctx.fillStyle = "rgba(255,255,255,0.3)";
-			this.ctx.strokeStyle = "rgba(255,255,255,0.8)";
-			this.ctx.rect(this.input.mouse_left_down_position.x-0.5, this.input.mouse_left_down_position.y-0.5, this.input.mouse_position.x - this.input.mouse_left_down_position.x, this.input.mouse_position.y - this.input.mouse_left_down_position.y);
-			this.ctx.fill();
-			this.ctx.stroke();
-		}
-		
-		for (i=0; i<l; i++)
-		{
-			item = this.menu_items[i];
-			
-			this.ctx.drawBackgroundBox(w - 150, h - (l - i) * 32, 148, 30);
-			this.ctx.drawBox(w - 150, h - (l - i) * 32, 30, 30, item[2] ? this.colors[4] : this.colors[0]);
-			
-			this.ctx.drawText(w - 150 + 15, h - (l - i) * 32 + 24, item[0], item[2] ? this.colors[1] : this.colors[0], 1, 1, 1, 0);
-			this.ctx.drawText(w - 120 + 4, h - (l - i) * 32 + 24, item[1], item[2] ? this.colors[1] : this.colors[0], 1, 0, 0, 1);
-		}
-		
-		this.ctx.drawBackgroundBox(w - 304, 2, 302, 26);
-		
-		this.ctx.drawText(w - 300, 20, this.resources[0], this.colors[2], 0, 0, 0, 1);
-		this.ctx.drawText(w - 200, 20, this.resources[1], this.colors[3], 0, 0, 0, 1);
-		this.ctx.drawText(w - 100, 20, this.resources[2], this.colors[1], 0, 0, 0, 1);
 	}
 	
 	
