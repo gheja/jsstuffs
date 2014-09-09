@@ -1,5 +1,8 @@
 UI = function(canvas_name)
 {
+	var PI2 = Math.PI * 2;
+	var PI05 = Math.PI / 2;
+	
 	/* *** ui drawing *** */
 	
 	this.colors = [ "rgba(0, 0, 0, 0.25)", "#fff", "#ff0", "#0c0", "#22c" ];
@@ -10,6 +13,10 @@ UI = function(canvas_name)
 	this.ctx = this.canvas.getContext("2d");
 	this.dirty = true;
 	this.overlay = true;
+	this.progress_show = true;
+	this.progress_progress = 1;
+	this.progress_text = "";
+	this.progress_play = false;
 	
 	canvas_2d_extend(this.ctx);
 	
@@ -37,6 +44,15 @@ UI = function(canvas_name)
 		this.overlay = value;
 	}
 	
+	this.setProgress = function(progress, text, show, play)
+	{
+		this.dirty = true;
+		this.progress_show = show;
+		this.progress_progress = progress;
+		this.progress_text = text;
+		this.progress_play = play;
+	}
+	
 	this.redraw = function()
 	{
 		var i, w, h, l, item;
@@ -58,6 +74,31 @@ UI = function(canvas_name)
 		{
 			this.ctx.fillStyle = "rgba(0,0,0,0.75)";
 			this.ctx.fillRect(0, 0, w, h);
+		}
+		
+		if (this.progress_show)
+		{
+			this.ctx.beginPath();
+			this.ctx.lineWidth = 8;
+			this.ctx.strokeStyle = "rgba(0,0,0,0.5)";
+			this.ctx.arc(w/2, h/2, 25, 0, PI2, 0);
+			this.ctx.stroke();
+			
+			this.ctx.beginPath();
+			this.ctx.strokeStyle = "#fff";
+			this.ctx.arc(w/2, h/2, 25, -PI05, -PI05 + PI2 * this.progress_progress, 0);
+			this.ctx.stroke();
+			
+			this.ctx.font = "18px Verdana";
+			this.ctx.textAlign = "center";
+			this.ctx.fillStyle = "#fff";
+			this.ctx.fillText(this.progress_text, w/2, h/2 + 60);
+			
+			if (this.progress_play)
+			{
+				this.ctx.font = "36px Arial";
+				this.ctx.fillText("\u25BA", w/2 + 3, h/2 + 12);
+			}
 		}
 		
 		// draw the selection
