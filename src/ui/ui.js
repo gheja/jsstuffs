@@ -8,33 +8,57 @@ UI = function(canvas_name)
 	
 	this.canvas = document.getElementById(canvas_name);
 	this.ctx = this.canvas.getContext("2d");
+	this.dirty = true;
+	this.overlay = true;
 	
 	canvas_2d_extend(this.ctx);
 	
 	this.setColor = function(id, color)
 	{
+		this.dirty = true;
 		this.colors[id] = color;
 	}
 	
 	this.setMenuItems = function(items)
 	{
+		this.dirty = true;
 		this.menu_items = items;
 	}
 	
 	this.setResources = function(resource_text1, resource_text2, resource_text3)
 	{
+		this.dirty = true;
 		this.resources = [ resource_text1, resource_text2, resource_text3 ];
+	}
+	
+	this.setOverlay = function(value)
+	{
+		this.dirty = true;
+		this.overlay = value;
 	}
 	
 	this.redraw = function()
 	{
 		var i, w, h, l, item;
 		
+		if (!this.dirty)
+		{
+			return;
+		}
+		
+		this.dirty = false;
+		
 		w = this.canvas.width;
 		h = this.canvas.height;
 		l = this.menu_items.length;
 		
 		this.ctx.clearRect(0, 0, w, h);
+		
+		if (this.overlay)
+		{
+			this.ctx.fillStyle = "rgba(0,0,0,0.75)";
+			this.ctx.fillRect(0, 0, w, h);
+		}
 		
 		// draw the selection
 		if (this.input.mouse_left_down_position.x != -1 && this.input.mouse_moved)
