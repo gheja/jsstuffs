@@ -5,7 +5,7 @@ UI = function(canvas_name)
 	
 	/* *** ui drawing *** */
 	
-	this.colors = [ "rgba(0, 0, 0, 0.25)", "#fff", "#ff0", "#0c0", "#22c" ];
+	this.colors = [ "rgba(0, 0, 0, 0.25)", "#fff", "#ff0", "#0c0", "#333" ];
 	this.menu_items = [];
 	this.menu_above_overlay = false;
 	this.resources = [ 0, 0, 0 ];
