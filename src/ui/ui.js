@@ -168,6 +168,30 @@ UI = function(canvas_name)
 	
 	this.callCallback = function(forced, p1, p2, p3)
 	{
+		var i;
+		
+		// before passing the event to the callback check the current menu items
+		if (!this.overlay || this.menu_above_overlay)
+		{
+			for (i=0; i<this.menu_items.length; i++)
+			{
+				// if menu item is enabled
+				if (this.menu_items[i][2])
+				{
+					// check if the hotkey was pressed
+					// TODO: mouse click check
+					if (p1 == this.EVENT_KEY_PRESS && String.fromCharCode(p2).toUpperCase() == this.menu_items[i][0])
+					{
+						// then call the menu item callback
+						this.menu_items[i][3](this.menu_items[i][4]);
+						
+						// do NOT call the event callback
+						return;
+					}
+				}
+			}
+		}
+		
 		if (forced || !this.overlay)
 		{
 			this.event_callback(p1, p2, p3);
