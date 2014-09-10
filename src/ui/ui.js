@@ -57,7 +57,7 @@ UI = function(canvas_name)
 	
 	this.redraw = function()
 	{
-		var i, w, h, l, item;
+		var i, w, h, l, c, item;
 		
 		if (!this.dirty)
 		{
@@ -69,34 +69,35 @@ UI = function(canvas_name)
 		w = this.canvas.width;
 		h = this.canvas.height;
 		l = this.menu_items.length;
+		c = this.ctx;
 		
-		this.ctx.clearRect(0, 0, w, h);
+		c.clearRect(0, 0, w, h);
 		
 		if (this.overlay)
 		{
 			// draw overlay
-			this.ctx.fillStyle = "rgba(0,0,0,0.75)";
-			this.ctx.fillRect(0, 0, w, h);
+			c.fillStyle = "rgba(0,0,0,0.75)";
+			c.fillRect(0, 0, w, h);
 		}
 		else
 		{
 			// draw the selection
 			if (this.input.mouse_left_down_position.x != -1 && this.input.mouse_moved)
 			{
-				this.ctx.beginPath();
-				this.ctx.lineWidth = 1;
-				this.ctx.fillStyle = "rgba(255,255,255,0.3)";
-				this.ctx.strokeStyle = "rgba(255,255,255,0.8)";
-				this.ctx.rect(this.input.mouse_left_down_position.x-0.5, this.input.mouse_left_down_position.y-0.5, this.input.mouse_position.x - this.input.mouse_left_down_position.x, this.input.mouse_position.y - this.input.mouse_left_down_position.y);
-				this.ctx.fill();
-				this.ctx.stroke();
+				c.beginPath();
+				c.lineWidth = 1;
+				c.fillStyle = "rgba(255,255,255,0.3)";
+				c.strokeStyle = "rgba(255,255,255,0.8)";
+				c.rect(this.input.mouse_left_down_position.x-0.5, this.input.mouse_left_down_position.y-0.5, this.input.mouse_position.x - this.input.mouse_left_down_position.x, this.input.mouse_position.y - this.input.mouse_left_down_position.y);
+				c.fill();
+				c.stroke();
 			}
 			
 			// draw resources
-			this.ctx.drawBackgroundBox(w - 304, 2, 302, 26);
-			this.ctx.drawText(w - 300, 20, this.resources[0], this.colors[2], 0, 0, 0, 1);
-			this.ctx.drawText(w - 200, 20, this.resources[1], this.colors[3], 0, 0, 0, 1);
-			this.ctx.drawText(w - 100, 20, this.resources[2], this.colors[1], 0, 0, 0, 1);
+			c.drawBackgroundBox(w - 304, 2, 302, 26);
+			c.drawText(w - 300, 20, this.resources[0], this.colors[2], 0, 0, 0, 1);
+			c.drawText(w - 200, 20, this.resources[1], this.colors[3], 0, 0, 0, 1);
+			c.drawText(w - 100, 20, this.resources[2], this.colors[1], 0, 0, 0, 1);
 		}
 		
 		// draw menu
@@ -106,37 +107,37 @@ UI = function(canvas_name)
 			{
 				item = this.menu_items[i];
 				
-				this.ctx.drawBackgroundBox(w - 150, h - (l - i) * 32, 148, 30);
-				this.ctx.drawBox(w - 150, h - (l - i) * 32, 30, 30, item[2] ? this.colors[4] : this.colors[0]);
+				c.drawBackgroundBox(w - 150, h - (l - i) * 32, 148, 30);
+				c.drawBox(w - 150, h - (l - i) * 32, 30, 30, item[2] ? this.colors[4] : this.colors[0]);
 				
-				this.ctx.drawText(w - 150 + 15, h - (l - i) * 32 + 24, item[0], item[2] ? this.colors[1] : this.colors[0], 1, 1, 1, 0);
-				this.ctx.drawText(w - 120 + 4, h - (l - i) * 32 + 24, item[1], item[2] ? this.colors[1] : this.colors[0], 1, 0, 0, 1);
+				c.drawText(w - 150 + 15, h - (l - i) * 32 + 24, item[0], item[2] ? this.colors[1] : this.colors[0], 1, 1, 1, 0);
+				c.drawText(w - 120 + 4, h - (l - i) * 32 + 24, item[1], item[2] ? this.colors[1] : this.colors[0], 1, 0, 0, 1);
 			}
 		}
 		
 		// draw progress bar
 		if (this.progress_show)
 		{
-			this.ctx.beginPath();
-			this.ctx.lineWidth = 8;
-			this.ctx.strokeStyle = "rgba(0,0,0,0.5)";
-			this.ctx.arc(w/2, h/2, 25, 0, PI2, 0);
-			this.ctx.stroke();
+			c.beginPath();
+			c.lineWidth = 8;
+			c.strokeStyle = "rgba(0,0,0,0.5)";
+			c.arc(w/2, h/2, 25, 0, PI2, 0);
+			c.stroke();
 			
-			this.ctx.beginPath();
-			this.ctx.strokeStyle = "#fff";
-			this.ctx.arc(w/2, h/2, 25, -PI05, -PI05 + PI2 * this.progress_progress, 0);
-			this.ctx.stroke();
+			c.beginPath();
+			c.strokeStyle = "#fff";
+			c.arc(w/2, h/2, 25, -PI05, -PI05 + PI2 * this.progress_progress, 0);
+			c.stroke();
 			
-			this.ctx.font = "18px Verdana";
-			this.ctx.textAlign = "center";
-			this.ctx.fillStyle = "#fff";
-			this.ctx.fillText(this.progress_text, w/2, h/2 + 60);
+			c.font = "18px Verdana";
+			c.textAlign = "center";
+			c.fillStyle = "#fff";
+			c.fillText(this.progress_text, w/2, h/2 + 60);
 			
 			if (this.progress_play)
 			{
-				this.ctx.font = "36px Arial";
-				this.ctx.fillText("\u25BA", w/2 + 3, h/2 + 12);
+				c.font = "36px Arial";
+				c.fillText("\u25BA", w/2 + 3, h/2 + 12);
 			}
 		}
 	}
