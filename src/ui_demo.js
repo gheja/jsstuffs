@@ -13,6 +13,8 @@ VeryImportantCanvas = function(canvas_name)
 	this.last_left_click = { x: -10, y: -10 };
 	this.last_right_click = { x: -10, y: -10 };
 	this.selection =  { start: { x: -10, y: -10 }, end: { x: -10, y: -10 } };
+	this.resources = [ 0, 0, 0, 0 ];
+	this.ticks = 0;
 	
 	this.progress = 0;
 	this.state = 1;
@@ -113,7 +115,8 @@ VeryImportantCanvas = function(canvas_name)
 		else if (this.state == 3)
 		{
 			// setting up game...
-			_ui.setResources(172121, 235667, '48/79');
+			this.resources = [ Math.floor(Math.random() * 10000 + 5000), Math.floor(Math.random() * 10000 + 5000), Math.floor(Math.random() * 50 + 3), 72 ];
+			_ui.setResources(this.resources[0], this.resources[1], this.resources[2] + "/" + this.resources[3]);
 			
 			this.last_mouse_positions = [];
 			for (i=0; i<30; i++)
@@ -123,10 +126,19 @@ VeryImportantCanvas = function(canvas_name)
 			
 			this.ctx.fillStyle = "#294";
 			this.ctx.fillRect(0, 0, 960, 540);
+			this.ticks = 0;
 			this.state = 4;
 		}
 		else if (this.state == 4)
 		{
+			this.ticks++;
+			if (this.ticks % 30 == 0)
+			{
+				this.resources[0] += 4;
+				this.resources[1] += 9;
+				_ui.setResources(this.resources[0], this.resources[1], this.resources[2] + "/" + this.resources[3]);
+			}
+			
 			this.ctx.strokeStyle = "#fff";
 			this.ctx.lineWidth = 2;
 			for (i=1; i<this.last_mouse_positions.length; i++)
