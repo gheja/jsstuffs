@@ -84,6 +84,7 @@ UI = function(canvas_name)
 			if (this.input.mouse_left_down_position.x != -1 && this.input.mouse_moved)
 			{
 				this.ctx.beginPath();
+				this.ctx.lineWidth = 1;
 				this.ctx.fillStyle = "rgba(255,255,255,0.3)";
 				this.ctx.strokeStyle = "rgba(255,255,255,0.8)";
 				this.ctx.rect(this.input.mouse_left_down_position.x-0.5, this.input.mouse_left_down_position.y-0.5, this.input.mouse_position.x - this.input.mouse_left_down_position.x, this.input.mouse_position.y - this.input.mouse_left_down_position.y);
