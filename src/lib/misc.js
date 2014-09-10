@@ -278,7 +278,7 @@ canvas_2d_extend = function(ctx)
 			this.drawText(x, y + 2, string, "rgba(0, 0, 0, 0.25)", large, bold, center, 0);
 		}
 		this.fillStyle = color;
-		this.font = (bold ? "bold " : "") + (large ? "22" : "18") + "px Verdana";
+		this.font = (bold ? "bold " : "") + (large ? "20" : "16") + "px Verdana";
 		this.textAlign = center ? "center" : "left";
 		this.fillText(string, x, y);
 	}
