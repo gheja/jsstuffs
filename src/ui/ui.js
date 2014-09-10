@@ -202,6 +202,8 @@ UI = function(canvas_name)
 	{
 		var a, x, y, moved;
 		
+		this.dirty = true;
+		
 		a = this.canvas.getBoundingClientRect();
 		x = event.clientX - a.left;
 		y = event.clientY - a.top;
