@@ -7,28 +7,6 @@ var _active_layer_id = 0;
 /** @const */ var MAX_RANGE = 62;
 /** @const */ var CHARS_RANGE = 1;
 
-/*
-function interpolate(a, b, f)
-{
-	return a + (b - a) * f;
-}
-
-function rgb_interpolate(r1, g1, b1, r2, g2, b2, f)
-{
-	return Math.floor(interpolate(r1, r2, f)) + "," + Math.floor(interpolate(g1, g2, f)) + "," + Math.floor(interpolate(b1, b2, f));
-}
-
-function rgb_interpolate_array(r1, g1, b1, r2, g2, b2, f)
-{
-	return [ interpolate(r1, r2, f), interpolate(g1, g2, f), interpolate(b1, b2, f), 1.0 ];
-}
-
-function normalize(a, b, c)
-{
-	return (a - b) / (c - b);
-}
-*/
-
 function encode62(a, digits)
 {
 	var i, characters, result;
@@ -286,48 +264,6 @@ function run()
 		}
 	}
 	
-/*
-	s = "";
-	t = "";
-	u = "";
-	
-	for (i=0; i<7; i++)
-	{
-		l = _layer_settings[i];
-		
-		if (l.range_a == 0 && l.range_b == 0)
-		{
-			s += "0";
-			t += encode62(0, CHARS_SEED);
-			t += encode62(0, CHARS_RANGE);
-			t += encode62(0, CHARS_RANGE);
-			u += encode62(0, CHARS_SEED);
-		}
-		else
-		{
-			s += l.seeds[l.selected_seed];
-			t += encode62(l.seeds[l.selected_seed], CHARS_SEED);
-			u += encode62(l.seeds[l.selected_seed], CHARS_SEED);
-			
-			if (l.range_a != -1)
-			{
-				s += "-" + (l.range_a) + "-" + l.range_b;
-				t += encode62(l.range_a, CHARS_RANGE);
-				t += encode62(l.range_b, CHARS_RANGE);
-				u += encode62(l.range_a, CHARS_RANGE);
-				u += encode62(l.range_b, CHARS_RANGE);
-			}
-			else
-			{
-				t += encode62(0, CHARS_RANGE);
-				t += encode62(0, CHARS_RANGE);
-			}
-		}
-		
-		
-		s += "/";
-	}
-*/
 	s = "";
 	
 	for (i=0; i<7; i++)
@@ -358,7 +294,6 @@ function run()
 	}
 	
 	document.getElementById("level_id").innerHTML = s;
-//	document.getElementById("level_id").innerHTML = "<br/>v1: " + s + "<br/>v2: " + t + "<br/>v3: " + u;
 }
 
 function changed()
