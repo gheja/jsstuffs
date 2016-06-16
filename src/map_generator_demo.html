@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Map generator demo</title>
+		<script src="./lib/almost_random.js"></script>
+		<script src="./map/map_generator.js"></script>
+		<script src="./map_generator_demo.js"></script>
+		
+		<link rel="stylesheet" type="text/css" href="map_generator_demo.css" />
+	</head>
+	<body>
+		<div id="container">
+			<h1>Map generator</h1>
+			
+			<div id="controls">
+				
+				<select id="layer_selector" onchange="changed();">
+					<option value="0" selected="selected">0: land</option>
+					<option value="1">1: water</option>
+					<option value="2">2: water</option>
+					<option value="3">3: forests</option>
+					<option value="4">4: forests</option>
+					<option value="5">5: de-forest</option>
+					<option value="6">6: starting points</option>
+				</select>
+				
+				<input type="button" onclick="randomize();" value="Randomize" />
+				
+				<input type="button" onclick="randomize_undo();" value="Undo" />
+				
+				<div id="layer_ranges_0">
+					<input type="range" id="range0a" min="0" max="61" value="0" onchange="changed();" />
+					<input type="range" id="range0b" min="0" max="61" value="32" onchange="changed();" />
+				</div>
+				
+				<div id="layer_ranges_1">
+					<input type="range" id="range1a" min="0" max="61" value="0" onchange="changed();" />
+					<input type="range" id="range1b" min="0" max="61" value="0" onchange="changed();" />
+				</div>
+				
+				<div id="layer_ranges_2">
+					<input type="range" id="range2a" min="0" max="61" value="0" onchange="changed();" />
+					<input type="range" id="range2b" min="0" max="61" value="0" onchange="changed();" />
+				</div>
+				
+				<div id="layer_ranges_3">
+					<input type="range" id="range3a" min="0" max="61" value="0" onchange="changed();" />
+					<input type="range" id="range3b" min="0" max="61" value="0" onchange="changed();" />
+				</div>
+				
+				<div id="layer_ranges_4">
+					<input type="range" id="range4a" min="0" max="61" value="0" onchange="changed();" />
+					<input type="range" id="range4b" min="0" max="61" value="0" onchange="changed();" />
+				</div>
+				
+				<div id="layer_ranges_5">
+					<input type="range" id="range5a" min="0" max="61" value="0" onchange="changed();" />
+					<input type="range" id="range5b" min="0" max="61" value="0" onchange="changed();" />
+				</div>
+				
+				<div id="layer_ranges_6">
+					(n/a)
+				</div>
+			</div>
+			
+			<div id="left">
+				<canvas id="canvas_big" width=512 height=512></canvas>
+				Map ID: <span id="level_id">n/a</span>
+			</div>
+			
+			<div id="right">
+				
+				<canvas id="canvas_0" width=128 height=128 onclick="select_seed(this);"></canvas>
+				<canvas id="canvas_1" width=128 height=128 onclick="select_seed(this);"></canvas>
+				<canvas id="canvas_2" width=128 height=128 onclick="select_seed(this);"></canvas>
+				<canvas id="canvas_3" width=128 height=128 onclick="select_seed(this);"></canvas>
+				<canvas id="canvas_4" width=128 height=128 onclick="select_seed(this);"></canvas>
+				<canvas id="canvas_5" width=128 height=128 onclick="select_seed(this);"></canvas>
+				<canvas id="canvas_6" width=128 height=128 onclick="select_seed(this);"></canvas>
+				<canvas id="canvas_7" width=128 height=128 onclick="select_seed(this);"></canvas>
+				<canvas id="canvas_8" width=128 height=128 onclick="select_seed(this);"></canvas>
+				<canvas id="canvas_9" width=128 height=128 onclick="select_seed(this);"></canvas>
+				<canvas id="canvas_10" width=128 height=128 onclick="select_seed(this);"></canvas>
+				<canvas id="canvas_11" width=128 height=128 onclick="select_seed(this);"></canvas>
+				<canvas id="canvas_12" width=128 height=128 onclick="select_seed(this);"></canvas>
+				<canvas id="canvas_13" width=128 height=128 onclick="select_seed(this);"></canvas>
+				<canvas id="canvas_14" width=128 height=128 onclick="select_seed(this);"></canvas>
+				<canvas id="canvas_15" width=128 height=128 onclick="select_seed(this);"></canvas>
+				<br class="clearer" />
+			</div>
+			
+			<br class="clearer" />
+			
+			<div id="footer">
+				This demo page is a part of <a href="https://github.com/gheja/jsstuffs">jsstuffs</a>.
+			</div>
+		</div>
+	</body>
+</html>

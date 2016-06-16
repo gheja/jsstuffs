@@ -1,0 +1,135 @@
+html
+{
+	padding: 0;
+	margin: 0;
+	/* background image from: https://play.google.com/store/apps/details?id=larry.zou.colorfullife */
+	background: #222 url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAUCAIAAABj86gYAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH3ggeFSsLnxn56AAAAYBJREFUOMuVlVFywzAIRAPiIrn/FSXUjzfdYuS4E314EgsWWBZs7/f79Xv23ma2985M/R5jmBm3ay13d3fZzzndfe/Ne7xe5XhDz0zQK9DDMbMxhrtn5lpLUJcA+r/Wykwzi4iWyPNx9zGGEOpVkAWJkw7M8Hx9c8YYwlH1AbNkAYmE/BeuhccFkMykN+7uay0lLjucz+cph/OKMBEBYw59ZtayXmtR2UlrM5hzoouTMTOL0xNrBEq90FrFSgVoofKu/indaIXjDHQVolSIfxWxDOAdOV1UVHOHQVKoDVc1MmgdlkubtftRgtamVDKVHOp7+nE7mHErZ5hlns/pb0VTFrI5Lf15Muecn7RIwzITUX5KIh6WjAYFlApRJ1+d/y6A6o2IugGZAIV/JvAvQNsQ1Y3fYwxNVpP8w/649EBpzjlbVA5sCL3uFT4hVNYmP7jjFRAyvZXduVQ0/AqMynF3Amg96QPysIUaNLzhpbZVobsQlZpMb7dYUyr2TRoayR9uoarzvA7ppgAAAABJRU5ErkJggg==);
+	color: #fff;
+	font-family: "Trebuchet MS", Arial, sans-serif;
+	font-size: 10pt;
+}
+
+body
+{
+	padding: 0;
+	margin: 0;
+}
+
+.container,
+#container
+{
+	width: 1040px;
+	overflow: hidden;
+	padding: 0 16px;
+	margin: 0 auto 40px auto;
+	background: rgba(34, 34, 34, 1);
+	border-right: 1px solid #1b1b1b;
+	border-bottom: 1px solid #1b1b1b;
+	border-left: 1px solid #1b1b1b;
+	box-shadow: 0px 0px 3px #1b1b1b;
+}
+
+a,
+a:visited,
+a:active
+{
+	text-decoration: none;
+	color: #0a0;
+}
+a:hover
+{
+	text-decoration: underline;
+	color: #0d0;
+}
+
+.pre
+{
+	font-family: monospace;
+}
+
+#footer
+{
+	margin: 20px 0 0 0;
+	padding: 10px 0 10px 0;
+	border-top: 2px dashed #1b1b1b;
+	color: #111;
+	text-align: center;
+	font-size: 9pt;
+}
+
+canvas.square
+{
+	float: left;
+	width: 400px;
+	height: 400px;
+}
+
+canvas.full
+{
+	float: none;
+	clear: both;
+	width: 960px;
+	height: 400px;
+}
+
+.messagebox
+{
+	width: 550px;
+	height: 392px;
+	float: left;
+	background: #111;
+	padding: 4px;
+	margin: 0 0 0 2px;
+	font-size: 8pt;
+	font-weight: bold;
+}
+
+.clearer
+{
+	float: none;
+	clear: both;
+}
+
+#controls
+{
+	padding: 0 0 0 528px;
+}
+
+#left
+{
+	width: 512px;
+	float: left;
+	overflow: hidden;
+}
+
+#right
+{
+	width: 528px; /* (128 + 4) * 4 */
+	float: left;
+	overflow: hidden;
+}
+
+#right canvas
+{
+	float: left;
+	padding: 0 0 4px 4px;
+	width: 128px;
+	height: 128px;
+}
+
+/*
+#right label
+{
+	float: left;
+	clear: both;
+	text-align: right;
+	padding: 0 4px 0 0;
+	width: 120px;
+}
+
+#right input
+{
+	float: left;
+	width: 100px;
+}
+*/
